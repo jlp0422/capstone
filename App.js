@@ -6,6 +6,8 @@ import Info from './native-components/Info';
 import Login from './native-components/Login';
 import ChooseBar from './native-components/ChooseBar';
 import PregameCountdown from './native-components/PregameCountdown';
+import PregameStatic from './native-components/PregameStatic';
+import TeamName from './native-components/TeamName';
 
 class HomeScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -34,11 +36,13 @@ const MainStack = createStackNavigator(
     Home: HomeScreen,
     Login: Login,
     ChooseBar: ChooseBar,
-    Pregame: PregameCountdown
+    PregameCountdown: PregameCountdown,
+    PregameStatic: PregameStatic,
+    TeamName: TeamName
   },
   {
-    // initialRouteName: 'Home' // will be set as home at end, changing for easier page testing
-    initialRouteName: 'Pregame',
+    initialRouteName: 'Home', // will be set as home at end, changing for easier page testing
+    // initialRouteName: 'TeamName',
     navigationOptions: {
       headerStyle: { backgroundColor: 'lightblue' }
     }

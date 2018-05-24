@@ -3,6 +3,9 @@ import React from 'react';
 import { View, Text, Button, TouchableHighlight, StyleSheet } from 'react-native';
 
 class Login extends React.Component {
+  static navigationOptions = {
+    title: 'Login'
+  }
   constructor() {
     super()
     this.onFacebook = this.onFacebook.bind(this)
@@ -11,10 +14,12 @@ class Login extends React.Component {
 
   onGoogle() {
     console.log('login with google')
+    this.props.navigation.navigate('ChooseBar')
   }
 
   onFacebook() {
     console.log('login with facebook')
+    this.props.navigation.navigate('ChooseBar')
   }
 
   render() {
