@@ -4,6 +4,8 @@ import { StyleSheet, Text, View, Button, TouchableHighlight } from 'react-native
 import { createStackNavigator } from 'react-navigation';
 import Info from './native-components/Info';
 import Login from './native-components/Login';
+import ChooseBar from './native-components/ChooseBar';
+import PregameCountdown from './native-components/PregameCountdown';
 
 class HomeScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -27,22 +29,16 @@ class HomeScreen extends React.Component {
   }
 }
 
-/* Not necessary rigt now, but keeping anyway
-class InfoScreen extends React.Component {
-  static navigationOptions = {
-    title: 'Info'
-  }
-  render() { return <Info /> }
-}
-*/
-
 const MainStack = createStackNavigator(
   {
     Home: HomeScreen,
-    Login: Login
+    Login: Login,
+    ChooseBar: ChooseBar,
+    Pregame: PregameCountdown
   },
   {
-    initialRouteName: 'Home',
+    // initialRouteName: 'Home' // will be set as home at end, changing for easier page testing
+    initialRouteName: 'Pregame',
     navigationOptions: {
       headerStyle: { backgroundColor: 'lightblue' }
     }
@@ -72,3 +68,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+/* Not necessary rigt now, but keeping anyway
+class InfoScreen extends React.Component {
+  static navigationOptions = {
+    title: 'Info'
+  }
+  render() { return <Info /> }
+}
+*/
