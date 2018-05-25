@@ -31,8 +31,10 @@ const seed = () => {
     questions.map(question => {
       Question.create({ 
         question: question.question,
-        answers: [...question.incorrect_answers, question.correct_answer],
-        correct_answer: question.correct_answer
+        answers: question.answers,
+        correct_answer: question.correct_answer,
+        difficulty: question.difficulty,
+        category: question.category
       })
     })
   })
