@@ -1,4 +1,4 @@
-const conn = require('./conn');
+const conn = require('../conn');
 const { Sequelize } = conn;
 
 const Trivia = conn.define('trivia', {
@@ -8,6 +8,6 @@ const Trivia = conn.define('trivia', {
   answers: {
     type: Sequelize.ARRAY(Sequelize.TEXT)
   }
-});
+}, { underscored: true });
 
 module.exports = Trivia;

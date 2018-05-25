@@ -1,8 +1,8 @@
 const conn = require('../conn');
 const { Sequelize } = conn;
 
-const Bar = conn.define(
-  'bar',
+const Player = conn.define(
+  'player',
   {
     id: {
       allowNull: false,
@@ -12,7 +12,7 @@ const Bar = conn.define(
     },
     email: {
       type: Sequelize.STRING,
-      unique: {
+       unique: {
         args: [true],
         msg: 'E-mail is already taken'
       },
@@ -29,26 +29,18 @@ const Bar = conn.define(
       }
     },
     firstName: {
-      type: Sequelize.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          args: [true],
-          msg: 'First Name cannot be empty'
-        }
-      }
+      type: Sequelize.STRING
     },
     lastName: {
-      type: Sequelize.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          args: [true],
-          msg: 'Last Name cannot be empty'
-        }
-      }
+      type: Sequelize.STRING
+    },
+    score: {
+      type: Sequelize.INTEGER
+    },
+    googleId: {
+      type: Sequelize.STRING
     }
-  },
+  }, { underscored: true },
   {
     getterMethods: {
       name() {
@@ -66,4 +58,4 @@ const Bar = conn.define(
   }
 );
 
-module.exports = Bar;
+module.exports = Player;
