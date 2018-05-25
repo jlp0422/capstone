@@ -28,7 +28,11 @@ const Bar = conn.define(
         }
       }
     },
-    first_name: {
+    password: {
+      allowNull: false,
+      type: Sequelize.STRING
+    },
+    name: {
       type: Sequelize.STRING,
       allowNull: false,
       validate: {
@@ -37,34 +41,9 @@ const Bar = conn.define(
           msg: 'First Name cannot be empty'
         }
       }
-    },
-    last_name: {
-      type: Sequelize.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          args: [true],
-          msg: 'Last Name cannot be empty'
-        }
-      }
     }
   },
-  { underscored: true },
-  {
-    getterMethods: {
-      name() {
-        return this.firstName + ' ' + this.lastName;
-      }
-    },
-
-    setterMethods: {
-      fullName(value) {
-        const names = value.split(' ');
-        this.setDataValue('firstName', names.slice(0, -1).join(' '));
-        this.setDataValue('lastName', names.slice(-1).join(' '));
-      }
-    }
-  }
+  { underscored: true }
 );
 
 module.exports = Bar;
