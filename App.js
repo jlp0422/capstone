@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React from 'react';
 import { StyleSheet, Text, View, Button, TouchableHighlight } from 'react-native';
-import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
+import { createStackNavigator, createBottomTabNavigator, createSwitchNavigator } from 'react-navigation';
 import Info from './native-components/Info';
 import Login from './native-components/Login';
 import ChooseBar from './native-components/ChooseBar';
@@ -10,6 +10,7 @@ import PregameStatic from './native-components/PregameStatic';
 import TeamName from './native-components/TeamName';
 import QuestionActive from './native-components/QuestionActive';
 import QuestionOver from './native-components/QuestionOver';
+import QuestionWaiting from './native-components/QuestionWaiting'
 
 class HomeScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -29,6 +30,33 @@ class HomeScreen extends React.Component {
     );
   }
 }
+
+// questions and gameplay have to be switch navigator
+
+const GameStack = createSwitchNavigator(
+  {
+    QuestionActive: {
+      screen: QuestionActive,
+      navigationOptions: {
+        title: 'Current Question'
+      }
+    },
+    QuestionOver: {
+      screen: QuestionOver,
+      navigationOptions: {
+        title: 'Question Over'
+      }
+    },
+    QuestionWaiting: {
+      screen: QuestionWaiting,
+      navigationOptions: {
+        title: 'Next Question coming soon'
+      }
+    }
+  }, {
+    initialRouteName: 'QuestionActive'
+  }
+)
 
 const MainStack = createStackNavigator(
   {
@@ -62,6 +90,7 @@ const MainStack = createStackNavigator(
         title: 'Next Game'
       }
     },
+    // GamePlay: GameStack,
     QuestionActive: {
       screen: QuestionActive,
       navigationOptions: {
@@ -70,13 +99,21 @@ const MainStack = createStackNavigator(
     },
     QuestionOver: {
       screen: QuestionOver,
-      title: 'Question Over'
+      navigationOptions: {
+        title: 'Question Over'
+      }
+    },
+    QuestionWaiting: {
+      screen: QuestionWaiting,
+      navigationOptions: {
+        title: 'Next Question coming soon'
+      }
     }
     // PregameStatic: PregameStatic,
   },
   {
-    // initialRouteName: 'Home', // will be set as home at end, changing for easier page testing
-    initialRouteName: 'QuestionOver',
+    initialRouteName: 'Home', // will be set as home at end, changing for easier page testing
+    // initialRouteName: 'GamePlay',
     navigationOptions: {
       headerStyle: { backgroundColor: 'lightblue' }
     }
@@ -91,6 +128,7 @@ const MainStack = createStackNavigator(
 const RootStack = createStackNavigator(
   {
     Main: MainStack,
+    // GamePlay: GameStack,
     Info: Info
   },
   {

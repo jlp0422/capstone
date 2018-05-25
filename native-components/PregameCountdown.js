@@ -32,6 +32,7 @@ class PregameCountdown extends React.Component {
   render() {
     const { hours, minutes, seconds } = this.state
     const { name } = this.props.navigation.state.params
+    const noGame = hours * 1 > 0 || minutes * 1 > 5
     return (
       <View style={ styles.container }>
         <Text style={ styles.headline }>Team { name }</Text>
@@ -39,7 +40,7 @@ class PregameCountdown extends React.Component {
           {minutes * 1 > 9 ? minutes : `0${minutes}`}:
           {seconds * 1 > 9 ? seconds : `0${seconds}`}
         </Text>
-        <Button title="Start game!" disabled={ hours * 1 > 0 || minutes * 1 > 5 } onPress={() => console.log('game started')} />
+        <Button title="Start game!" onPress={() => this.props.navigation.navigate('QuestionActive')} />
         <Text style={ styles.buttonCopy }>Start game button is available within 5 minutes of the next game starting.</Text>
       </View>
     )

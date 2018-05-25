@@ -9,21 +9,22 @@ class QuestionActive extends React.Component {
       answer: '',
       timer: 5
     }
-    this.timer = this.timer.bind(this)
+    this.countdown = this.countdown.bind(this)
   }
 
   componentDidMount() {
-    this.timer()
+    this.setState({ timer: 5 })
+    this.countdown()
   }
 
-  timer() {
+  countdown() {
     let { timer } = this.state
     if (timer) {
-      this.setState({ timer: timer - 1})
-      setTimeout(() => this.timer(), 1000)
+      this.setState({ timer: timer - 1 })
+      setTimeout(() => this.countdown(), 1000)
     }
     else {
-      this.props.navigation.navigate('QuestionOver')
+      this.props.navigation.push('QuestionOver')
     }
   }
 
@@ -74,7 +75,7 @@ const styles = StyleSheet.create({
     padding: 10
   },
   timer: {
-    fontSize: 30,
+    fontSize: 35,
     fontWeight: 'bold',
     padding: 10
   },
