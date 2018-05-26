@@ -94,7 +94,7 @@ const MainStack = createStackNavigator(
     QuestionActive: {
       screen: QuestionActive,
       navigationOptions: {
-        title: 'Current Question'
+        title: 'Current Question',
       }
     },
     QuestionOver: {
