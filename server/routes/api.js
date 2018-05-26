@@ -3,7 +3,7 @@ const axios = require('axios');
 
 router.get('/api', (req, res, next) => {
   axios
-    .get(`https://opentdb.com/api.php?amount=1`)
+    .get(`https://opentdb.com/api.php?amount=20`)
     .then(res => res.data)
     .then(questions => res.send(questions));
 });

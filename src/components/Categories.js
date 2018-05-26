@@ -25,7 +25,14 @@ export default class Categories extends Component {
         {categories.map(category => {
           return (
             <li key={category.id}>
-              <Link to={`/v1/categories/${category.id}`}>{category.name}</Link>
+              <Link
+                to={{
+                  pathname: `/categories/${category.id}`,
+                  state: { name: category.name, id: category.id }
+                }}
+              >
+                {category.name}
+              </Link>
             </li>
           );
         })}
