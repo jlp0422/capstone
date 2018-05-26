@@ -139,8 +139,8 @@ const MainStack = createStackNavigator(
     // PregameStatic: PregameStatic,
   },
   {
-    // initialRouteName: 'Home', // will be set as home at end, changing for easier page testing
-    initialRouteName: 'Home',
+    initialRouteName: 'Home', // will be set as home at end, changing for easier page testing
+    // initialRouteName: 'QuestionActive',
     navigationOptions: {
       headerStyle: { backgroundColor: 'lightblue' }
     }
@@ -171,12 +171,3 @@ export default class App extends React.Component {
   }
   render() { return <RootStack /> }
 }
-
-/* Not necessary rigt now, but keeping anyway
-class InfoScreen extends React.Component {
-  static navigationOptions = {
-    title: 'Info'
-  }
-  render() { return <Info /> }
-}
-*/

@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
+import { View, Text, StyleSheet, Button, AsyncStorage } from 'react-native';;
 
 class PregameCountdown extends React.Component {
   constructor() {
@@ -15,6 +15,18 @@ class PregameCountdown extends React.Component {
 
   componentDidMount() {
     this.timer()
+    Promise.all([
+      AsyncStorage.getItem('name'),
+      AsyncStorage.getItem('bar_id'),
+      AsyncStorage.getItem('team_name')
+    ])
+    .then(([ name, bar, team ]) => {
+      console.log('STORAGE', '\n', 'name: ', name, '\n', 'bar: ', bar, '\n', 'team: ', team)
+    })
+    // const name = await AsyncStorage.getItem('name')
+    // const bar = await AsyncStorage.getItem('bar_id')
+    // const team = await AsyncStorage.getItem('team_name')
+    // console.log('STORAGE', name, bar, team)
   }
 
   componentWillUnmount() {

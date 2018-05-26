@@ -1,7 +1,6 @@
 /* eslint-disable */
 import React from 'react';
-import { View, Text, Button, TouchableHighlight, StyleSheet } from 'react-native';
-// import io from 'socket.io-client/socket.io'
+import { View, Text, Button, TouchableHighlight, StyleSheet, AsyncStorage } from 'react-native';
 
 class Login extends React.Component {
   constructor() {
@@ -12,13 +11,17 @@ class Login extends React.Component {
 
   onGoogle() {
     console.log('login with google')
-    io.emit('login')
+    // re-directing user to login with google
+    // setting email and google id in the database
+    // send back user id who is logging in
+    // store user id in async storage
+    AsyncStorage.setItem('name', 'jeremy google')
     this.props.navigation.navigate('ChooseBar')
   }
 
   onFacebook() {
     console.log('login with facebook')
-    io.emit('login')
+    AsyncStorage.setItem('name', 'jeremy facebook')
     this.props.navigation.navigate('ChooseBar')
   }
 

@@ -31,9 +31,9 @@ class QuestionWaiting extends React.Component {
     const { timer } = this.state
     return (
       <View style={ styles.conatiner }>
-        <Text style={[ styles.centerText, styles.h1 ]}>Question X</Text>
-        <Text style={[ styles.centerText, styles.h2 ]}>Category: XX</Text>
-        <Text style={[ styles.centerText, styles.h2 ]}>Staring in:</Text>
+        <Text style={[ styles.centerText, styles.h1 ]}>Next Question</Text>
+        {/*<Text style={[ styles.centerText, styles.h2 ]}>Category: XX</Text>*/}
+        <Text style={[ styles.centerText, styles.h2 ]}>Starting in:</Text>
         <Text style={[ styles.centerText, styles.timer ]}>:{timer > 9 ? timer : `0${timer}`}</Text>
         <Text style={[ styles.centerText, styles.score ]}>Your Score: 3</Text>
         <Text style={[ styles.centerText, styles.score ]}>Top Score: 8</Text>
@@ -46,7 +46,8 @@ const styles = StyleSheet.create({
   conatiner: {
     flex: 1,
     alignItems: 'center',
-    paddingTop: 30
+    padding: 10,
+    paddingTop: 80
     // justifyContent: 'center'
   },
   h1: {

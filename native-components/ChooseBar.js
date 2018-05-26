@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React from 'react';
-import { View, Text, Button, StyleSheet, TextInput, KeyboardAvoidingView } from 'react-native';
+import { View, Text, Button, StyleSheet, TextInput, KeyboardAvoidingView, AsyncStorage } from 'react-native';
 
 class ChooseBar extends React.Component {
   constructor() {
@@ -13,6 +13,7 @@ class ChooseBar extends React.Component {
 
   onSubmit() {
     console.log(`your bar id: ${this.state.barId} `)
+    AsyncStorage.setItem('bar_id', this.state.barId)
     this.props.navigation.navigate('TeamName')
   }
 

@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React from 'react';
 import { View, StyleSheet, Text, Button } from 'react-native';
+import axios from 'axios';
 
 class QuestionOver extends React.Component {
   constructor() {
@@ -28,14 +29,15 @@ class QuestionOver extends React.Component {
   }
   render() {
     const { timer } = this.state
+    const { answer, question } = this.props.navigation.state.params
     return (
-      <View>
+      <View style={ styles.container }>
         <Text style={[ styles.centerText, styles.h1 ]}>Question X</Text>
-        <Text style={[ styles.centerText, styles.copy ]}>Question X Text</Text>
+        <Text style={[ styles.centerText, styles.copy ]}>{ question.question }</Text>
         <Text style={[ styles.centerText, styles.h2 ]}>Correct Answer:</Text>
-        <Text style={[ styles.centerText, styles.copy ]}>Answer A</Text>
+        <Text style={[ styles.centerText, styles.copy ]}>{ question.correct_answer }</Text>
         <Text style={[ styles.centerText, styles.h2 ]}>Your Answer:</Text>
-        <Text style={[ styles.centerText, styles.copy ]}>Answer B</Text>
+        <Text style={[ styles.centerText, styles.copy ]}>{ answer || 'No answer selected' }</Text>
         <Text style={[ styles.centerText, styles.h2, styles.final ]}>Your Score: X</Text>
         <Text style={[ styles.centerText, styles.timer ]}>:{ timer > 9 ? timer : `0${timer}` }</Text>
 
@@ -49,7 +51,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center'
+    // justifyContent: 'center',
+    padding: 10,
+    paddingTop: 80,
   },
   centerText: {
     textAlign: 'center'
@@ -57,7 +61,6 @@ const styles = StyleSheet.create({
   h1: {
     fontSize: 30,
     fontWeight: 'bold',
-    paddingTop: 30,
     paddingBottom: 10
   },
   h2: {
@@ -69,7 +72,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   copy: {
-    fontSize: 16,
+    fontSize: 18,
     paddingTop: 5
   },
   final: {

@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React from 'react';
-import { View, Text, StyleSheet, TextInput, Button, KeyboardAvoidingView } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Button, KeyboardAvoidingView, AsyncStorage } from 'react-native';
 
 class TeamName extends React.Component {
   constructor() {
@@ -13,6 +13,7 @@ class TeamName extends React.Component {
 
   onSubmit() {
     console.log(`team name: ${this.state.name}`)
+    AsyncStorage.setItem('team_name', this.state.name)
     this.props.navigation.navigate('PregameCountdown', { name: this.state.name })
   }
 
