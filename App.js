@@ -1,6 +1,5 @@
 /* eslint-disable */
 import React from 'react';
-import SocketIOClient from 'socket.io-client';
 import { StyleSheet, Text, View, Button, TouchableHighlight } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator, createSwitchNavigator } from 'react-navigation';
 import Info from './native-components/Info';
@@ -13,6 +12,7 @@ import QuestionActive from './native-components/QuestionActive';
 import QuestionOver from './native-components/QuestionOver';
 import QuestionWaiting from './native-components/QuestionWaiting';
 import GameOver from './native-components/GameOver';
+import socket from './socket';
 
 class HomeScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -50,30 +50,30 @@ const styles = StyleSheet.create({
 
 // questions and gameplay have to be switch navigator
 // not being used right now
-const GameStack = createSwitchNavigator(
-  {
-    QuestionActive: {
-      screen: QuestionActive,
-      navigationOptions: {
-        title: 'Current Question'
-      }
-    },
-    QuestionOver: {
-      screen: QuestionOver,
-      navigationOptions: {
-        title: 'Question Over'
-      }
-    },
-    QuestionWaiting: {
-      screen: QuestionWaiting,
-      navigationOptions: {
-        title: 'Next Question coming soon'
-      }
-    }
-  }, {
-    initialRouteName: 'QuestionActive'
-  }
-)
+// const GameStack = createSwitchNavigator(
+//   {
+//     QuestionActive: {
+//       screen: QuestionActive,
+//       navigationOptions: {
+//         title: 'Current Question'
+//       }
+//     },
+//     QuestionOver: {
+//       screen: QuestionOver,
+//       navigationOptions: {
+//         title: 'Question Over'
+//       }
+//     },
+//     QuestionWaiting: {
+//       screen: QuestionWaiting,
+//       navigationOptions: {
+//         title: 'Next Question coming soon'
+//       }
+//     }
+//   }, {
+//     initialRouteName: 'QuestionActive'
+//   }
+// )
 
 const MainStack = createStackNavigator(
   {
@@ -139,8 +139,8 @@ const MainStack = createStackNavigator(
     // PregameStatic: PregameStatic,
   },
   {
-    // initialRouteName: 'Home', // will be set as home at end, changing for easier page testing
-    initialRouteName: 'QuestionActive',
+    initialRouteName: 'Home', // will be set as home at end, changing for easier page testing
+    // initialRouteName: 'QuestionActive',
     navigationOptions: {
       headerStyle: { backgroundColor: 'lightblue' }
     }
@@ -167,7 +167,7 @@ const RootStack = createStackNavigator(
 export default class App extends React.Component {
   constructor(props) {
     super(props)
-    this.socket = SocketIOClient('http://localhost:3000')
+    this.socket = socket
   }
   render() { return <RootStack /> }
 }

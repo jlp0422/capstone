@@ -16,10 +16,6 @@ app.use('/dist', express.static(path.join(__dirname, '../dist')));
 app.use('/vendor', express.static(path.join(__dirname, '../node_modules')));
 app.use('/public', express.static(path.join(__dirname, '../public')));
 
-// app.get('/', (req, res, next) => {
-//   res.send('Capstone is fun');
-// });
-
 app.get('/', (req, res, next) => {
   res.sendFile(path.join(__dirname, '../src/index.html'));
 });
@@ -27,11 +23,15 @@ app.get('/', (req, res, next) => {
 const port = process.env.PORT || 3000;
 server.listen(port, () => console.log(`listening on port ${port}`));
 
+// playing around with web sockets
+socket.on('connect', (client) => {
+  console.log('***** CONNECTED TO: ', client.id)
+})
 
-socket.on('connection', (client) => {
-  console.log('***** connected to: ', client.id)
+socket.on('disconnect', () => {
+  console.log('***** DISCONNECTED ******')
 })
 
 socket.on('login', () => {
-  console.log('*** LOGIN: ')
+  console.log('*** LOGIN ***')
 })

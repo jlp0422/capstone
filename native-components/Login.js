@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React from 'react';
 import { View, Text, Button, TouchableHighlight, StyleSheet, AsyncStorage } from 'react-native';
+import socket from '../socket'
 
 class Login extends React.Component {
   constructor() {
@@ -16,6 +17,7 @@ class Login extends React.Component {
     // send back user id who is logging in
     // store user id in async storage
     AsyncStorage.setItem('name', 'jeremy google')
+    socket.emit('login')
     this.props.navigation.navigate('ChooseBar')
   }
 

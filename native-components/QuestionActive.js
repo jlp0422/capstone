@@ -21,8 +21,7 @@ class QuestionActive extends React.Component {
 
   componentDidMount() {
     const { questionNumber } = this.state
-    this.setState({ timer: 5, questionNumber: questionNumber + 1 })
-    // this.countdown()
+    this.countdown()
     axios.get('http://localhost:3000/v1/api/')
       .then( res => res.data)
       .then( question => this.setState({ question: question.results[0] }))
@@ -58,7 +57,7 @@ class QuestionActive extends React.Component {
     const html = `<div>${str}</div>`
     const parser = new DOMParser.DOMParser()
     const parsed = parser.parseFromString(html, 'text/html')
-    return parsed.lastChild.childNodes[0].data
+    return parsed.childNodes[0].childNodes[0].data
   }
 
   render() {
