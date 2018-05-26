@@ -95,18 +95,21 @@ const MainStack = createStackNavigator(
       screen: QuestionActive,
       navigationOptions: {
         title: 'Current Question',
+        headerLeft: null
       }
     },
     QuestionOver: {
       screen: QuestionOver,
       navigationOptions: {
-        title: 'Question Over'
+        title: 'Question Over',
+        headerLeft: null
       }
     },
     QuestionWaiting: {
       screen: QuestionWaiting,
       navigationOptions: {
-        title: 'Next Question coming soon'
+        title: 'Next Question coming soon',
+        headerLeft: null
       }
     }
     // PregameStatic: PregameStatic,
