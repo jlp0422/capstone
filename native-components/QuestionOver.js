@@ -1,13 +1,14 @@
 /* eslint-disable */
 import React from 'react';
-import { View, StyleSheet, Text, Button } from 'react-native';
+import { View, StyleSheet, Text, Button, AsyncStorage } from 'react-native';
 import axios from 'axios';
 
 class QuestionOver extends React.Component {
   constructor() {
     super()
     this.state = {
-      timer: 10
+      timer: 10,
+      score: 0
     }
     this.countdown = this.countdown.bind(this)
   }
@@ -15,6 +16,8 @@ class QuestionOver extends React.Component {
   componentDidMount() {
     this.setState({ timer: 10 })
     this.countdown()
+    Promise.all([ AsyncStorage.getItem('score') ])
+      .then(([ score ]) => this.setState({ score }))
   }
 
   countdown() {
@@ -28,7 +31,7 @@ class QuestionOver extends React.Component {
     }
   }
   render() {
-    const { timer } = this.state
+    const { timer, score } = this.state
     const { answer, question } = this.props.navigation.state.params
     return (
       <View style={ styles.container }>
@@ -38,7 +41,7 @@ class QuestionOver extends React.Component {
         <Text style={[ styles.centerText, styles.copy ]}>{ question.correct_answer }</Text>
         <Text style={[ styles.centerText, styles.h2 ]}>Your Answer:</Text>
         <Text style={[ styles.centerText, styles.copy ]}>{ answer || 'No answer selected' }</Text>
-        <Text style={[ styles.centerText, styles.h2, styles.final ]}>Your Score: X</Text>
+        <Text style={[ styles.centerText, styles.h2, styles.final ]}>Your Score: {score}</Text>
         <Text style={[ styles.centerText, styles.timer ]}>:{ timer > 9 ? timer : `0${timer}` }</Text>
 
         {/*<Button title="Next Question" onPress={() => console.log('next')} />*/}

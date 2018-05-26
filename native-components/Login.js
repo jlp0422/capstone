@@ -11,7 +11,7 @@ class Login extends React.Component {
 
   onGoogle() {
     console.log('login with google')
-    // re-directing user to login with google
+    // re-direct user to login with google
     // setting email and google id in the database
     // send back user id who is logging in
     // store user id in async storage

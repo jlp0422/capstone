@@ -18,7 +18,8 @@ class PregameCountdown extends React.Component {
     Promise.all([
       AsyncStorage.getItem('name'),
       AsyncStorage.getItem('bar_id'),
-      AsyncStorage.getItem('team_name')
+      AsyncStorage.getItem('team_name'),
+      AsyncStorage.removeItem('score')
     ])
     .then(([ name, bar, team ]) => {
       console.log('STORAGE', '\n', 'name: ', name, '\n', 'bar: ', bar, '\n', 'team: ', team)

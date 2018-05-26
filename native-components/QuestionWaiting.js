@@ -1,18 +1,21 @@
 /* eslint-disable */
 import React from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import { View, Text, Button, StyleSheet, AsyncStorage } from 'react-native';
 
 class QuestionWaiting extends React.Component {
   constructor() {
     super()
     this.state = {
-      timer: 10
+      timer: 10,
+      score: 0
     }
     this.countdown = this.countdown.bind(this)
   }
 
   componentDidMount() {
     this.setState({ timer: 10 })
+    Promise.all([AsyncStorage.getItem('score')])
+      .then(([score]) => this.setState({ score }))
     this.countdown()
   }
 
@@ -28,14 +31,14 @@ class QuestionWaiting extends React.Component {
   }
 
   render() {
-    const { timer } = this.state
+    const { timer, score } = this.state
     return (
       <View style={ styles.conatiner }>
         <Text style={[ styles.centerText, styles.h1 ]}>Next Question</Text>
         {/*<Text style={[ styles.centerText, styles.h2 ]}>Category: XX</Text>*/}
         <Text style={[ styles.centerText, styles.h2 ]}>Starting in:</Text>
         <Text style={[ styles.centerText, styles.timer ]}>:{timer > 9 ? timer : `0${timer}`}</Text>
-        <Text style={[ styles.centerText, styles.score ]}>Your Score: 3</Text>
+        <Text style={[ styles.centerText, styles.score ]}>Your Score: { score }</Text>
         <Text style={[ styles.centerText, styles.score ]}>Top Score: 8</Text>
       </View>
     )

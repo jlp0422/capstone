@@ -43,6 +43,7 @@
     "react-dom": "^16.4.0",
     "react-native": "~0.55.2",
     "react-native-elements": "^0.19.1",
+    "react-native-html-parser": "0.0.5",
     "react-navigation": "^2.0.1",
     "react-router-dom": "^4.2.2",
     "sequelize": "^4.37.8",

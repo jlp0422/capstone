@@ -2,6 +2,7 @@
 import React from 'react';
 import { View, StyleSheet, Text, Button, AsyncStorage } from 'react-native';
 import axios from 'axios';
+import DOMParser from 'react-native-html-parser';
 
 class QuestionActive extends React.Component {
   constructor() {
@@ -40,14 +41,26 @@ class QuestionActive extends React.Component {
   }
 
   onChooseAnswer(answer) {
+    const { question } = this.state
     this.setState({ answer })
+    if (answer === question.correct_answer) {
+      Promise.all([AsyncStorage.getItem('score')])
+        .then(([ score ]) => {
+          newScore = (score * 1) + 1
+          AsyncStorage.setItem('score', `${newScore}`)
+        })
+    }
     console.log('answer: ', answer)
   }
 
   render() {
     const { timer, answer, question, questionNumber, score } = this.state
     const { onChooseAnswer } = this
-    if (!question.type) return null
+    const html = `<div>${question.question}</div>`.toString()
+    const parser = new DOMParser.DOMParser()
+    const qParsed = parser.parseFromString(html, 'text/html')
+    const questionText = qParsed.lastChild.childNodes[0].data
+    if (!question.type || !questionText) return null
     return (
       <View style={ styles.container }>
         <View style={ styles.topRow }>
@@ -57,7 +70,7 @@ class QuestionActive extends React.Component {
         <View style={ styles.questionInfo }>
           <Text style={ [ styles.centerText, styles.questionHeader ]}>Question {questionNumber}</Text>
           <Text style={ [ styles.centerText, styles.timer, { color: timer < 10 ? 'red' : 'black' } ]}>:{ timer > 9 ? timer : `0${timer}` }</Text>
-          <Text style={ [ styles.centerText, styles.questionText ]}>{ question.question }</Text>
+          <Text style={ [ styles.centerText, styles.questionText ]}>{ questionText }</Text>
         </View>
         <View style={ styles.answers }>
           <Button disabled={!timer || !!answer} title={`${question.correct_answer}`} onPress={() => onChooseAnswer(question.correct_answer)} />
