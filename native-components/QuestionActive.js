@@ -16,6 +16,7 @@ class QuestionActive extends React.Component {
     }
     this.countdown = this.countdown.bind(this)
     this.onChooseAnswer = this.onChooseAnswer.bind(this)
+    this.onParseHTML = this.onParseHTML.bind(this)
   }
 
   componentDidMount() {
@@ -53,14 +54,17 @@ class QuestionActive extends React.Component {
     console.log('answer: ', answer)
   }
 
+  onParseHTML(str) {
+    const html = `<div>${str}</div>`
+    const parser = new DOMParser.DOMParser()
+    const parsed = parser.parseFromString(html, 'text/html')
+    return parsed.lastChild.childNodes[0].data
+  }
+
   render() {
     const { timer, answer, question, questionNumber, score } = this.state
-    const { onChooseAnswer } = this
-    const html = `<div>${question.question}</div>`.toString()
-    const parser = new DOMParser.DOMParser()
-    const qParsed = parser.parseFromString(html, 'text/html')
-    const questionText = qParsed.lastChild.childNodes[0].data
-    if (!question.type || !questionText) return null
+    const { onChooseAnswer, onParseHTML } = this
+    if (!question.type) return null
     return (
       <View style={ styles.container }>
         <View style={ styles.topRow }>
@@ -70,13 +74,13 @@ class QuestionActive extends React.Component {
         <View style={ styles.questionInfo }>
           <Text style={ [ styles.centerText, styles.questionHeader ]}>Question {questionNumber}</Text>
           <Text style={ [ styles.centerText, styles.timer, { color: timer < 10 ? 'red' : 'black' } ]}>:{ timer > 9 ? timer : `0${timer}` }</Text>
-          <Text style={ [ styles.centerText, styles.questionText ]}>{ questionText }</Text>
+          <Text style={ [ styles.centerText, styles.questionText ]}>{ onParseHTML(question.question) }</Text>
         </View>
         <View style={ styles.answers }>
-          <Button disabled={!timer || !!answer} title={`${question.correct_answer}`} onPress={() => onChooseAnswer(question.correct_answer)} />
+          <Button disabled={!timer || !!answer} title={`${onParseHTML(question.correct_answer)}`} onPress={() => onChooseAnswer(question.correct_answer)} />
           {
             question.incorrect_answers.map( (a, idx) => (
-              <Button key={idx} disabled={ !timer || !!answer } title={`${a}`} onPress={() => onChooseAnswer(a)} />
+              <Button key={idx} disabled={ !timer || !!answer } title={`${onParseHTML(a)}`} onPress={() => onChooseAnswer(a)} />
 
             ))
           }
