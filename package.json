@@ -45,7 +45,8 @@
     "react-native-elements": "^0.19.1",
     "react-navigation": "^2.0.1",
     "react-router-dom": "^4.2.2",
-    "sequelize": "^4.37.8",
+    "react-sidebar": "^2.3.2",
+    "sequelize": "^4.37.10",
     "webpack": "^3.11.0"
   }
 }
