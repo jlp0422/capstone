@@ -1,7 +1,10 @@
 import React from 'react';
 import { NavLink, Route, HashRouter as Router, Switch } from 'react-router-dom';
 import SideNav from './SideNav';
+<<<<<<< HEAD
 import Categories from './Categories';
+=======
+>>>>>>> b0d5ddd5d4b911b9cc09d2dca349393dbee18ff6
 
 const App = () => {
   return (
@@ -9,8 +12,12 @@ const App = () => {
       <div>
         <SideNav />
         <Switch>
+<<<<<<< HEAD
           <Route path="/" exact render={() => <hr />} />
           <Route path="/categories" exact render={() => <Categories />} />
+=======
+          <Route path="/" render={() => <hr />} />
+>>>>>>> b0d5ddd5d4b911b9cc09d2dca349393dbee18ff6
         </Switch>
       </div>
     </Router>
