@@ -17,6 +17,10 @@ class PregameCountdown extends React.Component {
     this.timer()
   }
 
+  componentWillUnmount() {
+    clearTimeout(this.timer)
+  }
+
   timer() {
     const now = new Date().getTime()
     const gameStart = new Date('June 21, 2018 18:40:00').getTime()
@@ -35,8 +39,8 @@ class PregameCountdown extends React.Component {
     const noGame = hours * 1 > 0 || minutes * 1 > 5
     return (
       <View style={ styles.container }>
-        <Text style={ styles.headline }>Team { name }</Text>
-        <Text style={ styles.header }>Game starts in {hours * 1 > 9 ? hours : `0${hours}`}:
+        <Text style={ styles.h1 }>Team: { name }</Text>
+        <Text style={ styles.h2 }>Game starts in {hours * 1 > 9 ? hours : `0${hours}`}:
           {minutes * 1 > 9 ? minutes : `0${minutes}`}:
           {seconds * 1 > 9 ? seconds : `0${seconds}`}
         </Text>
@@ -54,19 +58,19 @@ const styles = StyleSheet.create({
     paddingRight: 10,
     paddingLeft: 10
   },
-  headline: {
-    fontSize: 40,
+  h1: {
+    fontSize: 30,
     fontWeight: 'bold',
     textAlign: 'center',
     paddingTop: 80,
-    paddingBottom: 30
+    paddingBottom: 20
   },
-  header: {
-    fontSize: 40,
+  h2: {
+    fontSize: 30,
     fontWeight: 'bold',
     textAlign: 'center',
-    paddingTop: 30,
-    paddingBottom: 30
+    paddingTop: 20,
+    paddingBottom: 40
   },
   buttonCopy: {
     fontSize: 12,

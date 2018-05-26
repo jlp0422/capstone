@@ -1,7 +1,11 @@
 const express = require('express');
-const app = express();
 const path = require('path');
-const conn = require('./db/conn')
+const http = require('http')
+const socketio = require('socket.io')
+
+const app = express()
+const server = http.Server(app)
+const socket = socketio(server)
 
 require('dotenv').config();
 app.use(require('body-parser').json());
@@ -21,5 +25,13 @@ app.get('/', (req, res, next) => {
 });
 
 const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`listening on port ${port}`));
+server.listen(port, () => console.log(`listening on port ${port}`));
 
+
+socket.on('connection', (client) => {
+  console.log('***** connected to: ', client.id)
+})
+
+socket.on('login', () => {
+  console.log('*** LOGIN: ')
+})

@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React from 'react';
 import { View, Text, Button, TouchableHighlight, StyleSheet } from 'react-native';
+// import io from 'socket.io-client/socket.io'
 
 class Login extends React.Component {
   constructor() {
@@ -11,11 +12,13 @@ class Login extends React.Component {
 
   onGoogle() {
     console.log('login with google')
+    io.emit('login')
     this.props.navigation.navigate('ChooseBar')
   }
 
   onFacebook() {
     console.log('login with facebook')
+    io.emit('login')
     this.props.navigation.navigate('ChooseBar')
   }
 
@@ -23,7 +26,7 @@ class Login extends React.Component {
     const { onFacebook, onGoogle } = this
     return (
       <View style={ styles.container }>
-        <Text style={ styles.login }>Login to play the next game</Text>
+        <Text style={ styles.h1 }>Login to play the next game</Text>
         <Button onPress={ onGoogle } title="Login with Google" />
         <Button onPress={ onFacebook } title="Login with Facebook" />
       </View>
@@ -35,11 +38,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    paddingTop: 100,
+    paddingTop: 80,
   },
-  login: {
-    fontSize: 25,
-    paddingBottom: 30
+  h1: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    paddingBottom: 30,
+    paddingLeft: 10,
+    paddingRight: 10,
+    textAlign: 'center'
   }
 })
 

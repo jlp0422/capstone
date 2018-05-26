@@ -7,7 +7,7 @@ router.get('/api', (req, res, next) => {
   .then(questions => res.send(questions))
 })
 
-/* 
+/*
 amount = Amount of questions (1-50)
 category = ID of category (9-32)
   list of category ids {
@@ -36,7 +36,7 @@ category = ID of category (9-32)
     31: Entertainment: Japanese Anime & Manga
     32: Entertainment: Cartoons & Animation
   }
-difficulty = easy/medium/hard 
+difficulty = easy/medium/hard
 type = multiple/boolean
 */
 

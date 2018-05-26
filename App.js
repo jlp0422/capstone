@@ -1,5 +1,6 @@
 /* eslint-disable */
 import React from 'react';
+import SocketIOClient from 'socket.io-client';
 import { StyleSheet, Text, View, Button, TouchableHighlight } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator, createSwitchNavigator } from 'react-navigation';
 import Info from './native-components/Info';
@@ -17,7 +18,7 @@ class HomeScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
       headerLeft: (
-        <Button title="Info" onPress={() => navigation.navigate('Info')} />
+        <Button title="About" onPress={() => navigation.navigate('Info')} />
       )
     }
   }
@@ -25,15 +26,30 @@ class HomeScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={{ fontSize: 35 }}>UnTapped Trivia</Text>
+        <Text style={ styles.h1 }>UnTapped Trivia</Text>
         <Button onPress={() => this.props.navigation.navigate('Login')} title="Play now" />
       </View>
     );
   }
 }
 
-// questions and gameplay have to be switch navigator
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    // backgroundColor: '#fff',
+    alignItems: 'center',
+    paddingTop: 80
+    // justifyContent: 'center',
+  },
+  h1: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    paddingBottom: 35
+  }
+});
 
+// questions and gameplay have to be switch navigator
+// not being used right now
 const GameStack = createSwitchNavigator(
   {
     QuestionActive: {
@@ -102,14 +118,14 @@ const MainStack = createStackNavigator(
     QuestionOver: {
       screen: QuestionOver,
       navigationOptions: {
-        title: 'Question Over',
+        title: 'Correct Answer',
         headerLeft: null
       }
     },
     QuestionWaiting: {
       screen: QuestionWaiting,
       navigationOptions: {
-        title: 'Next Question coming soon',
+        title: 'Next Question',
         headerLeft: null
       }
     },
@@ -124,7 +140,7 @@ const MainStack = createStackNavigator(
   },
   {
     // initialRouteName: 'Home', // will be set as home at end, changing for easier page testing
-    initialRouteName: 'GameOver',
+    initialRouteName: 'Home',
     navigationOptions: {
       headerStyle: { backgroundColor: 'lightblue' }
     }
@@ -149,17 +165,12 @@ const RootStack = createStackNavigator(
 )
 
 export default class App extends React.Component {
+  constructor(props) {
+    super(props)
+    this.socket = SocketIOClient('http://localhost:3000')
+  }
   render() { return <RootStack /> }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
 
 /* Not necessary rigt now, but keeping anyway
 class InfoScreen extends React.Component {
