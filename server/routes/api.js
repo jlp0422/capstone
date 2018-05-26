@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const axios = require('axios');
 
-router.get('/questions', (req, res, next) => {
+router.get('/api', (req, res, next) => {
   axios.get(`https://opentdb.com/api.php?amount=1`)
   .then(res => res.data)
   .then(questions => res.send(questions))
@@ -40,7 +40,7 @@ difficulty = easy/medium/hard
 type = multiple/boolean
 */
 
-router.get('/questions/:query', (req, res, next) => {
+router.get('/api/:query', (req, res, next) => {
   axios.get(`https://opentdb.com/api.php?${req.params.query}`)
   .then(res => res.data)
   .then(questions => res.send(questions))
