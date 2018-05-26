@@ -3,9 +3,6 @@ import React from 'react';
 import { View, Text, Button, StyleSheet, TextInput } from 'react-native';
 
 class ChooseBar extends React.Component {
-  static navigationOptions = {
-    title: 'Enter Bar ID'
-  }
   constructor() {
     super()
     this.state = {

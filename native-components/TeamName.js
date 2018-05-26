@@ -3,9 +3,6 @@ import React from 'react';
 import { View, Text, StyleSheet, TextInput, Button } from 'react-native';
 
 class TeamName extends React.Component {
-  static navigationOptions = {
-    title: 'Choose Team Name'
-  }
   constructor() {
     super()
     this.state = {
@@ -35,7 +32,9 @@ class TeamName extends React.Component {
             maxLength={ 25}
           />
         </View>
-        <Button title="Submit" onPress={ onSubmit } />
+        <View style={{ paddingTop: 30 }}>
+          <Button disabled={ name.length < 4 } title="Submit" onPress={ onSubmit } />
+        </View>
       </View>
     )
   }
