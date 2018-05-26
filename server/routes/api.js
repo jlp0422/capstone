@@ -2,10 +2,11 @@ const router = require('express').Router();
 const axios = require('axios');
 
 router.get('/api', (req, res, next) => {
-  axios.get(`https://opentdb.com/api.php?amount=1`)
-  .then(res => res.data)
-  .then(questions => res.send(questions))
-})
+  axios
+    .get(`https://opentdb.com/api.php?amount=1`)
+    .then(res => res.data)
+    .then(questions => res.send(questions));
+});
 
 /* 
 amount = Amount of questions (1-50)
@@ -41,28 +42,31 @@ type = multiple/boolean
 */
 
 router.get('/api/:query', (req, res, next) => {
-  axios.get(`https://opentdb.com/api.php?${req.params.query}`)
-  .then(res => res.data)
-  .then(questions => res.send(questions))
-})
+  axios
+    .get(`https://opentdb.com/api.php?${req.params.query}`)
+    .then(res => res.data)
+    .then(questions => res.send(questions));
+});
 
 router.get('/categories', (req, res, next) => {
-  axios.get(`https://opentdb.com/api_category.php`)
-  .then(res => res.data)
-  .then(categories => res.send(categories))
-})
+  axios
+    .get(`https://opentdb.com/api_category.php`)
+    .then(res => res.data)
+    .then(categories => res.send(categories));
+});
 
 router.get('/categories/:id', (req, res, next) => {
-  axios.get(`https://opentdb.com/api_count.php?category=${req.params.id}`)
-  .then(res => res.data)
-  .then(categories => res.send(categories))
-})
+  axios
+    .get(`https://opentdb.com/api_count.php?category=${req.params.id}`)
+    .then(res => res.data)
+    .then(categories => res.send(categories));
+});
 
 router.get('/counts', (req, res, next) => {
-  axios.get(`https://opentdb.com/api_count_global.php`)
-  .then(res => res.data)
-  .then(counts => res.send(counts))
-})
-
+  axios
+    .get(`https://opentdb.com/api_count_global.php`)
+    .then(res => res.data)
+    .then(counts => res.send(counts));
+});
 
 module.exports = router;
