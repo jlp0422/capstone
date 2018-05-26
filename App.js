@@ -10,7 +10,8 @@ import PregameStatic from './native-components/PregameStatic';
 import TeamName from './native-components/TeamName';
 import QuestionActive from './native-components/QuestionActive';
 import QuestionOver from './native-components/QuestionOver';
-import QuestionWaiting from './native-components/QuestionWaiting'
+import QuestionWaiting from './native-components/QuestionWaiting';
+import GameOver from './native-components/GameOver';
 
 class HomeScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -111,12 +112,19 @@ const MainStack = createStackNavigator(
         title: 'Next Question coming soon',
         headerLeft: null
       }
+    },
+    GameOver: {
+      screen: GameOver,
+      navigationOptions: {
+        title: 'Game Over',
+        headerLeft: null
+      }
     }
     // PregameStatic: PregameStatic,
   },
   {
-    initialRouteName: 'Home', // will be set as home at end, changing for easier page testing
-    // initialRouteName: 'GamePlay',
+    // initialRouteName: 'Home', // will be set as home at end, changing for easier page testing
+    initialRouteName: 'GameOver',
     navigationOptions: {
       headerStyle: { backgroundColor: 'lightblue' }
     }
