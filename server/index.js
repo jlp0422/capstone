@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+
 const http = require('http')
 const socketio = require('socket.io')
 
@@ -7,11 +8,11 @@ const app = express()
 const server = http.Server(app)
 const io = socketio(server)
 
+
 require('dotenv').config();
 app.use(require('body-parser').json());
 
 app.use('/v1', require('./routes'));
-
 app.use('/dist', express.static(path.join(__dirname, '../dist')));
 app.use('/vendor', express.static(path.join(__dirname, '../node_modules')));
 app.use('/public', express.static(path.join(__dirname, '../public')));
@@ -37,3 +38,4 @@ require('../socket-server')(io)
 // io.on('login', () => {
 //   console.log('*** LOGIN ***')
 // })
+
