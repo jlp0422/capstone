@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React from 'react';
-import { View, Text, Button, StyleSheet, TextInput } from 'react-native';
+import { View, Text, Button, StyleSheet, TextInput, KeyboardAvoidingView, AsyncStorage } from 'react-native';
+import socket from '../socket-client'
 
 class ChooseBar extends React.Component {
   constructor() {
@@ -12,7 +13,10 @@ class ChooseBar extends React.Component {
   }
 
   onSubmit() {
-    console.log(`your bar id: ${this.state.barId} `)
+    const { barId } = this.state
+    socket.emit('choose-bar', barId)
+    console.log(`your bar id: ${barId} `)
+    AsyncStorage.setItem('bar_id', barId)
     this.props.navigation.navigate('TeamName')
   }
 
@@ -20,9 +24,9 @@ class ChooseBar extends React.Component {
     const { barId } = this.state
     const { onSubmit } = this
     return (
-      <View style={ styles.container }>
-        <Text style={ styles.header }>Choose your Bar</Text>
-        <Text style={ styles.subheader }>Enter your Bar ID below</Text>
+      <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
+        <Text style={ styles.h1 }>Choose your Bar</Text>
+        <Text style={ styles.h2 }>Enter your Bar ID below</Text>
         <TextInput
           autoFocus
           maxLength={4}
@@ -30,10 +34,11 @@ class ChooseBar extends React.Component {
           placeholder="__  __  __  __"
           keyboardType='numeric'
           value={ barId }
-          onChangeText={text => this.setState({ barId: `${text}` })}
+          onChangeText={text => this.setState({ barId: text })}
+          onSubmitEditing={ onSubmit }
         />
         <Button disabled={barId.length < 4} title="Submit" onPress={ onSubmit } />
-      </View>
+      </KeyboardAvoidingView>
     )
   }
 }
@@ -42,13 +47,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    paddingTop: 100
+    paddingTop: 80
   },
-  header: {
+  h1: {
     fontSize: 30,
     fontWeight: 'bold'
   },
-  subheader: {
+  h2: {
     fontSize: 20,
     paddingTop: 20
   },
