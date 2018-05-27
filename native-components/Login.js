@@ -11,6 +11,8 @@ class Login extends React.Component {
 
   onGoogle() {
     console.log('login with google')
+    axios.get('/auth/google')
+    .then(res => console.log(res.data))
     this.props.navigation.navigate('ChooseBar')
   }
 

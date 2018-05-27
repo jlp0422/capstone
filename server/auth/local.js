@@ -6,6 +6,7 @@ const { Player } = require('../db').models;
 const secret = process.env.SECRET;
 
 router.post('/register', (req, res) => {
+  console.log(req.body)
   Player.create(req.body)
   .then(player => {
     const token = jwt.sign({ id: player.id }, secret, { expiresIn: 86400 });
@@ -15,6 +16,7 @@ router.post('/register', (req, res) => {
 });
 
 router.post('/login', (req, res) => {
+  console.log("login", req.body)
   Player.findOne({ where: { email: req.body.email } })
     .then(player => {
       const passwordIsValid = bcrypt.compareSync(req.body.password, player.password);
