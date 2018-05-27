@@ -137,7 +137,6 @@ const MainStack = createStackNavigator(
         headerLeft: null
       }
     }
-    // PregameStatic: PregameStatic,
   },
   {
     initialRouteName: 'Home', // will be set as home at end, changing for easier page testing
