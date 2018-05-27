@@ -1,5 +1,8 @@
 module.exports = (io) => {
   io.on('connection', (socket) => {
-    console.log(socket.id, 'has made a persisent connection!')
+    console.log('**** SOCKET CONNECTED: ', socket.id)
+    socket.on('login', (type) => {
+      console.log(`login attempt with ${type}`)
+    });
   })
 }
