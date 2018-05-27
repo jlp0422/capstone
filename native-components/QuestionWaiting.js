@@ -13,17 +13,22 @@ class QuestionWaiting extends React.Component {
   }
 
   componentDidMount() {
+    let countdownTimer
     this.setState({ timer: 10 })
     Promise.all([AsyncStorage.getItem('score')])
       .then(([score]) => this.setState({ score }))
     this.countdown()
   }
 
+  componentWillUnmount() {
+    clearTimeout(countdownTimer)
+  }
+
   countdown() {
     let { timer } = this.state
     if (timer) {
       this.setState({ timer: timer - 1 })
-      setTimeout(() => this.countdown(), 1000);
+      countdownTimer = setTimeout(() => this.countdown(), 1000);
     }
     else {
       this.props.navigation.push('QuestionActive')

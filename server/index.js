@@ -5,7 +5,7 @@ const socketio = require('socket.io')
 
 const app = express()
 const server = http.Server(app)
-const socket = socketio(server)
+const io = socketio(server)
 
 require('dotenv').config();
 app.use(require('body-parser').json());
@@ -23,15 +23,16 @@ app.get('/', (req, res, next) => {
 const port = process.env.PORT || 3000;
 server.listen(port, () => console.log(`listening on port ${port}`));
 
+require('../socket-server')(io)
 // playing around with web sockets
-socket.on('connect', (client) => {
-  console.log('***** CONNECTED TO: ', client.id)
-})
+// io.on('connect', (socket) => {
+//   console.log('***** CONNECTED TO: ', socket.id)
+// })
 
-socket.on('disconnect', () => {
-  console.log('***** DISCONNECTED ******')
-})
+// io.on('disconnect', () => {
+//   console.log('***** DISCONNECTED ******')
+// })
 
-socket.on('login', () => {
-  console.log('*** LOGIN ***')
-})
+// io.on('login', () => {
+//   console.log('*** LOGIN ***')
+// })

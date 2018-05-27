@@ -13,6 +13,11 @@ import QuestionOver from './native-components/QuestionOver';
 import QuestionWaiting from './native-components/QuestionWaiting';
 import GameOver from './native-components/GameOver';
 import socket from './socket';
+window.navigator.userAgent = "react-native";
+
+// var io = require('socket.io-client/socket.io');
+
+// const socket = io('http://localhost/3000')
 
 class HomeScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -139,8 +144,8 @@ const MainStack = createStackNavigator(
     // PregameStatic: PregameStatic,
   },
   {
-    initialRouteName: 'Home', // will be set as home at end, changing for easier page testing
-    // initialRouteName: 'QuestionActive',
+    // initialRouteName: 'Home', // will be set as home at end, changing for easier page testing
+    initialRouteName: 'TeamName',
     navigationOptions: {
       headerStyle: { backgroundColor: 'lightblue' }
     }

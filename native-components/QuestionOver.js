@@ -16,17 +16,22 @@ class QuestionOver extends React.Component {
   }
 
   componentDidMount() {
+    let countdownTimer
     this.setState({ timer: 10 })
-    // this.countdown()
+    this.countdown()
     Promise.all([ AsyncStorage.getItem('score') ])
       .then(([ score ]) => this.setState({ score }))
+  }
+
+  componentWillUnmount() {
+    clearTimeout(countdownTimer)
   }
 
   countdown() {
     let { timer } = this.state
     if (timer) {
       this.setState({ timer: timer - 1 })
-      setTimeout(() => this.countdown(), 1000)
+      countdownTimer = setTimeout(() => this.countdown(), 1000)
     }
     else {
       this.props.navigation.push('QuestionWaiting')

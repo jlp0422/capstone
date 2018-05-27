@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React from 'react';
-import { View, Text, StyleSheet, Button, AsyncStorage } from 'react-native';;
+import { View, Text, StyleSheet, Button, AsyncStorage } from 'react-native';
 
 class PregameCountdown extends React.Component {
   constructor() {
@@ -8,13 +8,14 @@ class PregameCountdown extends React.Component {
     this.state = {
       hours: '',
       minutes: '',
-      seconds: ''
+      seconds: '',
     }
-    this.timer = this.timer.bind(this)
+    this.countdown = this.countdown.bind(this)
   }
 
   componentDidMount() {
-    this.timer()
+    let countdownTimer
+    this.countdown()
     Promise.all([
       AsyncStorage.getItem('name'),
       AsyncStorage.getItem('bar_id'),
@@ -24,17 +25,13 @@ class PregameCountdown extends React.Component {
     .then(([ name, bar, team ]) => {
       console.log('STORAGE', '\n', 'name: ', name, '\n', 'bar: ', bar, '\n', 'team: ', team)
     })
-    // const name = await AsyncStorage.getItem('name')
-    // const bar = await AsyncStorage.getItem('bar_id')
-    // const team = await AsyncStorage.getItem('team_name')
-    // console.log('STORAGE', name, bar, team)
   }
 
   componentWillUnmount() {
-    clearTimeout(this.timer)
+    clearTimeout(countdownTimer)
   }
 
-  timer() {
+  countdown() {
     const now = new Date().getTime()
     const gameStart = new Date('June 21, 2018 18:40:00').getTime()
     const t = gameStart - now
@@ -43,7 +40,7 @@ class PregameCountdown extends React.Component {
     const minutes = Math.floor((t % (1000 * 60 * 60)) / (1000 * 60))
     const seconds = Math.floor((t % (1000 * 60)) / 1000)
     this.setState({ hours, minutes, seconds })
-    setTimeout(() => this.timer(), 1000);
+    countdownTimer = setTimeout(() => this.countdown(), 1000);
   }
 
   render() {

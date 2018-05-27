@@ -9,9 +9,8 @@ class QuestionActive extends React.Component {
     super()
     this.state = {
       answer: '',
-      timer: 5,
+      timer: 10,
       question: {},
-      questionNumber: 0,
       score: 0
     }
     this.countdown = this.countdown.bind(this)
@@ -20,7 +19,7 @@ class QuestionActive extends React.Component {
   }
 
   componentDidMount() {
-    const { questionNumber } = this.state
+    let countdownTimer
     this.countdown()
     axios.get('http://localhost:3000/v1/api/')
       .then( res => res.data)
@@ -29,11 +28,15 @@ class QuestionActive extends React.Component {
       .then(([ score ]) => this.setState({ score }))
   }
 
+  componentWillUnmount() {
+    clearTimeout(countdownTimer)
+  }
+
   countdown() {
     let { timer, question, answer } = this.state
     if (timer) {
       this.setState({ timer: timer - 1 })
-      setTimeout(() => this.countdown(), 1000)
+      countdownTimer = setTimeout(() => this.countdown(), 1000)
     }
     else {
       this.props.navigation.push('QuestionOver', { question, answer })
@@ -61,7 +64,7 @@ class QuestionActive extends React.Component {
   }
 
   render() {
-    const { timer, answer, question, questionNumber, score } = this.state
+    const { timer, answer, question, score } = this.state
     const { onChooseAnswer, onParseHTML } = this
     if (!question.type) return null
     return (
@@ -71,7 +74,7 @@ class QuestionActive extends React.Component {
           <Text>Your Score: {score ? score : 0}</Text>
         </View>
         <View style={ styles.questionInfo }>
-          <Text style={ [ styles.centerText, styles.questionHeader ]}>Question {questionNumber}</Text>
+          <Text style={ [ styles.centerText, styles.questionHeader ]}>Question X</Text>
           <Text style={ [ styles.centerText, styles.timer, { color: timer < 10 ? 'red' : 'black' } ]}>:{ timer > 9 ? timer : `0${timer}` }</Text>
           <Text style={ [ styles.centerText, styles.questionText ]}>{ onParseHTML(question.question) }</Text>
         </View>
