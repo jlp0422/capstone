@@ -24,6 +24,7 @@ const port = process.env.PORT || 3000;
 server.listen(port, () => console.log(`listening on port ${port}`));
 
 require('../socket-server')(io)
+
 // playing around with web sockets
 // io.on('connect', (socket) => {
 //   console.log('***** CONNECTED TO: ', socket.id)

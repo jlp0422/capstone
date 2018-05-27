@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React from 'react';
 import { View, Text, Button, TouchableHighlight, StyleSheet, AsyncStorage } from 'react-native';
-import socket from '../socket'
+import socket from '../socket-client'
 window.navigator.userAgent = "react-native";
 
 class Login extends React.Component {

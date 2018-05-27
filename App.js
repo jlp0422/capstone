@@ -12,7 +12,7 @@ import QuestionActive from './native-components/QuestionActive';
 import QuestionOver from './native-components/QuestionOver';
 import QuestionWaiting from './native-components/QuestionWaiting';
 import GameOver from './native-components/GameOver';
-import socket from './socket'
+import socket from './socket-client'
 window.navigator.userAgent = "react-native";
 
 class HomeScreen extends React.Component {

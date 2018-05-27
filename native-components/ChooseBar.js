@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React from 'react';
 import { View, Text, Button, StyleSheet, TextInput, KeyboardAvoidingView, AsyncStorage } from 'react-native';
+import socket from '../socket-client'
 
 class ChooseBar extends React.Component {
   constructor() {
@@ -12,8 +13,10 @@ class ChooseBar extends React.Component {
   }
 
   onSubmit() {
-    console.log(`your bar id: ${this.state.barId} `)
-    AsyncStorage.setItem('bar_id', this.state.barId)
+    const { barId } = this.state
+    socket.emit('choose-bar', barId)
+    console.log(`your bar id: ${barId} `)
+    AsyncStorage.setItem('bar_id', barId)
     this.props.navigation.navigate('TeamName')
   }
 

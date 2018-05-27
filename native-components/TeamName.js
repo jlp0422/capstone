@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React from 'react';
 import { View, Text, StyleSheet, TextInput, Button, KeyboardAvoidingView, AsyncStorage } from 'react-native';
+import socket from '../socket-client'
 
 class TeamName extends React.Component {
   constructor() {
@@ -12,8 +13,10 @@ class TeamName extends React.Component {
   }
 
   onSubmit() {
-    console.log(`team name: ${this.state.name}`)
-    AsyncStorage.setItem('team_name', this.state.name)
+    const { name } = this.state
+    socket.emit('team-name', name)
+    console.log(`team name: ${name}`)
+    AsyncStorage.setItem('team_name', name)
     this.props.navigation.navigate('PregameCountdown', { name: this.state.name })
   }
 
