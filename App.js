@@ -12,12 +12,14 @@ import QuestionActive from './native-components/QuestionActive';
 import QuestionOver from './native-components/QuestionOver';
 import QuestionWaiting from './native-components/QuestionWaiting';
 import GameOver from './native-components/GameOver';
+import socket from './socket-client'
+window.navigator.userAgent = "react-native";
 
 class HomeScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
       headerLeft: (
-        <Button title="Info" onPress={() => navigation.navigate('Info')} />
+        <Button title="About" onPress={() => navigation.navigate('Info')} />
       )
     }
   }
@@ -25,39 +27,54 @@ class HomeScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={{ fontSize: 35 }}>UnTapped Trivia</Text>
+        <Text style={ styles.h1 }>UnTapped Trivia</Text>
         <Button onPress={() => this.props.navigation.navigate('Login')} title="Play now" />
       </View>
     );
   }
 }
 
-// questions and gameplay have to be switch navigator
-
-const GameStack = createSwitchNavigator(
-  {
-    QuestionActive: {
-      screen: QuestionActive,
-      navigationOptions: {
-        title: 'Current Question'
-      }
-    },
-    QuestionOver: {
-      screen: QuestionOver,
-      navigationOptions: {
-        title: 'Question Over'
-      }
-    },
-    QuestionWaiting: {
-      screen: QuestionWaiting,
-      navigationOptions: {
-        title: 'Next Question coming soon'
-      }
-    }
-  }, {
-    initialRouteName: 'QuestionActive'
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    // backgroundColor: '#fff',
+    alignItems: 'center',
+    paddingTop: 80
+    // justifyContent: 'center',
+  },
+  h1: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    paddingBottom: 35
   }
-)
+});
+
+// questions and gameplay have to be switch navigator
+// not being used right now
+// const GameStack = createSwitchNavigator(
+//   {
+//     QuestionActive: {
+//       screen: QuestionActive,
+//       navigationOptions: {
+//         title: 'Current Question'
+//       }
+//     },
+//     QuestionOver: {
+//       screen: QuestionOver,
+//       navigationOptions: {
+//         title: 'Question Over'
+//       }
+//     },
+//     QuestionWaiting: {
+//       screen: QuestionWaiting,
+//       navigationOptions: {
+//         title: 'Next Question coming soon'
+//       }
+//     }
+//   }, {
+//     initialRouteName: 'QuestionActive'
+//   }
+// )
 
 const MainStack = createStackNavigator(
   {
@@ -102,14 +119,14 @@ const MainStack = createStackNavigator(
     QuestionOver: {
       screen: QuestionOver,
       navigationOptions: {
-        title: 'Question Over',
+        title: 'Correct Answer',
         headerLeft: null
       }
     },
     QuestionWaiting: {
       screen: QuestionWaiting,
       navigationOptions: {
-        title: 'Next Question coming soon',
+        title: 'Next Question',
         headerLeft: null
       }
     },
@@ -120,11 +137,10 @@ const MainStack = createStackNavigator(
         headerLeft: null
       }
     }
-    // PregameStatic: PregameStatic,
   },
   {
-    // initialRouteName: 'Home', // will be set as home at end, changing for easier page testing
-    initialRouteName: 'GameOver',
+    initialRouteName: 'Home', // will be set as home at end, changing for easier page testing
+    // initialRouteName: 'TeamName',
     navigationOptions: {
       headerStyle: { backgroundColor: 'lightblue' }
     }
@@ -149,23 +165,9 @@ const RootStack = createStackNavigator(
 )
 
 export default class App extends React.Component {
+  constructor(props) {
+    super(props)
+    this.socket = socket
+  }
   render() { return <RootStack /> }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
-
-/* Not necessary rigt now, but keeping anyway
-class InfoScreen extends React.Component {
-  static navigationOptions = {
-    title: 'Info'
-  }
-  render() { return <Info /> }
-}
-*/
