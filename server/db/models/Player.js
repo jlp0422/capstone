@@ -12,7 +12,7 @@ const Player = conn.define(
     },
     email: {
       type: Sequelize.STRING,
-       unique: {
+      unique: {
         args: [true],
         msg: 'E-mail is already taken'
       },
@@ -38,7 +38,8 @@ const Player = conn.define(
     googleId: {
       type: Sequelize.STRING
     }
-  }, { underscored: true },
+  },
+  { underscored: true }
   // {
   //   getterMethods: {
   //     name() {

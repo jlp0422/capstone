@@ -21,7 +21,7 @@ export default class Categories extends Component {
   render() {
     const { categories } = this.state;
     return (
-      <ul>
+      <ol>
         {categories.map(category => {
           return (
             <li key={category.id}>
@@ -36,7 +36,7 @@ export default class Categories extends Component {
             </li>
           );
         })}
-      </ul>
+      </ol>
     );
   }
 }

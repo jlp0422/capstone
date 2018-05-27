@@ -3,12 +3,12 @@ import { NavLink, Route, HashRouter as Router, Switch } from 'react-router-dom';
 import SideNav from './SideNav';
 import Categories from './Categories';
 import Category from './Category';
+import Teams from './Teams';
 
 const App = () => {
   return (
     <Router>
       <div>
-        <SideNav />
         <Switch>
           <Route path="/" exact render={() => <hr />} />
           <Route path="/categories" exact render={() => <Categories />} />
@@ -17,6 +17,7 @@ const App = () => {
             exact
             render={({ history }) => <Category history={history} />}
           />
+          <Route path="/teams" exact render={() => <Teams />} />
         </Switch>
       </div>
     </Router>

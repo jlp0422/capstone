@@ -45,11 +45,18 @@ export default class Category extends Component {
     return (
       <div>
         <h1>{category.name}</h1>
-        <ul>
-          {questions.map((question, index) => (
-            <li key={index}>{question.question}</li>
-          ))}
-        </ul>
+        {questions.length ? (
+          <div>
+            <h3>Questions in category</h3>
+            <ol>
+              {questions.map((question, index) => (
+                <li key={index}>{question.question}</li>
+              ))}
+            </ol>
+          </div>
+        ) : (
+          <h2>there no questions in this game with this category</h2>
+        )}
       </div>
     );
   }
