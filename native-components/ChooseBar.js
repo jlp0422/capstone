@@ -1,7 +1,8 @@
 /* eslint-disable */
 import React from 'react';
 import { View, Text, Button, StyleSheet, TextInput, KeyboardAvoidingView, AsyncStorage } from 'react-native';
-import socket from '../socket-client'
+import socket from '../socket-client';
+window.navigator.userAgent = "react-native";
 
 class ChooseBar extends React.Component {
   constructor() {
@@ -14,7 +15,7 @@ class ChooseBar extends React.Component {
     const { barId } = this.state
     socket.emit('choose-bar', barId)
     socket.on('bar register', (bar) => {
-      console.log(`choose bar component: bar id: ${bar}`)
+      console.log(`component from socket: bar id: ${bar}`)
     })
     AsyncStorage.setItem('bar_id', barId)
     this.props.navigation.navigate('TeamName')
@@ -34,7 +35,7 @@ class ChooseBar extends React.Component {
           placeholder="__  __  __  __"
           keyboardType='numeric'
           value={ barId }
-          onChangeText={text => this.setState({ barId: text })}
+          onChangeText={(barId) => this.setState({ barId })}
           onSubmitEditing={ onSubmit }
         />
         <Button disabled={barId.length < 4} title="Submit" onPress={ onSubmit } />

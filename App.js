@@ -159,8 +159,8 @@ const MainStack = createStackNavigator(
     }
   },
   {
-    initialRouteName: 'Home', // will be set as home at end, changing for easier page testing
-    // initialRouteName: 'QuestionActive',
+    // initialRouteName: 'Home', // will be set as home at end, changing for easier page testing
+    initialRouteName: 'GameOver',
     navigationOptions: {
       headerStyle: { backgroundColor: 'lightblue' }
     }

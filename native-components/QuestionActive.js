@@ -25,7 +25,7 @@ class QuestionActive extends React.Component {
     let countdownTimer
     socket.emit('request question')
     socket.on('send question', (question) => this.setState({ question: question.results[0]}))
-    // this.countdown()
+    this.countdown()
     // axios.get('http://localhost:3000/v1/api/')
     //   .then( res => res.data)
     //   .then( question => this.setState({ question: question.results[0] }))
@@ -46,9 +46,7 @@ class QuestionActive extends React.Component {
       this.setState({ timer: timer - 1 })
       countdownTimer = setTimeout(() => this.countdown(), 1000)
     }
-    else {
-      this.props.navigation.push('QuestionOver', { question, answer })
-    }
+    else { this.props.navigation.push('QuestionOver', { question, answer }) }
   }
 
   onChooseAnswer(answer) {
@@ -87,7 +85,7 @@ class QuestionActive extends React.Component {
           <Text style={ [ styles.centerText, styles.questionText ]}>{ onParseHTML(question.question) }</Text>
           {
             answer &&
-            <Text style={ [ styles.centerText, styles.selectedAnswer ]}>Your Answer: { answer }</Text>
+            <Text style={ [ styles.centerText, styles.selectedAnswer ]}>Your Answer: { onParseHTML(answer) }</Text>
           }
         </View>
         <View style={ styles.answers }>

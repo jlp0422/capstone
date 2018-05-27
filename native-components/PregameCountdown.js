@@ -23,7 +23,7 @@ class PregameCountdown extends React.Component {
       AsyncStorage.removeItem('score')
     ])
     .then(([ user, bar, team ]) => {
-      console.log('STORAGE', '\n', 'user: ', user, '\n', 'bar: ', bar, '\n', 'team: ', team)
+      console.log('ASYNC STORAGE:', '\n', 'user: ', user, '\n', 'bar id: ', bar, '\n', 'team name: ', team)
     })
   }
 
@@ -50,7 +50,7 @@ class PregameCountdown extends React.Component {
     const timer = `${hours * 1 > 9 ? hours : `0${ hours }`}:${minutes * 1 > 9 ? minutes : `0${ minutes }`}:${seconds * 1 > 9 ? seconds : `0${ seconds }`}`
     return (
       <View style={ styles.container }>
-        <Text style={ styles.h1 }>Team: { name }</Text>
+        <Text style={ styles.h1 }>Team { name }</Text>
         <Text style={ styles.h2 }>Game starts in{`\n`}{ timer }</Text>
         {/* would be not button in final version, but need a way to create the game when testing */}
         <Button title="Start game!" onPress={() => this.props.navigation.navigate('QuestionActive')} />

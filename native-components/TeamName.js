@@ -1,7 +1,8 @@
 /* eslint-disable */
 import React from 'react';
 import { View, Text, StyleSheet, TextInput, Button, KeyboardAvoidingView, AsyncStorage } from 'react-native';
-import socket from '../socket-client'
+import socket from '../socket-client';
+window.navigator.userAgent = "react-native";
 
 class TeamName extends React.Component {
   constructor() {
@@ -14,7 +15,7 @@ class TeamName extends React.Component {
     const { name } = this.state
     socket.emit('team-name', name)
     socket.on('team register', (team) => {
-      console.log(`team name component: team ${team}`)
+      console.log(`component from socket: team ${team}`)
     })
     AsyncStorage.setItem('team_name', name)
     this.props.navigation.navigate('PregameCountdown', { name })
@@ -29,7 +30,7 @@ class TeamName extends React.Component {
         <Text style={ styles.h2 }>Choose your team name</Text>
         <View style={ styles.inputContainer }>
           <TextInput
-            onChangeText={text => this.setState({ name: text })}
+            onChangeText={(name) => this.setState({ name })}
             style={ styles.input }
             autoFocus
             value={ name }

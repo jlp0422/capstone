@@ -9,10 +9,12 @@ module.exports = (io) => {
     });
     socket.on('choose-bar', (bar_id) => {
       console.log(`socket server: bar id: ${bar_id}`)
+      // only works with io.emit
       socket.broadcast.emit('bar register', bar_id)
     })
     socket.on('team-name', (name) => {
       console.log(`socket server: team name: ${name}`)
+      // only works with io.emit
       socket.broadcast.emit('team register', name)
     })
     socket.on('answer', (info) => {
