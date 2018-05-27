@@ -6,18 +6,18 @@ import socket from '../socket-client'
 class TeamName extends React.Component {
   constructor() {
     super()
-    this.state = {
-      name: ''
-    }
+    this.state = { name: '' }
     this.onSubmit = this.onSubmit.bind(this)
   }
 
   onSubmit() {
     const { name } = this.state
     socket.emit('team-name', name)
-    console.log(`team name: ${name}`)
+    socket.on('team register', (team) => {
+      console.log(`team name component: team ${team}`)
+    })
     AsyncStorage.setItem('team_name', name)
-    this.props.navigation.navigate('PregameCountdown', { name: this.state.name })
+    this.props.navigation.navigate('PregameCountdown', { name })
   }
 
   render() {
@@ -81,4 +81,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default TeamName
+export default TeamName;

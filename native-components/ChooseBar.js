@@ -6,16 +6,16 @@ import socket from '../socket-client'
 class ChooseBar extends React.Component {
   constructor() {
     super()
-    this.state = {
-      barId: ''
-    }
+    this.state = { barId: '' }
     this.onSubmit = this.onSubmit.bind(this)
   }
 
   onSubmit() {
     const { barId } = this.state
     socket.emit('choose-bar', barId)
-    console.log(`your bar id: ${barId} `)
+    socket.on('bar register', (bar) => {
+      console.log(`choose bar component: bar id: ${bar}`)
+    })
     AsyncStorage.setItem('bar_id', barId)
     this.props.navigation.navigate('TeamName')
   }
