@@ -17,11 +17,11 @@ export default class CurrentGame extends Component {
 
   render() {
     const sidebarContent = [
-      'CurrentGame',
-      'Teams',
-      'Scores',
-      'Categories',
-      'PastGames'
+      'currentGame',
+      'teams',
+      'scores',
+      'categories',
+      'pastGames'
     ];
 
     return (
@@ -30,7 +30,7 @@ export default class CurrentGame extends Component {
           <Sidebar
             sidebar={sidebarContent.map(val => (
               <li key={val}>
-                <NavLink to={`./${val}`}>{val}</NavLink>
+                <NavLink to={`/${val}`}>{val}</NavLink>
               </li>
             ))}
             open={this.state.sidebarOpen}
