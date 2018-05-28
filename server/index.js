@@ -7,6 +7,7 @@ require('dotenv').config();
 app.use(require('body-parser').json());
 
 app.use('/v1', require('./routes'));
+app.use('/auth', require('./auth'));
 
 app.use('/dist', express.static(path.join(__dirname, '../dist')));
 app.use('/vendor', express.static(path.join(__dirname, '../node_modules')));

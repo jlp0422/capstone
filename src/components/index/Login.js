@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import bcrypt from 'bcryptjs';
 
 export default class Login extends Component {
   constructor(props){
@@ -16,18 +17,18 @@ export default class Login extends Component {
   
   submit(ev){
     const { name, email, password, signup } = this.state;
+    const hashPassword = bcrypt.hashSync(password, 6)
     ev.preventDefault();
     if ( signup ) {
-      axios.post('/auth/local/register', { name, email, password })
+      axios.post('/auth/register', { name, email, password: hashPassword })
       .then(res => res.data)
-      .then(user => console.log(user))
+      .then(user => localStorage.setItem('token',  user.token ))
     }
     else {
-      axios.post('/auth/local/login', { email, password })
+      axios.post('/auth/login', { email, password })
       .then(res => res.data)
-      .then(user => console.log(user))
+      .then(user => localStorage.setItem( 'token',  user.token ))
     }
-    this.setState({ signup: false, name: '', email: '', password: '' })
   }
 
   render(){
