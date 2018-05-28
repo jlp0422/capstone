@@ -55,7 +55,7 @@ export default class Category extends Component {
             </ol>
           </div>
         ) : (
-          <h2>there no questions in this game with this category</h2>
+          <h2>there are no questions in this game with this category</h2>
         )}
       </div>
     );
