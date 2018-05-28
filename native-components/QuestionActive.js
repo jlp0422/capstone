@@ -3,6 +3,8 @@ import React from 'react';
 import { View, StyleSheet, Text, Button, AsyncStorage } from 'react-native';
 import axios from 'axios';
 import DOMParser from 'react-native-html-parser';
+import socket from '../socket-client'
+window.navigator.userAgent = "react-native";
 
 class QuestionActive extends React.Component {
   constructor() {
@@ -11,7 +13,8 @@ class QuestionActive extends React.Component {
       answer: '',
       timer: 10,
       question: {},
-      score: 0
+      score: 0,
+      team: ''
     }
     this.countdown = this.countdown.bind(this)
     this.onChooseAnswer = this.onChooseAnswer.bind(this)
@@ -20,12 +23,17 @@ class QuestionActive extends React.Component {
 
   componentDidMount() {
     let countdownTimer
+    socket.emit('request question')
+    socket.on('send question', (question) => this.setState({ question: question.results[0]}))
     this.countdown()
-    axios.get('http://localhost:3000/v1/api/')
-      .then( res => res.data)
-      .then( question => this.setState({ question: question.results[0] }))
-    Promise.all([ AsyncStorage.getItem('score') ])
-      .then(([ score ]) => this.setState({ score }))
+    // axios.get('http://localhost:3000/v1/api/')
+    //   .then( res => res.data)
+    //   .then( question => this.setState({ question: question.results[0] }))
+    Promise.all([
+      AsyncStorage.getItem('score'),
+      AsyncStorage.getItem('team_name')
+      ])
+      .then(([ score, team ]) => this.setState({ score, team }))
   }
 
   componentWillUnmount() {
@@ -38,14 +46,13 @@ class QuestionActive extends React.Component {
       this.setState({ timer: timer - 1 })
       countdownTimer = setTimeout(() => this.countdown(), 1000)
     }
-    else {
-      this.props.navigation.push('QuestionOver', { question, answer })
-    }
+    else { this.props.navigation.push('QuestionOver', { question, answer }) }
   }
 
   onChooseAnswer(answer) {
-    const { question } = this.state
+    const { question, team } = this.state
     this.setState({ answer })
+    socket.emit('answer', { answer, team })
     if (answer === question.correct_answer) {
       Promise.all([AsyncStorage.getItem('score')])
         .then(([ score ]) => {
@@ -53,7 +60,6 @@ class QuestionActive extends React.Component {
           AsyncStorage.setItem('score', `${newScore}`)
         })
     }
-    console.log('answer: ', answer)
   }
 
   onParseHTML(str) {
@@ -77,13 +83,25 @@ class QuestionActive extends React.Component {
           <Text style={ [ styles.centerText, styles.questionHeader ]}>Question X</Text>
           <Text style={ [ styles.centerText, styles.timer, { color: timer < 10 ? 'red' : 'black' } ]}>:{ timer > 9 ? timer : `0${timer}` }</Text>
           <Text style={ [ styles.centerText, styles.questionText ]}>{ onParseHTML(question.question) }</Text>
+          {
+            answer &&
+            <Text style={ [ styles.centerText, styles.selectedAnswer ]}>Your Answer: { onParseHTML(answer) }</Text>
+          }
         </View>
         <View style={ styles.answers }>
-          <Button disabled={!timer || !!answer} title={`${onParseHTML(question.correct_answer)}`} onPress={() => onChooseAnswer(question.correct_answer)} />
+          <Button
+            disabled={!timer || !!answer}
+            title={`${onParseHTML(question.correct_answer)}`}
+            onPress={() => onChooseAnswer(question.correct_answer)}
+          />
           {
-            question.incorrect_answers.map( (a, idx) => (
-              <Button key={idx} disabled={ !timer || !!answer } title={`${onParseHTML(a)}`} onPress={() => onChooseAnswer(a)} />
-
+            question.incorrect_answers.map((a, idx) => (
+              <Button
+                key={ idx }
+                disabled={ !timer || !!answer }
+                title={`${onParseHTML(a)}`}
+                onPress={() => onChooseAnswer(a)}
+              />
             ))
           }
         </View>
@@ -108,7 +126,7 @@ const styles = StyleSheet.create({
     flex: 2,
     alignItems: 'center',
     padding: 20,
-    paddingTop: 10
+    paddingTop: 0
   },
   questionHeader: {
     fontSize: 30,
@@ -133,7 +151,11 @@ const styles = StyleSheet.create({
   },
   centerText: {
     textAlign: 'center'
-  }
+  },
+  selectedAnswer: {
+    fontWeight: 'bold',
+    paddingTop: 10
+  },
 })
 
 export default QuestionActive;

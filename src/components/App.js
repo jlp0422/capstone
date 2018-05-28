@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink, Route, HashRouter as Router, Switch } from 'react-router-dom';
+import { Route, HashRouter as Router, Switch } from 'react-router-dom';
 import { withRR4, Nav, NavText } from 'react-sidenav';
 import Categories from './Categories';
 import Category from './Category';
@@ -59,7 +59,6 @@ const App = () => {
               exact
               render={() => (
                 <div className="Teams">
-                  {' '}
                   <Teams />
                 </div>
               )}

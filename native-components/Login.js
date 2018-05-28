@@ -1,40 +1,33 @@
 /* eslint-disable */
 import React from 'react';
 import { View, Text, Button, TouchableHighlight, StyleSheet, AsyncStorage } from 'react-native';
-import socket from '../socket-client'
+import socket from '../socket-client';
 window.navigator.userAgent = "react-native";
 
 class Login extends React.Component {
   constructor() {
     super()
-    this.onFacebook = this.onFacebook.bind(this)
-    this.onGoogle = this.onGoogle.bind(this)
+    this.onLogin = this.onLogin.bind(this)
   }
 
-  onGoogle() {
-    console.log('login with google')
+  onLogin(site) {
+    console.log(`login component: login with ${site}`)
     // re-direct user to login with google
     // setting email and google id in the database
     // send back user id who is logging in
     // store user id in async storage
-    AsyncStorage.setItem('name', 'jeremy google')
-    socket.emit('login', 'google')
-    this.props.navigation.navigate('ChooseBar')
-  }
-
-  onFacebook() {
-    console.log('login with facebook')
-    AsyncStorage.setItem('name', 'jeremy facebook')
+    AsyncStorage.setItem('user', `jeremy ${site}`)
+    socket.emit('login', site)
     this.props.navigation.navigate('ChooseBar')
   }
 
   render() {
-    const { onFacebook, onGoogle } = this
+    const { onLogin } = this
     return (
       <View style={ styles.container }>
-        <Text style={ styles.h1 }>Login to play the next game</Text>
-        <Button onPress={ onGoogle } title="Login with Google" />
-        <Button onPress={ onFacebook } title="Login with Facebook" />
+        <Text style={ styles.h1 }>Login to play</Text>
+        <Button onPress={() => onLogin('google') } title="Login with Google" />
+        <Button onPress={() => onLogin('facebook') } title="Login with Facebook" />
       </View>
     )
   }

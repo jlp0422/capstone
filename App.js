@@ -24,11 +24,27 @@ class HomeScreen extends React.Component {
     }
   }
 
+  constructor() {
+    super()
+    this.onPlay = this.onPlay.bind(this)
+  }
+
+  onPlay() {
+    Promise.all([
+      AsyncStorage.removeItem('user'),
+      AsyncStorage.removeItem('bar_id'),
+      AsyncStorage.removeItem('team_name'),
+      AsyncStorage.removeItem('score')
+    ])
+    .then(() => this.props.navigation.navigate('Login'))
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <Text style={ styles.h1 }>UnTapped Trivia</Text>
         <Button onPress={() => this.props.navigation.navigate('Login')} title="Play now" />
+        {/*<Text style={ styles.h2 }>Next game starts at 9:00pm</Text>*/}
       </View>
     );
   }
@@ -45,6 +61,10 @@ const styles = StyleSheet.create({
   h1: {
     fontSize: 30,
     fontWeight: 'bold',
+    paddingBottom: 35
+  },
+  h2: {
+    fontSize: 20,
     paddingBottom: 35
   }
 });
@@ -139,8 +159,8 @@ const MainStack = createStackNavigator(
     }
   },
   {
-    initialRouteName: 'Home', // will be set as home at end, changing for easier page testing
-    // initialRouteName: 'TeamName',
+    // initialRouteName: 'Home', // will be set as home at end, changing for easier page testing
+    initialRouteName: 'GameOver',
     navigationOptions: {
       headerStyle: { backgroundColor: 'lightblue' }
     }

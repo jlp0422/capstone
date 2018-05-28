@@ -5,7 +5,11 @@ import { StackActions } from 'react-navigation';
 
 class GameOver extends React.Component {
   render() {
-    const scores = [{ team: 'Jeremy', score: 16 }, { team: 'Jacob', score: 12 }, { team: 'Mike', score: 9 }]
+    const scores = [
+      { team: 'The GOATs', score: 16 },
+      { team: 'Dream Team', score: 12 },
+      { team: 'Get to the Choppa', score: 9 }
+    ]
     return (
       <View style={ styles.container }>
         <Text style={ styles.h1} >Thanks for playing!</Text>
@@ -43,7 +47,8 @@ const styles = StyleSheet.create({
   },
   scores: {
     fontSize: 18,
-    padding: 5
+    padding: 5,
+    textAlign: 'center'
   },
   scroll: {
     maxHeight: '50%'
