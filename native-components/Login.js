@@ -1,7 +1,8 @@
 /* eslint-disable */
 import React from 'react';
-import { View, Text, Button, TouchableHighlight, StyleSheet, AsyncStorage } from 'react-native';
+import { View, Text, Button, TouchableHighlight, StyleSheet, AsyncStorage, Linking } from 'react-native';
 import socket from '../socket-client';
+import axios from 'axios';
 window.navigator.userAgent = "react-native";
 
 class Login extends React.Component {
@@ -10,14 +11,32 @@ class Login extends React.Component {
     this.onLogin = this.onLogin.bind(this)
   }
 
+  componentDidUpdate() { 
+    Linking.addEventListener('url', this.handleOpenURL);  
+  }
+  
+  componentWillUnmount() { 
+    Linking.removeEventListener('url', this.handleOpenURL);
+  }
+
+  handleOpenURL(event){ 
+    console.log("url", event.url);
+  }
+
   onLogin(site) {
     console.log(`login component: login with ${site}`)
     // re-direct user to login with google
     // setting email and google id in the database
     // send back user id who is logging in
     // store user id in async storage
-    AsyncStorage.setItem('user', `jeremy ${site}`)
-    socket.emit('login', site)
+
+    Linking.openURL(`http://localhost:3000/auth/${site}`)
+    
+    socket.on('authenticated', (id) => {
+      console.log("authenticated user:", id)
+      AsyncStorage.setItem('user', `${id}`)
+    })
+    
     this.props.navigation.navigate('ChooseBar')
   }
 

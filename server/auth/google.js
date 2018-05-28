@@ -2,12 +2,14 @@ const router = require('express').Router();
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
+const socket = require('../../socket-client');
+const Player = require('../db/models/Player');
 
 const host = process.env.HOST
 const googleCredentials = {
   clientID: process.env.GOOGLE_ID,
   clientSecret: process.env.GOOGLE_KEY,
-  callbackURL: `${host}/auth/google/callback`
+  callbackURL: `${host}auth/google/callback`
 }
 
 const verificationCb = (token, refreshToken, profile, done) => {
@@ -17,12 +19,12 @@ const verificationCb = (token, refreshToken, profile, done) => {
     email: profile.emails[0].value,
   };
 
-  User.findOrCreate({
+  Player.findOrCreate({
     where: { googleId: profile.id },
     defaults: info
   })
-  .spread((user, created) => {
-      done(null, user);
+  .spread((player, created) => {
+      done(null, player);
   })
   .catch(done);
 }
@@ -31,9 +33,11 @@ passport.use(new GoogleStrategy(googleCredentials, verificationCb));
 
 router.get('/', passport.authenticate('google', { scope: 'email', session: false }))
 
-router.get('/callback', passport.authenticate('google', { failureRedirect: '/login', session: false }), (req, res) => {
-  const token = jwt.sign({id: req.user.id}, process.env.SECRET, { expiresIn: 86400 })
-  res.redirect(`/?token=${token}`)
+router.get('/callback', passport.authenticate('google', { session: false }), (req, res) => {
+  socket.emit('authenticate', req.user.id)
+  // token = jwt.sign({ id: req.user.id }, process.env.SECRET, { expiresIn: 86400 })
+  res.redirect(`exp://localhost:19000`)
 }) 
+
 
 module.exports = router;
