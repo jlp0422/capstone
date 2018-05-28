@@ -1,7 +1,9 @@
 import React from 'react';
-import { Route, HashRouter as Router, Switch } from 'react-router-dom';
+import Login from './index/Login';
+import { NavLink, Route, HashRouter as Router, Switch } from 'react-router-dom';
 import { withRR4, Nav, NavText } from 'react-sidenav';
 import Categories from './Categories';
+import PastGames from './PastGames';
 import Category from './Category';
 import Teams from './Teams';
 import Home from './Home';
@@ -16,6 +18,9 @@ const App = () => {
           <SideNav default="/" highlightBgColor="blue" highlightColor="white">
             <Nav id="">
               <NavText> Home </NavText>
+            </Nav>
+            <Nav id="">
+              <NavText> Login </NavText>
             </Nav>
             <Nav id="categories">
               <NavText> Categories </NavText>
@@ -33,6 +38,15 @@ const App = () => {
               render={() => (
                 <div className="Home">
                   <Home />
+                </div>
+              )}
+            />
+            <Route
+              path="/login"
+              exact
+              render={() => (
+                <div className="">
+                  <Login />
                 </div>
               )}
             />
