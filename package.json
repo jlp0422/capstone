@@ -13,15 +13,17 @@
   },
   "main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
   "scripts": {
-    "start": "react-native-scripts start",
-    "eject": "react-native-scripts eject",
+    "postinstall": "npm run webpack",
+    "start:native": "react-native-scripts start",
+    "eject:native": "react-native-scripts eject",
     "android": "react-native-scripts android",
     "ios": "react-native-scripts ios",
     "test": "jest",
     "webpack": "./node_modules/webpack/bin/webpack.js",
     "start:dev": "npm run webpack -- -w & nodemon server",
-    "start:both": "npm run start & npm run start:dev",
-    "seed": "node server/seed.js"
+    "start:both": "npm run start:native & npm run start:dev",
+    "seed": "node server/seed.js",
+    "start": "npm run seed && node server"
   },
   "jest": {
     "preset": "jest-expo"
