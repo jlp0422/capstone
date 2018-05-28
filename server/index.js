@@ -7,8 +7,6 @@ const socketio = require('socket.io')
 const app = express()
 const server = http.Server(app)
 const io = socketio(server)
-const sockServer = require('../socket-server')
-const { sock } = sockServer
 
 require('dotenv').config();
 app.use(require('body-parser').json());
@@ -27,4 +25,4 @@ app.get('/', (req, res, next) => {
 const port = process.env.PORT || 3000;
 server.listen(port, () => console.log(`listening on port ${port}`));
 
-sock(io)
+require('../socket-server')(io)

@@ -11,6 +11,18 @@ class Login extends React.Component {
     this.onLogin = this.onLogin.bind(this)
   }
 
+  componentDidUpdate() { 
+    Linking.addEventListener('url', this.handleOpenURL);  
+  }
+  
+  componentWillUnmount() { 
+    Linking.removeEventListener('url', this.handleOpenURL);
+  }
+
+  handleOpenURL(event){ 
+    console.log("url", event.url);
+  }
+
   onLogin(site) {
     console.log(`login component: login with ${site}`)
     switch(site) {
@@ -25,8 +37,14 @@ class Login extends React.Component {
     // setting email and google id in the database
     // send back user id who is logging in
     // store user id in async storage
-    AsyncStorage.setItem('user', `jeremy ${site}`)
-    socket.emit('login', site)
+
+    Linking.openURL(`http://localhost:3000/auth/${site}`)
+    
+    socket.on('authenticated', (id) => {
+      console.log("authenticated user:", id)
+      AsyncStorage.setItem('user', `${id}`)
+    })
+    
     this.props.navigation.navigate('ChooseBar')
   }
 

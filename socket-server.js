@@ -1,13 +1,7 @@
 /* eslint-disable */
 const axios = require('axios');
 
-const authenticate = (socket, token) => {
-  socket.on('authenticate', (token) => {
-    // emit to whoever needs
-  })
-}
-
-const sock = (io) => {
+module.exports = (io) => {
   io.on('connection', (socket) => {
     console.log('socket server connected:', socket.id)
     socket.on('login', (type) => {
@@ -33,14 +27,12 @@ const sock = (io) => {
         .then( res => res.data)
         .then( question => io.emit('send question', question))
     });
-    authenticate(socket, 'xxx');
+    socket.on('authenticate', (id) => {
+      console.log('user id:', id)
+      socket.broadcast.emit('authenticated', id)
+    });
     socket.on('disconnect', () => {
       console.log('user has disconnected')
     })
   })
-}
-
-module.exports = {
-  sock,
-  authenticate
 }
