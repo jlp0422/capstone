@@ -12,6 +12,10 @@ class Login extends React.Component {
 
   onLogin(site) {
     console.log(`login component: login with ${site}`)
+    if (site === 'google') {
+      axios.get(`/auth/${site}`)
+        .then(res => console.log(res.data))
+    }
     // re-direct user to login with google
     // setting email and google id in the database
     // send back user id who is logging in
