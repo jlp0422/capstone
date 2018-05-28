@@ -21,7 +21,7 @@
     "test": "jest",
     "webpack": "./node_modules/webpack/bin/webpack.js",
     "start:dev": "npm run webpack -- -w & nodemon server",
-    "start:both": "npm run start & npm run start:dev",
+    "start:both": "npm run start:native & npm run start:dev",
     "seed": "node server/seed.js",
     "start": "npm run seed && node server"
   },
