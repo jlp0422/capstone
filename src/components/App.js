@@ -13,18 +13,14 @@ const App = () => {
     <Router>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <div style={{ width: 220 }}>
-          <SideNav
-            default="Home"
-            highlightBgColor="blue"
-            highlightColor="white"
-          >
-            <Nav id="Home">
+          <SideNav default="/" highlightBgColor="blue" highlightColor="white">
+            <Nav id="">
               <NavText> Home </NavText>
             </Nav>
-            <Nav id="Categories">
+            <Nav id="categories">
               <NavText> Categories </NavText>
             </Nav>
-            <Nav id="Teams">
+            <Nav id="teams">
               <NavText> Teams </NavText>
             </Nav>
           </SideNav>

@@ -28,7 +28,8 @@ export default class Teams extends Component {
                 name: player.team_name,
                 email: player.email,
                 id: player.id,
-                game_id: player.game_id
+                game_id: player.game_id,
+                score: player.score
               }
             ]
           });
@@ -41,35 +42,50 @@ export default class Teams extends Component {
   }
   render() {
     const { teams, showAll, currentGame } = this.state;
-    console.log(this.state);
+    console.log(teams.score);
     return (
       <div>
         <button onClick={this.onClick}>
           toggle all players/players assigned the game
         </button>
-        <ul>
-          {showAll
-            ? teams.map(team => {
-                return (
-                  <li key={team.id}>
-                    <Link to={`/players/${team.id}`}>{team.name}</Link>
-                    {'           '}
-                    <Link to={`mailto:${team.email}`}>{team.email}</Link>
-                  </li>
-                );
-              })
-            : teams.map(team => {
-                if (team.game_id === currentGame) {
-                  return (
-                    <li key={team.id}>
+        <h1>Teams</h1>
+        <div className="grid-container">
+          <h3 className="grid-item1">name</h3>
+          {showAll && <h3 className="grid-item2">email</h3>}
+          {!showAll && <h3 className="grid-item2">score</h3>}
+        </div>
+        {showAll
+          ? teams.map(team => {
+              return (
+                <div className="" key={team.id}>
+                  <ul className="">
+                    <li>
                       <Link to={`/players/${team.id}`}>{team.name}</Link>
-                      {'           '}
+                    </li>
+
+                    <li>
                       <Link to={`mailto:${team.email}`}>{team.email}</Link>
                     </li>
-                  );
-                }
-              })}
-        </ul>
+                  </ul>
+                </div>
+              );
+            })
+          : teams.map(team => {
+              if (team.game_id === currentGame) {
+                return (
+                  <div key={team.id}>
+                    <ul className="">
+                      <li>
+                        <Link to={`/players/${team.id}`}>{team.name}</Link>
+                      </li>
+
+                      <li>{team.score}</li>
+                    </ul>
+                    <br />
+                  </div>
+                );
+              }
+            })}
       </div>
     );
   }
