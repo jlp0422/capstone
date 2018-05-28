@@ -1,7 +1,8 @@
 /* eslint-disable */
 import React from 'react';
-import { View, Text, Button, TouchableHighlight, StyleSheet, AsyncStorage } from 'react-native';
+import { View, Text, Button, TouchableHighlight, StyleSheet, AsyncStorage, Image } from 'react-native';
 import socket from '../socket-client';
+import axios from 'axios';
 window.navigator.userAgent = "react-native";
 
 class Login extends React.Component {
@@ -12,9 +13,13 @@ class Login extends React.Component {
 
   onLogin(site) {
     console.log(`login component: login with ${site}`)
-    if (site === 'google') {
-      axios.get(`/auth/${site}`)
-        .then(res => console.log(res.data))
+    switch(site) {
+      case 'google':
+        console.log('switch google')
+        // axios.get(`http://localhost:3000/auth/${site}`)
+          // .then(res => console.log('response from axios: ', res.data))
+      case 'facebook':
+        console.log('switch facebook')
     }
     // re-direct user to login with google
     // setting email and google id in the database
@@ -30,8 +35,20 @@ class Login extends React.Component {
     return (
       <View style={ styles.container }>
         <Text style={ styles.h1 }>Login to play</Text>
-        <Button onPress={() => onLogin('google') } title="Login with Google" />
-        <Button onPress={() => onLogin('facebook') } title="Login with Facebook" />
+
+        <View style={ styles.buttonContainer }>
+          <TouchableHighlight onPress={() => onLogin('google')} underlayColor={'#f0f3f8'}>
+            <Image style={ styles.googleButton } source={require('../images/google_button.png')} />
+          </TouchableHighlight>
+        </View>
+
+        <View>
+          <TouchableHighlight onPress={() => onLogin('facebook')} underlayColor={'#f0f3f8'}>
+            <Image style={ styles.facebookButton } source={require('../images/facebook_button.png')} />
+          </TouchableHighlight>
+        </View>
+        {/*<Button onPress={() => onLogin('google') } title="Login with Google" />*/}
+        {/*<Button onPress={() => onLogin('facebook') } title="Login with Facebook" />*/}
       </View>
     )
   }
@@ -46,10 +63,21 @@ const styles = StyleSheet.create({
   h1: {
     fontSize: 30,
     fontWeight: 'bold',
-    paddingBottom: 30,
+    paddingBottom: 50,
     paddingLeft: 10,
     paddingRight: 10,
     textAlign: 'center'
+  },
+  buttonContainer: {
+    paddingBottom: 40
+  },
+  googleButton: {
+    width: 250,
+    height: 60.25
+  },
+  facebookButton: {
+    width: 250,
+    height: 40.5
   }
 })
 

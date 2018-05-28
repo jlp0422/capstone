@@ -34,6 +34,6 @@ router.get('/', passport.authenticate('google', { scope: 'email', session: false
 router.get('/callback', passport.authenticate('google', { failureRedirect: '/login', session: false }), (req, res) => {
   const token = jwt.sign({id: req.user.id}, process.env.SECRET, { expiresIn: 86400 })
   res.redirect(`/?token=${token}`)
-}) 
+})
 
 module.exports = router;
