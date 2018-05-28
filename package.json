@@ -43,9 +43,13 @@
     "react-dom": "^16.4.0",
     "react-native": "~0.55.2",
     "react-native-elements": "^0.19.1",
+    "react-native-html-parser": "0.0.5",
     "react-navigation": "^2.0.1",
     "react-router-dom": "^4.2.2",
+    "react-sidebar": "^2.3.2",
     "sequelize": "^4.37.8",
+    "socket.io": "^2.1.1",
+    "socket.io-client": "^2.1.1",
     "webpack": "^3.11.0"
   }
 }
