@@ -30,9 +30,7 @@ class QuestionWaiting extends React.Component {
       this.setState({ timer: timer - 1 })
       countdownTimer = setTimeout(() => this.countdown(), 1000);
     }
-    else {
-      this.props.navigation.push('QuestionActive')
-    }
+    else { this.props.navigation.push('QuestionActive') }
   }
 
   render() {

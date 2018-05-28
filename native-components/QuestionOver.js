@@ -33,9 +33,7 @@ class QuestionOver extends React.Component {
       this.setState({ timer: timer - 1 })
       countdownTimer = setTimeout(() => this.countdown(), 1000)
     }
-    else {
-      this.props.navigation.push('QuestionWaiting')
-    }
+    else { this.props.navigation.push('QuestionWaiting') }
   }
 
   onParseHTML(str) {
