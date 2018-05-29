@@ -24,8 +24,8 @@ module.exports = (io) => {
     socket.on('request question', () => {
       console.log('question requested on server')
       axios.get('http://localhost:3000/v1/api/')
-        .then( res => res.data)
-        .then( question => io.emit('send question', question))
+        .then(res => res.data)
+        .then(question => io.emit('send question', question))
     });
     socket.on('authenticate', (id) => {
       console.log('user id:', id)

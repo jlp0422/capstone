@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React from 'react';
-import { View, Text, Button, TouchableHighlight, StyleSheet, AsyncStorage, Image } from 'react-native';
+import { View, Text, Button, TouchableHighlight, StyleSheet, AsyncStorage, Image, Linking } from 'react-native';
 import socket from '../socket-client';
 import axios from 'axios';
 window.navigator.userAgent = "react-native";
@@ -11,25 +11,23 @@ class Login extends React.Component {
     this.onLogin = this.onLogin.bind(this)
   }
 
-  componentDidUpdate() { 
-    Linking.addEventListener('url', this.handleOpenURL);  
+  componentDidUpdate() {
+    Linking.addEventListener('url', this.handleOpenURL);
   }
-  
-  componentWillUnmount() { 
+
+  componentWillUnmount() {
     Linking.removeEventListener('url', this.handleOpenURL);
   }
 
-  handleOpenURL(event){ 
+  handleOpenURL(event){
     console.log("url", event.url);
   }
 
   onLogin(site) {
     console.log(`login component: login with ${site}`)
-    switch(site) {
+    switch (site) {
       case 'google':
         console.log('switch google')
-        // axios.get(`http://localhost:3000/auth/${site}`)
-          // .then(res => console.log('response from axios: ', res.data))
       case 'facebook':
         console.log('switch facebook')
     }
@@ -39,12 +37,12 @@ class Login extends React.Component {
     // store user id in async storage
 
     Linking.openURL(`http://localhost:3000/auth/${site}`)
-    
+
     socket.on('authenticated', (id) => {
       console.log("authenticated user:", id)
       AsyncStorage.setItem('user', `${id}`)
     })
-    
+
     this.props.navigation.navigate('ChooseBar')
   }
 

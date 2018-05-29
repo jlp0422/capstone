@@ -28,7 +28,7 @@ class HomeScreen extends React.Component {
     super()
     this.onPlay = this.onPlay.bind(this)
   }
-
+np
   onPlay() {
     Promise.all([
       AsyncStorage.removeItem('user'),
@@ -159,8 +159,8 @@ const MainStack = createStackNavigator(
     }
   },
   {
-    // initialRouteName: 'Home', // will be set as home at end, changing for easier page testing
-    initialRouteName: 'Login',
+    initialRouteName: 'Home', // will be set as home at end, changing for easier page testing
+    // initialRouteName: 'Login',
     navigationOptions: {
       headerStyle: { backgroundColor: 'lightblue' }
     }
