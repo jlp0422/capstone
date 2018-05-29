@@ -13,8 +13,7 @@ router.get('/:id/teams', (req, res, next) => {
   Game.findById(req.params.id)
     .then(game =>
       game.getPlayers({
-        where: { game_id: game.id },
-        include: [{ model: Player }]
+        where: { game_id: game.id }
       })
     )
     .then(teams => res.send(teams));

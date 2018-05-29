@@ -17,6 +17,36 @@
     grid-row-end: 1;
 }
 
-ul {
+ul.team {
     columns: 2;
+}
+
+.grid-question-header {
+    grid-column-start: 1;
+    grid-column-end: 1;
+    grid-row-start: 1;
+    grid-row-end: 1;
+}
+
+.grid-button {
+    grid-column-start: 1;
+    grid-column-end: 1;
+    grid-row-start: 2;
+    grid-row-end: 2;
+    max-width: 150px;
+    max-height: 25px;
+}
+
+.grid-question {
+    grid-column-start: 2;
+    grid-column-end: 2;
+    grid-row-start: 2;
+    grid-row-end: 2;
+}
+
+.grid-answer {
+    grid-column-start: 3;
+    grid-column-end: 3;
+    grid-row-start: 2;
+    grid-row-end: 2;
 }
