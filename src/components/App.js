@@ -7,6 +7,7 @@ import PastGames from './PastGames';
 import Category from './Category';
 import Teams from './Teams';
 import Home from './Home';
+import CurrentGame from './CurrentGame';
 
 const SideNav = withRR4();
 
@@ -24,6 +25,9 @@ const App = () => {
             </Nav>
             <Nav id="categories">
               <NavText> Categories </NavText>
+            </Nav>
+            <Nav id="games/currentGame">
+              <NavText> Current Game </NavText>
             </Nav>
             <Nav id="teams">
               <NavText> Teams </NavText>
@@ -70,6 +74,15 @@ const App = () => {
               render={() => (
                 <div className="Teams">
                   <Teams />
+                </div>
+              )}
+            />
+            <Route
+              path="/games/currentGame"
+              exact
+              render={() => (
+                <div className="CurrentGame">
+                  <CurrentGame />
                 </div>
               )}
             />

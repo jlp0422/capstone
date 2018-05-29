@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import moment from 'moment';
 
 export default class PastGames extends Component {
   constructor() {
@@ -22,7 +23,7 @@ export default class PastGames extends Component {
           id: 3,
           date: '03/01/2018',
           numberOfTeams: 6
-        },
+        }
       ]
     };
   }
@@ -38,32 +39,20 @@ export default class PastGames extends Component {
     const { pastGames } = this.state;
     return (
       <div className="container">
-      <div className="row">
-        <div className="col">
-          <h3>Date</h3>
-          {
-            pastGames.map(game => {
-              return (
-                <div key={game.id}>
-                  {game.date}
-                </div>
-              );
-            })
-          }
+        <div className="row">
+          <div className="col">
+            <h3>Date</h3>
+            {pastGames.map(game => {
+              return <div key={game.id}>{game.date}</div>;
+            })}
+          </div>
+          <div className="col">
+            <h3>No. of Teams</h3>
+            {pastGames.map(game => {
+              return <div key={game.id}>{game.numberOfTeams}</div>;
+            })}
+          </div>
         </div>
-        <div className="col">
-          <h3>No. of Teams</h3>
-          {
-            pastGames.map(game => {
-              return (
-                <div key={game.id}>
-                  {game.numberOfTeams}
-                </div>
-              );
-            })
-          }
-        </div>
-      </div>
       </div>
     );
   }
