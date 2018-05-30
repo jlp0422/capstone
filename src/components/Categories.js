@@ -14,7 +14,8 @@ export default class Categories extends Component {
       .get('/v1/categories')
       .then(res => res.data)
       .then(_categories => _categories.trivia_categories)
-      .then(categories => this.setState({ categories }));
+      .then(categories => this.setState({ categories }))
+      .catch(err => console.log(err))
   }
 
   render() {
