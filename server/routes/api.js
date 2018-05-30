@@ -3,8 +3,8 @@ const axios = require('axios');
 
 router.get('/api', (req, res, next) => {
   axios
-    .get(`https://opentdb.com/api.php?amount=20`)
-    .then(res => res.data)
+    .get(`https://opentdb.com/api.php?amount=1`)
+    .then(resp => resp.data)
     .then(questions => res.send(questions));
 });
 
@@ -44,28 +44,28 @@ type = multiple/boolean
 router.get('/api/:query', (req, res, next) => {
   axios
     .get(`https://opentdb.com/api.php?${req.params.query}`)
-    .then(res => res.data)
+    .then(resp => resp.data)
     .then(questions => res.send(questions));
 });
 
 router.get('/categories', (req, res, next) => {
   axios
     .get(`https://opentdb.com/api_category.php`)
-    .then(res => res.data)
+    .then(resp => resp.data)
     .then(categories => res.send(categories));
 });
 
 router.get('/categories/:id', (req, res, next) => {
   axios
     .get(`https://opentdb.com/api_count.php?category=${req.params.id}`)
-    .then(res => res.data)
+    .then(resp => resp.data)
     .then(categories => res.send(categories));
 });
 
 router.get('/counts', (req, res, next) => {
   axios
     .get(`https://opentdb.com/api_count_global.php`)
-    .then(res => res.data)
+    .then(resp => resp.data)
     .then(counts => res.send(counts));
 });
 

@@ -20,7 +20,10 @@ class HomeScreen extends React.Component {
     return {
       headerLeft: (
         <Button title="About" onPress={() => navigation.navigate('Info')} />
-      )
+      ),
+      // headerRight: (
+      //   <Button title="Home" onPress={() => navigation.push('Home')} />
+      // )
     }
   }
 
@@ -107,7 +110,7 @@ const MainStack = createStackNavigator(
     Login: {
       screen: Login,
       navigationOptions: {
-        title: 'Login'
+        title: 'Login',
       }
     },
     ChooseBar: {

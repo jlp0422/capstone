@@ -1,7 +1,6 @@
 import React from 'react';
-import Login from './index/Login';
+import Login from './Login';
 import { NavLink, Route, HashRouter as Router, Switch } from 'react-router-dom';
-import { withRR4, Nav, NavText } from 'react-sidenav';
 import Categories from './Categories';
 import PastGames from './PastGames';
 import Category from './Category';
