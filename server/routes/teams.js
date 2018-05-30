@@ -1,9 +1,9 @@
 const router = require('express').Router();
-const { Player } = require('../db').models
+const { Team } = require('../db').models
 
 router.get('/', (req, res, next) => {
-  Player.findAll()
-  .then(players => res.send(players))
+  Team.findAll()
+  .then(Teams => res.send(Teams))
 })
 
 module.exports = router;

@@ -1,23 +1,26 @@
 const router = require('express').Router();
-const { Game, Player, Question } = require('../db').models;
+const { Game, Team, Question } = require('../db').models;
 
 router.get('/', (req, res, next) => {
   Game.findAll().then(games => res.send(games));
 });
-router.get('/current', (req, res, next) => {
+
+router.get('/active', (req, res, next) => {
   Game.find({
-    where: { current: true }
+    where: { active: true }
   }).then(game => res.send(game));
 });
+
 router.get('/:id/teams', (req, res, next) => {
   Game.findById(req.params.id)
     .then(game =>
-      game.getPlayers({
+      game.getTeams({
         where: { game_id: game.id }
       })
     )
     .then(teams => res.send(teams));
 });
+
 router.get('/:id/questions', (req, res, next) => {
   Game.findById(req.params.id)
     .then(game =>

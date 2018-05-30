@@ -1,7 +1,6 @@
 const router = require('express').Router();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const cyrpto = require('crypto');
 const { Bar } = require('../db').models;
 const secret = process.env.SECRET;
 
@@ -21,7 +20,7 @@ router.post('/login', (req, res) => {
       const token = jwt.sign({ id: bar.id }, secret, {expiresIn: 86400 });
       if (!passwordIsValid){
         return res.status(401).send({ token: null });
-      } 
+      }
       res.status(200).send({ token });
     })
     .catch(err => res.status(404).send({ error: err }));
