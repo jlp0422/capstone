@@ -2,6 +2,7 @@ import React from 'react';
 import Login from './Login';
 import { NavLink, Route, HashRouter as Router, Switch } from 'react-router-dom';
 import Categories from './Categories';
+import CurrentGame from './CurrentGame';
 import PastGames from './PastGames';
 import Category from './Category';
 import Teams from './Teams';
@@ -19,6 +20,8 @@ const App = () => {
           <Route path="/categories" exact component={Categories}/>
           <Route path="/categories/:id" component={Category}/>
           <Route path="/teams" component={Teams}/>
+          <Route path="/games/active" exact component={CurrentGame}/>
+          <Route path="/games/past" exact component={PastGames}/>
         </Switch>
       </div>
     </Router>

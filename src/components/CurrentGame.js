@@ -23,7 +23,7 @@ export default class CurrentGame extends Component {
       .then(_questions => _questions.results)
       .then(questions => this.setState({ questions: questions }));
     axios
-      .get('/v1/games/current')
+      .get('/v1/games/active')
       .then(res => res.data)
       .then(game => {
         axios

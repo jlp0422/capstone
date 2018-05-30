@@ -36,13 +36,12 @@ export default class Teams extends Component {
         });
       });
     axios
-      .get('/v1/games/current')
+      .get('/v1/games/active')
       .then(res => res.data)
       .then(game => this.setState({ currentGame: game.id }));
   }
   render() {
     const { teams, showAll, currentGame } = this.state;
-    console.log(teams.score);
     return (
       <div>
         <button onClick={this.onClick}>
