@@ -6,6 +6,7 @@ import PastGames from './PastGames';
 import Category from './Category';
 import Teams from './Teams';
 import Home from './Home';
+import { withRR4, Nav, NavText } from 'react-sidenav';
 
 const SideNav = withRR4();
 
