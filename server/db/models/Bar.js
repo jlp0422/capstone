@@ -8,26 +8,8 @@ const Bar = conn.define(
       allowNull: false,
       primaryKey: true,
       type: Sequelize.INTEGER
-      // defaultValue: Sequelize.UUIDV4
     },
-    email: {
-      type: Sequelize.STRING,
-      unique: {
-        args: [true],
-        msg: 'E-mail is already taken'
-      },
-      allowNull: false,
-      validate: {
-        isEmail: {
-          args: [true],
-          msg: 'E-mail is invalid'
-        },
-        notEmpty: {
-          args: [true],
-          msg: 'E-mail cannot be empty'
-        }
-      }
-    },
+    email: Sequelize.STRING,
     password: {
       allowNull: false,
       type: Sequelize.STRING
@@ -35,12 +17,6 @@ const Bar = conn.define(
     name: {
       type: Sequelize.STRING,
       allowNull: false,
-      validate: {
-        notEmpty: {
-          args: [true],
-          msg: 'Bar Name cannot be empty'
-        }
-      }
     }
   },
   { underscored: true }
