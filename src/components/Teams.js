@@ -17,10 +17,10 @@ export default class Teams extends Component {
   }
   componentDidMount() {
     axios
-      .get('/v1/players')
+      .get('/v1/teams')
       .then(res => res.data)
-      .then(players => {
-        players.map(player => {
+      .then(teams => {
+        teams.map(player => {
           this.setState({
             teams: [
               ...this.state.teams,
@@ -46,7 +46,7 @@ export default class Teams extends Component {
     return (
       <div>
         <button onClick={this.onClick}>
-          toggle all players/players assigned the game
+          toggle all teams/teams assigned the game
         </button>
         <h1>Teams</h1>
         <div className="grid-container">
@@ -60,7 +60,7 @@ export default class Teams extends Component {
                 <div className="" key={team.id}>
                   <ul className="">
                     <li>
-                      <Link to={`/players/${team.id}`}>{team.name}</Link>
+                      <Link to={`/teams/${team.id}`}>{team.name}</Link>
                     </li>
 
                     <li>
@@ -76,7 +76,7 @@ export default class Teams extends Component {
                   <div key={team.id}>
                     <ul className="">
                       <li>
-                        <Link to={`/players/${team.id}`}>{team.name}</Link>
+                        <Link to={`/teams/${team.id}`}>{team.name}</Link>
                       </li>
 
                       <li>{team.score}</li>

@@ -1,0 +1,41 @@
+.grid-container {
+	display: grid;
+	grid-column-gap: 50px;
+}
+
+.grid-item1 {
+	grid-column-start: 1;
+	grid-column-end: 1;
+	grid-row-start: 1;
+	grid-row-end: 1;
+}
+
+.grid-item2 {
+	grid-column-start: 2;
+	grid-column-end: 2;
+	grid-row-start: 1;
+	grid-row-end: 1;
+}
+
+ul {
+	columns: 2;
+}
+
+.sidebar {
+	grid-column: 1;
+	display: grid;
+	grid-template-rows: repeat(6, 50px)
+}
+
+.sidebar-link{
+	grid-row: auto;
+}
+
+.main-grid {
+	display: grid;
+	grid-template-columns: 1fr 4fr;
+}
+
+.routes-grid {
+	grid-column: 2;
+}

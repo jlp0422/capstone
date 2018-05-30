@@ -58,7 +58,6 @@ export default class Login extends Component {
           <br />
           <button> { signup ? 'Sign up' : 'Log in' }</button>
         </form>
-        <Link to='forgot'> Forgot your password? </Link>
         {
           signup ?
           <h3> Already have an account? </h3>
