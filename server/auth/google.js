@@ -3,7 +3,7 @@ const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const socket = require('../../socket-client');
-const Player = require('../db/models/Player');
+const Team = require('../db/models/Team');
 
 const host = process.env.HOST
 const googleCredentials = {
@@ -19,12 +19,12 @@ const verificationCb = (token, refreshToken, profile, done) => {
     email: profile.emails[0].value,
   };
 
-  Player.findOrCreate({
+  Team.findOrCreate({
     where: { googleId: profile.id },
     defaults: info
   })
-  .spread((player, created) => {
-      done(null, player);
+  .spread((team, created) => {
+      done(null, team);
   })
   .catch(done);
 }
@@ -37,7 +37,7 @@ router.get('/callback', passport.authenticate('google', { session: false }), (re
   socket.emit('authenticate', req.user.id)
   // token = jwt.sign({ id: req.user.id }, process.env.SECRET, { expiresIn: 86400 })
   res.redirect(`exp://localhost:19000`)
-}) 
+})
 
 
 module.exports = router;

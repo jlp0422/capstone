@@ -1,10 +1,10 @@
-const { Player, Bar, Game, Question } = require('./db').models;
+const { Team, Bar, Game, Question } = require('./db').models;
 const conn = require('./db/conn');
 const axios = require('axios');
 const chance = require('chance').Chance();
 const faker = require('faker');
 
-const numOfPlayers = 4;
+const numOfTeams = 4;
 
 const doTimes = (num, cb) => {
   const results = []
@@ -13,15 +13,15 @@ const doTimes = (num, cb) => {
   }
 }
 
-const createPlayer = () => {
-  return Player.create({
+const createTeam = () => {
+  return Team.create({
     team_name: `${chance.capitalize(faker.commerce.color())} ${chance.animal()}s`,
     email: chance.email()
   })
 }
 
-const populatePlayers = () => {
-  return doTimes(numOfPlayers, createPlayer);
+const populateTeams = () => {
+  return doTimes(numOfTeams, createTeam);
 }
 
 const seed = () => {
@@ -29,7 +29,7 @@ const seed = () => {
   .then(res => res.data.results)
   .then(questions => {
     questions.map(question => {
-      Question.create({ 
+      Question.create({
         question: question.question,
         answers: question.answers,
         correct_answer: question.correct_answer,
@@ -40,12 +40,13 @@ const seed = () => {
   })
   .then(() => {
     return Bar.create({
+      id: Math.floor(Math.random() * 10000),
       email: chance.email(),
       password: 'admin',
       name: `${chance.animal()} Town`
     })
     .then(() => Game.create())
-    .then(() => populatePlayers())
+    .then(() => populateTeams())
   })
   .catch(err => console.log(err))
 }

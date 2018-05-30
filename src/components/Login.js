@@ -14,7 +14,7 @@ export default class Login extends Component {
     }
     this.submit = this.submit.bind(this);
   }
-  
+
   submit(ev){
     const { name, email, password, signup } = this.state;
     const hashPassword = bcrypt.hashSync(password, 6)
@@ -38,27 +38,29 @@ export default class Login extends Component {
         <h1> { signup ? 'Create an Account' : 'Please Log in' } </h1>
         <form onSubmit={this.submit}>
           { signup ?
-            <input 
-              onChange={(ev) => this.setState({ name: ev.target.value })} 
+            <input
+              onChange={(ev) => this.setState({ name: ev.target.value })}
               placeholder="Your Bar's Name" />
             : null
           }
           <br />
-          <input 
-            type='email'
-            onChange={(ev) => this.setState({ email: ev.target.value })} 
-            placeholder='Email' />
+          <input
+            type='number'
+            max="9999"
+            min="1000"
+            onChange={(ev) => this.setState({ id: ev.target.value })}
+            placeholder='Bar ID' />
           <br />
           <input
-            type='password' 
-            onChange={(ev) => this.setState({ password: ev.target.value })} 
+            type='password'
+            onChange={(ev) => this.setState({ password: ev.target.value })}
             placeholder='Password' />
           <br />
           <button> { signup ? 'Sign up' : 'Log in' }</button>
         </form>
         <Link to='forgot'> Forgot your password? </Link>
         {
-          signup ? 
+          signup ?
           <h3> Already have an account? </h3>
           :
           <h3> Don't have an account? </h3>

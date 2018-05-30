@@ -7,8 +7,8 @@ const Bar = conn.define(
     id: {
       allowNull: false,
       primaryKey: true,
-      type: Sequelize.UUID,
-      defaultValue: Sequelize.UUIDV4
+      type: Sequelize.INTEGER
+      // defaultValue: Sequelize.UUIDV4
     },
     email: {
       type: Sequelize.STRING,
@@ -38,7 +38,7 @@ const Bar = conn.define(
       validate: {
         notEmpty: {
           args: [true],
-          msg: 'First Name cannot be empty'
+          msg: 'Bar Name cannot be empty'
         }
       }
     }
