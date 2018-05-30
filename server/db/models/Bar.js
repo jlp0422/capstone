@@ -1,8 +1,7 @@
 const conn = require('../conn');
 const { Sequelize } = conn;
 
-const Bar = conn.define(
-  'bar',
+const Bar = conn.define('bar', 
   {
     id: {
       allowNull: false,
@@ -18,8 +17,7 @@ const Bar = conn.define(
       type: Sequelize.STRING,
       allowNull: false,
     }
-  },
-  { underscored: true }
+  },{ underscored: true }
 );
 
 module.exports = Bar;

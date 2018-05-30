@@ -58,7 +58,7 @@ export default class Teams extends Component {
           ? teams.map(team => {
               return (
                 <div className="" key={team.id}>
-                  <ul className="">
+                  <ul className="team">
                     <li>
                       <Link to={`/teams/${team.id}`}>{team.name}</Link>
                     </li>
@@ -74,7 +74,7 @@ export default class Teams extends Component {
               if (team.game_id === currentGame) {
                 return (
                   <div key={team.id}>
-                    <ul className="">
+                    <ul className="team">
                       <li>
                         <Link to={`/teams/${team.id}`}>{team.name}</Link>
                       </li>

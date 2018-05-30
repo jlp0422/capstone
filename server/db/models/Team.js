@@ -1,8 +1,7 @@
 const conn = require('../conn');
 const { Sequelize } = conn;
 
-const Team = conn.define(
-  'team',
+const Team = conn.define('team',
   {
     id: {
       allowNull: false,
