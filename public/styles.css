@@ -3,39 +3,124 @@
 	grid-column-gap: 50px;
 }
 
-.grid-item1 {
-	grid-column-start: 1;
-	grid-column-end: 1;
-	grid-row-start: 1;
-	grid-row-end: 1;
+.team-name {
+	grid-column: 1;
 }
 
-.grid-item2 {
-	grid-column-start: 2;
-	grid-column-end: 2;
-	grid-row-start: 1;
-	grid-row-end: 1;
+.grid-answer {
+	grid-column: 2;
+	grid-row: 1;
 }
 
-ul {
-	columns: 2;
+.team-secondary {
+	grid-column: 2;
+}
+
+.team {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+}
+
+.teams {
+	padding-bottom: 20px;
+}
+
+.question-header {
+	grid-column: 1;
+	grid-row: 1;
+}
+
+.grid-button {
+	margin-top: 20px;
+	grid-column: 1;
+	grid-row: 2;
+	max-width: 150px;
+}
+
+.question {
+	grid-column: 2;
+	grid-row: 2;
+	padding-top: 40px;
+}
+
+.answer {
+	grid-column: 3;
+	grid-row: 2;
 }
 
 .sidebar {
+	padding: 30px 20px;
+	background-color: #27476E;
 	grid-column: 1;
 	display: grid;
-	grid-template-rows: repeat(6, 50px)
+	grid-template-rows: repeat(6, 50px);
+	height: 100vh;
+}
+
+.sidebar a {
+	color: white;
 }
 
 .sidebar-link{
 	grid-row: auto;
 }
 
-.main-grid {
+/* Main Page */
+
+.main {
 	display: grid;
-	grid-template-columns: 1fr 4fr;
+	grid-template-columns: 1fr 7fr;
+	background-color: #E7F1F5;
 }
 
-.routes-grid {
+.main-header {
+	display: grid;
+	grid-template-columns: 80% 20%;
+	grid-column: 1 / -1;
+	padding: 20px 15px;
+	background-color: #006992;
+	color: white;
+	font-size: 20px;
+}
+
+.header-links {
 	grid-column: 2;
+	justify-self: end;
+	margin-right: 20px;
+	color: white;
+	font-size: 18px;
+}
+
+/* Login */
+
+.login {
+	text-align: center;
+	margin-top: 45px;
+}
+
+.login-header {
+	margin: 10px auto;
+	font-size: 40px;
+	font-weight: 400;
+}
+
+.login-input {
+	margin: 0 auto;
+	max-width: 60%;
+}
+
+.login-hr {
+	width: 33%;
+	height: 1px;
+	background-color: darkgrey;
+}
+
+.sign-up {
+	margin: 20px auto;
+}
+
+.sign-up-text {
+	font-size: 25px;
+	text-align: center;
+	margin-bottom: 15px;
 }

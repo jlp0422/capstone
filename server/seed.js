@@ -2,6 +2,7 @@ const { Team, Bar, Game, Question } = require('./db').models;
 const conn = require('./db/conn');
 const axios = require('axios');
 const chance = require('chance').Chance();
+const bcrypt = require('bcryptjs');
 const faker = require('faker');
 
 const numOfTeams = 4;
@@ -39,10 +40,11 @@ const seed = () => {
     })
   })
   .then(() => {
+    const hashPassword = bcrypt.hashSync('admin', 6)
     return Bar.create({
       id: Math.floor(Math.random() * 10000),
       email: chance.email(),
-      password: 'admin',
+      password: hashPassword,
       name: `${chance.animal()} Town`
     })
     .then(() => Game.create())

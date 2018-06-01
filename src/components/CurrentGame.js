@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import TeamsList from './TeamsList';
 
 export default class CurrentGame extends Component {
   constructor() {
@@ -10,18 +11,13 @@ export default class CurrentGame extends Component {
       teams: [],
       index: 0
     };
-    this.changeState = this.changeState.bind(this);
-  }
-  changeState() {
-    this.setState({ index: this.state.index + 1 });
   }
 
   componentDidMount() {
     axios
       .get('/v1/api')
-      .then(res => res.data)
-      .then(_questions => _questions.results)
-      .then(questions => this.setState({ questions: questions }));
+      .then(res => res.data.results)
+      .then(questions => this.setState({ questions }));
     axios
       .get('/v1/games/active')
       .then(res => res.data)
@@ -29,56 +25,44 @@ export default class CurrentGame extends Component {
         axios
           .get(`/v1/games/${game.id}/teams`)
           .then(res => res.data)
-          .then(teams => this.setState({ teams: teams }));
+          .then(teams => this.setState({ teams }));
       });
   }
+
   render() {
     const { teams, questions, index } = this.state;
     const { changeState } = this;
-    console.log(this.state);
+    console.log(this.state.questions);
     return (
       <div>
-        {questions.length ? (
-          <div className="grid-container">
-            {index === questions.length - 1 && <h1>LAST QUESTION</h1>}
-            <h2 className="grid-question-header">Question No.{index + 1}</h2>
-            <button
-              className="grid-button"
-              disabled={index === questions.length - 1}
-              onClick={() => changeState()}
-            >
+        {
+          questions.length ? (
+            <div className="question">
+              <div>
+                {
+                  index === questions.length - 1 && <h1>LAST QUESTION</h1>
+                }
+                <h2 className="question-header">Question No.{index + 1}</h2>
+                <div dangerouslySetInnerHTML={{ __html: `<strong>Question: </strong>${questions[index].question}` }}></div>
+                <div className="answer">
+                  <strong> Correct Answer: </strong>
+                  {questions[index].correct_answer}
+                </div>
+              </div>
+              <button
+                className="btn btn-dark grid-button"
+                disabled={index === questions.length - 1}
+                onClick={() => this.setState({ index: this.state.index + 1 })}
+              >
               Next Question
             </button>
-            <span className="grid-question">{questions[index].question}</span>
-            <span className="grid-answer">
-              <strong>correct answer:</strong>
-              {questions[index].correct_answer}
-            </span>
           </div>
-        ) : null}
-        {teams.length ? (
-          <div>
-            <h1>Teams</h1>
-            <div className="grid-container">
-              <h3 className="grid-item1">name</h3>
-              <h3 className="grid-item2">answer</h3>
-            </div>
-            {teams.map(team => {
-              return (
-                <div className="" key={team.id}>
-                  <ul className="team">
-                    <li>
-                      <Link to={`/players/${team.id}`}>{team.team_name}</Link>
-                    </li>
-                    <li>
-                      <span>place holder for answer</span>
-                    </li>
-                  </ul>
-                </div>
-              );
-            })}
-          </div>
-        ) : null}
+          ) : null}
+        { 
+          teams.length ? 
+            <TeamsList teams={teams} game={true} />
+          : null
+        }
       </div>
     );
   }
