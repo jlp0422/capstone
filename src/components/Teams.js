@@ -1,20 +1,18 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import TeamsList from './TeamsList';
 
 export default class Teams extends Component {
   constructor() {
     super();
     this.state = {
       teams: [],
-      showAll: true,
+      showAll: false,
       currentGame: null
     };
-    this.onClick = this.onClick.bind(this);
   }
-  onClick() {
-    this.setState({ showAll: !this.state.showAll });
-  }
+
   componentDidMount() {
     axios
       .get('/v1/teams')
@@ -44,47 +42,11 @@ export default class Teams extends Component {
     const { teams, showAll, currentGame } = this.state;
     return (
       <div>
-        <button onClick={this.onClick}>
-          toggle all teams/teams assigned the game
+        <h1> { showAll ? 'All Teams' : "Active Game's Teams" } </h1>
+        <TeamsList showAll={showAll} teams={ showAll ? teams : teams.filter(team => team.game_id === currentGame )}/>
+        <button onClick={() => this.setState({ showAll: !this.state.showAll })}>
+          { showAll ? "Active Game's Teams" : 'All Teams' }
         </button>
-        <h1>Teams</h1>
-        <div className="grid-container">
-          <h3 className="grid-item1">name</h3>
-          {showAll && <h3 className="grid-item2">email</h3>}
-          {!showAll && <h3 className="grid-item2">score</h3>}
-        </div>
-        {showAll
-          ? teams.map(team => {
-              return (
-                <div className="" key={team.id}>
-                  <ul className="team">
-                    <li>
-                      <Link to={`/teams/${team.id}`}>{team.name}</Link>
-                    </li>
-
-                    <li>
-                      <Link to={`mailto:${team.email}`}>{team.email}</Link>
-                    </li>
-                  </ul>
-                </div>
-              );
-            })
-          : teams.map(team => {
-              if (team.game_id === currentGame) {
-                return (
-                  <div key={team.id}>
-                    <ul className="team">
-                      <li>
-                        <Link to={`/teams/${team.id}`}>{team.name}</Link>
-                      </li>
-
-                      <li>{team.score}</li>
-                    </ul>
-                    <br />
-                  </div>
-                );
-              }
-            })}
       </div>
     );
   }

@@ -8,39 +8,55 @@ export default class Login extends Component {
     super(props);
     this.state = {
       signup: false,
+      id: '',
       name: '',
-      email: '',
       password: ''
     }
     this.submit = this.submit.bind(this);
   }
 
   submit(ev){
-    const { name, email, password, signup } = this.state;
+    const { id, name, password, signup } = this.state;
     const hashPassword = bcrypt.hashSync(password, 6)
     ev.preventDefault();
     if ( signup ) {
-      axios.post('/auth/register', { name, email, password: hashPassword })
+      axios.post('/auth/register', { id, name, password: hashPassword })
       .then(res => res.data)
       .then(user => localStorage.setItem('token',  user.token ))
     }
     else {
-      axios.post('/auth/login', { email, password })
+      axios.post('/auth/login', { id, password })
       .then(res => res.data)
-      .then(user => localStorage.setItem( 'token',  user.token ))
+      .then(user => localStorage.setItem('token',  user.token ))
     }
+  }
+
+  validatePassword(password) {
+    const strongRegex = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})');
+    const mediumRegex = new RegExp('^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})');
+
+    return (
+      this.setState({ passwordStrength:
+        strongRegex.test(password) ?
+        'Strong'
+        : mediumRegex.test(password) ?
+        'Medium'
+        : 'Weak'
+      })
+    );
   }
 
   render(){
     const { signup } = this.state;
     return (
-      <div>
-        <h1> { signup ? 'Create an Account' : 'Please Log in' } </h1>
+      <div className='login'>
+        <div className='login-header'> { signup ? 'Create an Account' : 'Please Log in' } </div>
         <form onSubmit={this.submit}>
           { signup ?
             <input
               onChange={(ev) => this.setState({ name: ev.target.value })}
-              placeholder="Your Bar's Name" />
+              placeholder="Your Bar's Name"
+              className='form-control login-input' />
             : null
           }
           <br />
@@ -49,22 +65,30 @@ export default class Login extends Component {
             max="9999"
             min="1000"
             onChange={(ev) => this.setState({ id: ev.target.value })}
-            placeholder='Bar ID' />
+            placeholder='Bar ID'
+            className='form-control login-input' />
           <br />
           <input
             type='password'
             onChange={(ev) => this.setState({ password: ev.target.value })}
-            placeholder='Password' />
+            placeholder='Password'
+            className='form-control login-input' />
           <br />
-          <button> { signup ? 'Sign up' : 'Log in' }</button>
+          <button className='btn btn-dark'> { signup ? 'Sign up' : 'Log in' }</button>
         </form>
-        {
-          signup ?
-          <h3> Already have an account? </h3>
-          :
-          <h3> Don't have an account? </h3>
-        }
-        <button onClick={()=> this.setState({ signup: !signup })}> { signup ? 'Click here to Log in' : 'Create an Account'} </button>
+        <hr className='login-hr'/>
+        <div className='sign-up'>
+          {
+            signup ?
+            <div className='sign-up-text'> Already have an account? </div>
+            :
+            <div className='sign-up-text'> Don't have an account? </div>
+          }
+          <button className='btn btn-dark'
+            onClick={()=> this.setState({ signup: !signup })}>
+            { signup ? 'Click here to Log in' : 'Create one!'} 
+          </button>
+        </div>
       </div>
     )
   }
