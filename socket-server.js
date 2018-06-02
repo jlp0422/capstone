@@ -18,12 +18,13 @@ module.exports = (io) => {
     socket.on('answer', (info) => {
       const { team, answer } = info
       console.log(`socket server: team: ${team}, answer: ${answer}`)
+      io.emit('answer submitted', info)
     });
     socket.on('request question', () => {
       io.emit('question requested')
     });
     socket.on('send question', (obj) => {
-      console.log('OBJ: ', obj)
+      // console.log('OBJ: ', obj)
       io.emit('sending question', obj)
     })
     socket.on('authenticate', (id) => {

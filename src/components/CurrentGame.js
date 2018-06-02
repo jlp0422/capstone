@@ -11,12 +11,17 @@ export default class CurrentGame extends Component {
     this.state = {
       questions: [],
       teams: [],
-      index: 0
+      index: 0,
+      timer: 11,
+      // questionActive: true,
+      answers: []
     }
     this.onNextQuestion = this.onNextQuestion.bind(this)
+    this.countdown = this.countdown.bind(this)
   }
 
   componentDidMount() {
+    // let countdownTimer;
     axios
       .get('/v1/api')
       .then(res => res.data.results)
@@ -31,21 +36,46 @@ export default class CurrentGame extends Component {
           .then(teams => this.setState({ teams }));
       })
       .then(() => {
+        const { timer, index } = this.state
         socket.on('question requested', () => {
-          socket.emit('send question', { index: this.state.index, question: this.state.questions[this.state.index] })
+          socket.emit('send question', { timer, index, question: this.state.questions[this.state.index] })
+        })
+        socket.on('answer submitted', (info) => {
+          const { answers } = this.state
+          // const answers = {}
+          // answers[team] = answer
+          this.setState({ answers: [...answers, info ]})
         })
       });
+      // this.countdown()
+  }
+
+  // componentWillUnmount() {
+  //   clearTimeout(countdownTimer)
+  // }
+
+  countdown() {
+    let { timer, question, answer } = this.state
+    if (timer) {
+      this.setState({ timer: timer - 1 })
+      setTimeout(() => this.countdown(), 1000)
+    }
+    else {
+      this.onNextQuestion()
+      this.countdown()
+    }
   }
 
   onNextQuestion() {
     console.log('BEFORE STATE CHANGE: ', this.state.index)
-    this.setState({ index: this.state.index + 1 })
+    this.setState({ index: this.state.index + 1, timer: 10 })
     console.log('AFTER STATE CHANGE: ', this.state.index)
-    socket.emit('send question', { index, question: this.state.questions[index] })
+    const { index, timer } = this.state
+    socket.emit('send question', { timer, index, question: this.state.questions[index] })
   }
 
   render() {
-    const { teams, questions, index } = this.state;
+    const { teams, questions, index, timer, answers } = this.state;
     const { changeState, onNextQuestion } = this;
     return (
       <div>
@@ -55,15 +85,23 @@ export default class CurrentGame extends Component {
               <div>
                 { index === questions.length - 1 && <h1>LAST QUESTION</h1> }
                 <h2 className="question-header">Question No.{index + 1}</h2>
-
+                <h3 className="timer">:{timer > 9 ? timer : `0${timer}`}</h3>
                 <div dangerouslySetInnerHTML={{ __html: `<strong>Question: </strong>${questions[index].question}` }}></div>
 
                 <div className="answer">
-                  <strong> Correct Answer: </strong>
-                  {questions[index].correct_answer}
+                  <div dangerouslySetInnerHTML={{ __html: `<strong> Correct Answer: </strong>${questions[index].correct_answer}` }}></div>
                 </div>
-
               </div>
+
+              <h3>Team Answers</h3>
+              <ul>
+              {
+                answers.map(answer => (
+                  <li key={answer.team}>Team {answer.team}: {answer.answer}</li>
+                ))
+              }
+              </ul>
+
               <button
                 className="btn btn-dark grid-button"
                 disabled={index === questions.length - 1}
