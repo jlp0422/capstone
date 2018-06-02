@@ -28,7 +28,10 @@ const TeamsList = (props) => {
                 game ?
                   <div> {team.answer ? team.answer : null } </div>
                 :
-                  <Link className='team-secondary' to={`mailto:${team.email}`}>{team.email}</Link>
+                  showAll ? 
+                    <Link className='team-secondary' to={`mailto:${team.email}`}>{team.email}</Link>
+                  :
+                   <div> { team.score ? team.score : 0 } </div>
               }
             </div>
           );
