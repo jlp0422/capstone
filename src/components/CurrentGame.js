@@ -46,16 +46,30 @@ export default class CurrentGame extends Component {
                   {questions[index].correct_answer}
                 </div>
               </div>
-              <button
-                className="btn btn-dark grid-button"
-                disabled={index === questions.length - 1}
-                onClick={() => {
-                  this.setState({ index: this.state.index + 1 })
-                  localStorage.setItem('index', this.state.index + 1)
-                }}
-              >
-              Next Question
-            </button>
+              { 
+                index === questions.length - 1 ?
+                  <button
+                    className="btn btn-dark grid-button"
+                    disabled={index !== questions.length - 1}
+                    onClick={() => {
+                      this.setState({ index: 0 })
+                      localStorage.setItem('index', 0)
+                    }}
+                  >
+                    Restart Game
+                  </button>
+                :
+                  <button
+                    className="btn btn-dark grid-button"
+                    disabled={index === questions.length - 1}
+                    onClick={() => {
+                      this.setState({ index: this.state.index + 1 })
+                      localStorage.setItem('index', this.state.index + 1)
+                    }}
+                  >
+                    Next Question
+                  </button>
+              }
           </div>
         }
           <br />
