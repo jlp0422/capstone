@@ -13,7 +13,6 @@ export default class Categories extends Component {
     axios.get('/v1/games/1/questions')
       .then(res => res.data)
       .then(questions => {
-        console.log(questions)
         const categories = []
         questions.forEach(question => categories.includes(question.category) ? categories : categories.push(question.category))
         this.setState({ categories })

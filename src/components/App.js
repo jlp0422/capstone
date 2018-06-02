@@ -25,7 +25,11 @@ class App extends Component {
   }
 
   componentDidMount(){
-    this.whoAmI()
+    this.whoAmI();
+  }
+
+  componentWillReceiveProps(){
+    this.whoAmI();
   }
 
   whoAmI(){
@@ -50,6 +54,7 @@ class App extends Component {
 
   render(){ 
     const { bar, loggedIn } = this.state; 
+    if (!bar.name) this.whoAmI()
     return (
       <Router>
         <div className='main'>
@@ -57,7 +62,7 @@ class App extends Component {
           <Sidebar loggedIn={loggedIn} />
           <div className='container app'>
           <Switch>
-            <Route path="/" exact component={Home}/>
+            <Route path="/" exact render={() => <Home bar={bar}/> }/>
             <Route path="/login" render={({history}) => <Login login={this.login} history={history}/>}/>
             <Route path="/categories" exact component={Categories}/>
             <Route path="/categories/:id" component={Category}/>

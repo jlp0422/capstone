@@ -15,7 +15,6 @@ router.post('/register', (req, res) => {
 });
 
 router.post('/login', (req, res) => {
-  console.log(req.body)
   Bar.findOne({ where: { id: req.body.id } })
     .then(bar => {
       const passwordIsValid = bcrypt.compareSync(req.body.password, bar.password);

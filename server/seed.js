@@ -5,29 +5,26 @@ const chance = require('chance').Chance();
 const bcrypt = require('bcryptjs');
 const faker = require('faker');
 
-const numOfTeams = 4;
+let numOfTeams = 5;
 
-const doTimes = (num, cb) => {
-  const results = [];
-  while (num--) {
-    results.push(cb());
-  }
-};
-
-const createTeam = () => {
+const createTeam = (game) => {
   return Team.create({
     team_name: `${chance.capitalize(faker.commerce.color())} ${chance.animal()}s`,
     email: chance.email()
-  });
+  })
+  .then(team => team.setGame(game))
 };
 
-const populateTeams = () => {
-  return doTimes(numOfTeams, createTeam);
+const populateTeams = (game) => {
+  while (numOfTeams--) {
+    createTeam(game)
+  }
 }
 
 const seed = () => {
   return Game.create()
   .then((game) => {
+    populateTeams(game)
     return axios.get('https://opentdb.com/api.php?amount=10')
     .then(res => res.data.results)
     .then(questions => {
@@ -51,7 +48,6 @@ const seed = () => {
         password: hashPassword,
         name: `${chance.animal()} Town`
       })
-      .then(() => populateTeams())
     })
     .catch(err => console.log(err))
   }) 
@@ -65,8 +61,6 @@ conn
   })
   .then(() => console.log('Seed Complete!'))
   .then(() => {
-    conn.close();
-    console.log('Connection Closed...');
-    return null;
+    return conn.close();
   })
   .catch(err => console.log('*** Error Seeding Database ***', err));
