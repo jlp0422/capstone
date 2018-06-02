@@ -13,7 +13,7 @@ export default class CurrentGame extends Component {
       teams: [],
       index: 0,
       timer: 11,
-      // questionActive: true,
+      countdownTimer: {},
       answers: []
     }
     this.onNextQuestion = this.onNextQuestion.bind(this)
@@ -21,7 +21,7 @@ export default class CurrentGame extends Component {
   }
 
   componentDidMount() {
-    // let countdownTimer;
+    const index = localStorage.getItem('index')*1
     axios.get('/v1/games/active')
       .then(res => res.data)
       .then(game => {
@@ -43,19 +43,18 @@ export default class CurrentGame extends Component {
           this.setState({ answers: [...answers, info ]})
         })
       });
-      this.countdown()
+    this.countdown()
+    this.setState({ index })
   }
 
-  // componentWillUnmount() {
-  //   clearTimeout(countdownTimer)
-  // }
+  componentWillUnmount() {
+    clearTimeout(this.state.countdownTimer)
+    localStorage.setItem('index', this.state.index)
+  }
 
   countdown() {
-    let { timer, question, answer } = this.state
-    if (timer) {
-      this.setState({ timer: timer - 1 })
-      setTimeout(() => this.countdown(), 1000)
-    }
+    let { timer, question, answer, countdownTimer } = this.state
+    if (timer) this.setState({ timer: timer - 1, countdownTimer: setTimeout(() => this.countdown(), 1000) })
     else {
       this.onNextQuestion()
       this.countdown()
@@ -63,25 +62,20 @@ export default class CurrentGame extends Component {
   }
 
   onNextQuestion() {
-    console.log('BEFORE STATE CHANGE: ', this.state.index)
-    this.setState({ index: this.state.index + 1, timer: 10, answers: [] })
-    console.log('AFTER STATE CHANGE: ', this.state.index)
-//     const { index, timer } = this.state
-    const index = localStorage.getItem('index')
-    const { timer } = this.state
-    socket.emit('send question', { timer, index: index*1, question: this.state.questions[index] })
-//     this.setState({ index: index*1 })
-  }
-
-  onNextQuestion() {
-    const { index } = this.state
-    this.setState({ index: index + 1 })
-    socket.emit('send question', { index, question: this.state.questions[index] })
+    while (index < 10){
+      console.log('BEFORE STATE CHANGE: ', this.state.index)
+      this.setState({ index: this.state.index + 1, timer: 10, answers: [] })
+      console.log('AFTER STATE CHANGE: ', this.state.index)
+      const { index, timer } = this.state
+      localStorage.setItem('index', this.state.index)
+      socket.emit('send question', { timer, index: index*1, question: this.state.questions[index] })
+    }
   }
 
   render() {
-    const { teams, questions, index, timer, answers } = this.state;
+    const { teams, questions, timer, answers } = this.state;
     const { changeState, onNextQuestion } = this;
+    const index = localStorage.getItem('index')*1
     return (
       <div>
         {
@@ -92,21 +86,10 @@ export default class CurrentGame extends Component {
                 <h2 className="question-header">Question No.{index + 1}</h2>
                 <h3 className="timer">:{timer > 9 ? timer : `0${timer}`}</h3>
                 <div dangerouslySetInnerHTML={{ __html: `<strong>Question: </strong>${questions[index].question}` }}></div>
-
                 <div className="answer">
                   <div dangerouslySetInnerHTML={{ __html: `<strong> Correct Answer: </strong>${questions[index].correct_answer}` }}></div>
                 </div>
-
               </div>
-
-              <h3>Team Answers</h3>
-              <ul>
-              {
-                answers.map(answer => (
-                  <li key={answer.team}>Team {answer.team}: {answer.answer}</li>
-                ))
-              }
-              </ul>
             </div>
             )
         }
@@ -140,7 +123,17 @@ export default class CurrentGame extends Component {
           </div>
         }
           <br />
-        { teams.length && <TeamsList teams={teams} game={true} /> }
+        { teams.length && <TeamsList answers={answers} game={true} /> }
+        {/* answers has team name and answers 
+            <h3>Team Answers</h3>
+            <ul>
+            {
+              answers.map(answer => (
+                <li key={answer.team}>Team {answer.team}: {answer.answer}</li>
+              ))
+            }
+            </ul>
+        */}
       </div>
     );
   }
