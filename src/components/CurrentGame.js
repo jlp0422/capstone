@@ -23,17 +23,15 @@ export default class CurrentGame extends Component {
   componentDidMount() {
     // let countdownTimer;
     axios
-      .get('/v1/api')
-      .then(res => res.data.results)
-      .then(questions => this.setState({ questions }));
-    axios
       .get('/v1/games/active')
       .then(res => res.data)
       .then(game => {
-        axios
-          .get(`/v1/games/${game.id}/teams`)
+        axios.get(`/v1/games/${game.id}/teams`)
           .then(res => res.data)
           .then(teams => this.setState({ teams }));
+        axios.get(`/v1/games/${game.id}/questions`)
+          .then(res => res.data)
+          .then(questions => this.setState({ questions })); 
       })
       .then(() => {
         const { timer, index } = this.state
@@ -78,7 +76,7 @@ export default class CurrentGame extends Component {
     return (
       <div>
         {
-          questions.length ? (
+          questions.length &&  
             <div className="question">
               <div>
                 { index === questions.length - 1 && <h1>LAST QUESTION</h1> }
@@ -112,7 +110,6 @@ export default class CurrentGame extends Component {
         {
           teams.length ?
             <TeamsList teams={teams} game={true} />
-          : null
         }
       </div>
     );

@@ -17,31 +17,48 @@ class App extends Component {
     super(props);
     this.state = {
       bar: {},
-      login: false
+      loggedIn: false
     }
+    this.logout = this.logout.bind(this)
+    this.login = this.login.bind(this)
+    this.whoAmI = this.whoAmI.bind(this)
   }
 
-  componentDidMount() {
+  componentDidMount(){
+    this.whoAmI()
+  }
+
+  whoAmI(){
     const user = localStorage.getItem('token')
     if (user) {
       const token = jwt.verify(user, 'untappedpotential')
       axios.post(`/v1/bars/${token.id}`, token)
       .then(res => res.data)
-      .then(bar => this.setState({ bar, login: true }))
+      .then(bar => this.setState({ bar, loggedIn: true }))
     }
   }
 
-  render(){
-    const { bar, login } = this.state;
+  logout(){
+    localStorage.removeItem('token')
+    this.setState({ loggedIn: false })
+  }
+
+  login(user){
+    localStorage.setItem('token',  user.token )
+    this.setState({ loggedIn: true })
+  }
+
+  render(){ 
+    const { bar, loggedIn } = this.state; 
     return (
       <Router>
         <div className='main'>
-          <Banner login={login} />
-          <Sidebar login={login}/>
-          <div className='container-fluid'>
+          <Banner loggedIn={loggedIn} logout={this.logout} bar={bar} />
+          <Sidebar loggedIn={loggedIn} />
+          <div className='container app'>
           <Switch>
             <Route path="/" exact component={Home}/>
-            <Route path="/login" component={Login}/>
+            <Route path="/login" render={({history}) => <Login login={this.login} history={history}/>}/>
             <Route path="/categories" exact component={Categories}/>
             <Route path="/categories/:id" component={Category}/>
             <Route path="/teams" component={Teams}/>

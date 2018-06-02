@@ -22,12 +22,14 @@ export default class Login extends Component {
     if ( signup ) {
       axios.post('/auth/register', { id, name, password: hashPassword })
       .then(res => res.data)
-      .then(user => localStorage.setItem('token',  user.token ))
+      .then(user => this.props.login(user))
+      .then(() => this.props.history.push('/'))
     }
     else {
       axios.post('/auth/login', { id, password })
       .then(res => res.data)
-      .then(user => localStorage.setItem('token',  user.token ))
+      .then(user => this.props.login(user))
+      .then(() => this.props.history.push('/'))
     }
   }
 
@@ -47,6 +49,7 @@ export default class Login extends Component {
   }
 
   render(){
+    console.log(this.props)
     const { signup } = this.state;
     return (
       <div className='login'>
