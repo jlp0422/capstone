@@ -10,53 +10,35 @@ export default class Category extends Component {
       questions: []
     };
   }
+
   componentDidMount() {
-    const categoryId =
-      location.hash.slice(location.hash.lastIndexOf('/') + 1) * 1;
-    axios
-      .get('/v1/categories')
+    this.setState({ category: location.hash.slice(location.hash.lastIndexOf('/') + 1).split('%20').join(' ')})
+    axios.get('v1/games/1/questions')
       .then(res => res.data)
-      .then(_categories => _categories.trivia_categories)
-      .then(categories =>
-        categories.map(category => {
-          category.id === categoryId ? this.setState({ category }) : null;
-        })
-      )
-      .then(() => {
-        axios
-          .get('/v1/api')
-          .then(res => res.data)
-          .then(_questions => _questions.results)
-          .then(questions =>
-            questions.map(question => {
-              question.category === this.state.category.name
-                ? this.setState({
-                    questions: [...this.state.questions, question]
-                  })
-                : null;
-            })
-          );
-      });
+      .then(questions => {
+        console.log(this.state.category)
+        const filteredQs = questions.filter(question => question.category == this.state.category)
+        this.setState({ questions: filteredQs })
+      })
   }
 
   render() {
-    console.log(this.state);
     const { category, questions } = this.state;
     return (
       <div>
-        <h1>{category.name}</h1>
-        {questions.length ? (
-          <div>
-            <h3>Questions in category</h3>
-            <ol>
-              {questions.map((question, index) => (
-                <li key={index}>{question.question}</li>
-              ))}
-            </ol>
-          </div>
-        ) : (
-          <h2>there are no questions in this game with this category</h2>
-        )}
+        {
+          questions.length ? 
+            <div>
+              <h1> Questions in {category} </h1>
+              <ol>
+                {
+                  questions.map((question, index) => <li key={index}>{question.question}</li>)
+                }
+              </ol>
+            </div>
+          : 
+            <h2>there are no questions in this game with this category</h2>
+        }
       </div>
     );
   }

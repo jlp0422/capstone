@@ -19,8 +19,8 @@ const TeamsList = (props) => {
           return (
             <div className="team" key={team.id}>
               { 
-                team.name ?
-                  <Link className='team-name' to={`/teams/${team.id}`}>{team.name}</Link> 
+                team.team_name ?
+                  <Link className='team-name' to={`/teams/${team.id}`}>{team.team_name}</Link> 
                 : 
                   <div> Team Name N/A </div>
               }

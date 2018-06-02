@@ -10,11 +10,14 @@ export default class Categories extends Component {
   }
 
   componentDidMount() {
-    axios
-      .get('/v1/categories')
+    axios.get('/v1/games/1/questions')
       .then(res => res.data)
-      .then(_categories => _categories.trivia_categories)
-      .then(categories => this.setState({ categories }))
+      .then(questions => {
+        console.log(questions)
+        const categories = []
+        questions.forEach(question => categories.includes(question.category) ? categories : categories.push(question.category))
+        this.setState({ categories })
+      })
       .catch(err => console.log(err))
   }
 
@@ -22,22 +25,16 @@ export default class Categories extends Component {
     const { categories } = this.state;
     return (
       <div>
-        <ol>
-          {categories.map(category => {
-            return (
-              <li key={category.id}>
-                <Link
-                  to={{
-                    pathname: `/categories/${category.id}`,
-                    state: { name: category.name, id: category.id }
-                  }}
-                >
-                  {category.name}
-                </Link>
-              </li>
-            );
-          })}
-        </ol>
+        <h1> Categories featured in this Game: </h1>
+          {
+            categories.map(category => {
+              return ( 
+                <div key={category}>
+                  <Link to={`/categories/${category}`}> {category} </Link> 
+                </div>
+              )
+            })
+          }
       </div>
     );
   }

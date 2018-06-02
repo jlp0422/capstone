@@ -15,34 +15,30 @@ export default class CurrentGame extends Component {
 
   componentDidMount() {
     axios
-      .get('/v1/api')
-      .then(res => res.data.results)
-      .then(questions => this.setState({ questions }));
-    axios
       .get('/v1/games/active')
       .then(res => res.data)
       .then(game => {
-        axios
-          .get(`/v1/games/${game.id}/teams`)
+        axios.get(`/v1/games/${game.id}/teams`)
           .then(res => res.data)
           .then(teams => this.setState({ teams }));
+        axios.get(`/v1/games/${game.id}/questions`)
+          .then(res => res.data)
+          .then(questions => this.setState({ questions }));  
       });
   }
 
   render() {
     const { teams, questions, index } = this.state;
-    const { changeState } = this;
-    console.log(this.state.questions);
     return (
       <div>
         {
-          questions.length ? (
+          questions.length &&  
             <div className="question">
               <div>
                 {
                   index === questions.length - 1 && <h1>LAST QUESTION</h1>
                 }
-                <h2 className="question-header">Question No.{index + 1}</h2>
+                <h1 className="question-header">Question No. {index + 1}</h1>
                 <div dangerouslySetInnerHTML={{ __html: `<strong>Question: </strong>${questions[index].question}` }}></div>
                 <div className="answer">
                   <strong> Correct Answer: </strong>
@@ -57,11 +53,10 @@ export default class CurrentGame extends Component {
               Next Question
             </button>
           </div>
-          ) : null}
+        }
         { 
-          teams.length ? 
+          teams.length &&
             <TeamsList teams={teams} game={true} />
-          : null
         }
       </div>
     );
