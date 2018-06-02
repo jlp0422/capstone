@@ -1,31 +1,24 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 
-class Banner extends Component {
-  constructor(props){
-    super(props);
-    this.state = this.props;
-  }
-
-  render(){
-    const { login } = this.state;
-    console.log(login)
-    return (
-      <div className='main-header'>
-        <span className="">UnTapped Trivia</span>
-        { login ? 
-          <NavLink className='header-links' 
-            onClick={() => {
-              this.setState({ login: !login })
-              localStorage.removeItem('token')
-            }} 
-            to='/login'> Log Out </NavLink>
-        : 
-          <NavLink className='header-links' to='/login'> Login </NavLink>
-        }
-      </div>
-    )
-  }
+const Banner = (props) => {
+  const { loggedIn, logout, bar } = props;
+  return (
+    <div className='main-header'>
+      <span className="">UnTapped Trivia</span>
+      { loggedIn ? 
+        <div className='header-links'> 
+          <NavLink 
+            className='header-links' 
+            onClick={logout} 
+            to='/login'> { bar.name }, Log Out 
+          </NavLink>
+        </div>
+      : 
+        <NavLink className='header-links' to='/login'> Login </NavLink>
+      }
+    </div>
+  )
 }
 
 export default Banner;

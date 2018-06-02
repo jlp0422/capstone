@@ -40,7 +40,6 @@
 .question {
 	grid-column: 2;
 	grid-row: 2;
-	padding-top: 40px;
 }
 
 .answer {
@@ -61,11 +60,21 @@
 	color: white;
 }
 
-.sidebar-link{
+.sidebar a:hover {
+	text-decoration: none;
+	color: lightgrey;
+}
+
+.sidebar-link {
 	grid-row: auto;
 }
 
 /* Main Page */
+
+.app {
+	grid-column: 2;
+	padding-top: 40px;
+}
 
 .main {
 	display: grid;
@@ -91,6 +100,11 @@
 	font-size: 18px;
 }
 
+.header-links:hover {
+	text-decoration: none;
+	color: lightgrey;
+}
+
 /* Login */
 
 .login {
@@ -114,6 +128,8 @@
 	height: 1px;
 	background-color: darkgrey;
 }
+
+/* Sign-Up */
 
 .sign-up {
 	margin: 20px auto;
