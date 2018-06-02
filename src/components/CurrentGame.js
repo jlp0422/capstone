@@ -54,6 +54,7 @@ export default class CurrentGame extends Component {
             </button>
           </div>
         }
+          <br />
         { 
           teams.length &&
             <TeamsList teams={teams} game={true} />

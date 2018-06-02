@@ -16,7 +16,6 @@ export default class Category extends Component {
     axios.get('v1/games/1/questions')
       .then(res => res.data)
       .then(questions => {
-        console.log(this.state.category)
         const filteredQs = questions.filter(question => question.category == this.state.category)
         this.setState({ questions: filteredQs })
       })
@@ -32,7 +31,7 @@ export default class Category extends Component {
               <h1> Questions in {category} </h1>
               <ol>
                 {
-                  questions.map((question, index) => <li key={index}>{question.question}</li>)
+                  questions.map((question, index) => <li key={index} dangerouslySetInnerHTML={{ __html: question.question }}></li>)
                 }
               </ol>
             </div>

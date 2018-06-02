@@ -25,7 +25,11 @@ class App extends Component {
   }
 
   componentDidMount(){
-    this.whoAmI()
+    this.whoAmI();
+  }
+
+  componentWillReceiveProps(){
+    this.whoAmI();
   }
 
   whoAmI(){
@@ -50,6 +54,7 @@ class App extends Component {
 
   render(){ 
     const { bar, loggedIn } = this.state; 
+    if (!bar.name) this.whoAmI()
     return (
       <Router>
         <div className='main'>
