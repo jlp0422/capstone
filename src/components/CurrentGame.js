@@ -6,8 +6,8 @@ import TeamsList from './TeamsList';
 import socket from '../../socket-client';
 
 export default class CurrentGame extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       questions: [],
       teams: [],
@@ -22,8 +22,7 @@ export default class CurrentGame extends Component {
 
   componentDidMount() {
     // let countdownTimer;
-    axios
-      .get('/v1/games/active')
+    axios.get('/v1/games/active')
       .then(res => res.data)
       .then(game => {
         axios.get(`/v1/games/${game.id}/teams`)
@@ -66,8 +65,11 @@ export default class CurrentGame extends Component {
     console.log('BEFORE STATE CHANGE: ', this.state.index)
     this.setState({ index: this.state.index + 1, timer: 10, answers: [] })
     console.log('AFTER STATE CHANGE: ', this.state.index)
-    const { index, timer } = this.state
-    socket.emit('send question', { timer, index, question: this.state.questions[index] })
+//     const { index, timer } = this.state
+    const index = localStorage.getItem('index')
+    const { timer } = this.state
+    socket.emit('send question', { timer, index: index*1, question: this.state.questions[index] })
+//     this.setState({ index: index*1 })
   }
 
   render() {
@@ -97,18 +99,38 @@ export default class CurrentGame extends Component {
                 ))
               }
               </ul>
-
-              <button
-                className="btn btn-dark grid-button"
-                disabled={index === questions.length - 1}
-                onClick={ onNextQuestion }
-              >
-              Next Question
-            </button>
-          </div>
-          ) : null}
+        }
         {
           teams.length ?
+              { 
+                index === questions.length - 1 ?
+                  <button
+                    className="btn btn-dark grid-button"
+                    disabled={index !== questions.length - 1}
+                    onClick={() => {
+                      this.setState({ index: 0 })
+                      localStorage.setItem('index', 0)
+                    }}
+                  >
+                    Restart Game
+                  </button>
+                :
+                  <button
+                    className="btn btn-dark grid-button"
+                    disabled={index === questions.length - 1}
+                    onClick={() => {
+                      this.setState({ index: this.state.index + 1 })
+                      localStorage.setItem('index', this.state.index + 1)
+                    }}
+                  >
+                    Next Question
+                  </button>
+              }
+          </div>
+        }
+          <br />
+        { 
+          teams.length &&
             <TeamsList teams={teams} game={true} />
         }
       </div>

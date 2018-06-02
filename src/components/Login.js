@@ -10,17 +10,22 @@ export default class Login extends Component {
       signup: false,
       id: '',
       name: '',
-      password: ''
+      password: '',
+      email: '',
+      passwordStrength: 'Weak',
+      passwordMatch: false
     }
     this.submit = this.submit.bind(this);
+    this.validatePassword = this.validatePassword.bind(this);
   }
 
   submit(ev){
-    const { id, name, password, signup } = this.state;
+    const { id, name, password, signup, email } = this.state;
     const hashPassword = bcrypt.hashSync(password, 6)
     ev.preventDefault();
     if ( signup ) {
-      axios.post('/auth/register', { id, name, password: hashPassword })
+      const newId = Math.floor(Math.random() * 10000)
+      axios.post('/auth/register', { name, id: newId, password: hashPassword, email })
       .then(res => res.data)
       .then(user => this.props.login(user))
       .then(() => this.props.history.push('/'))
@@ -48,35 +53,60 @@ export default class Login extends Component {
     );
   }
 
+  passwordMatch(confirmPassword){
+    if (this.state.password === confirmPassword) {
+      this.setState({ passwordMatch: true })
+    }
+  }
+
   render(){
-    console.log(this.props)
-    const { signup } = this.state;
+    const { signup, passwordStrength, passwordMatch } = this.state;
     return (
       <div className='login'>
         <div className='login-header'> { signup ? 'Create an Account' : 'Please Log in' } </div>
         <form onSubmit={this.submit}>
           { signup ?
-            <input
-              onChange={(ev) => this.setState({ name: ev.target.value })}
-              placeholder="Your Bar's Name"
-              className='form-control login-input' />
-            : null
+            <div>
+              <input
+                onChange={(ev) => this.setState({ name: ev.target.value })}
+                placeholder="Your Bar's Name"
+                className='form-control login-input mb-3' />
+              <input
+                onChange={(ev) => this.setState({ email: ev.target.value })}
+                placeholder='Your Email'
+                className='form-control login-input mb-3' />
+              <input
+                type='password'
+                onChange={(ev) => {
+                  this.validatePassword(ev.target.value)
+                  this.setState({ password: ev.target.value })
+                }}
+                placeholder='Password'
+                className='form-control login-input mb-3' />
+              <input
+                type='password'
+                onChange={(ev) => this.passwordMatch(ev.target.value) }
+                placeholder='Confirm Password'
+                className='form-control login-input mb-3' />
+              <span> {passwordStrength} </span>
+              <span> {passwordMatch ? 'match' : 'nope'} </span>
+            </div>
+            : 
+            <div>
+              <input
+                type='number'
+                max='9999'
+                min='1000'
+                onChange={(ev) => this.setState({ id: ev.target.value })}
+                placeholder='Bar ID'
+                className='form-control login-input mb-3' />
+              <input
+                type='password'
+                onChange={(ev) => this.setState({ password: ev.target.value })}
+                placeholder='Password'
+                className='form-control login-input mb-3' />
+            </div>
           }
-          <br />
-          <input
-            type='number'
-            max="9999"
-            min="1000"
-            onChange={(ev) => this.setState({ id: ev.target.value })}
-            placeholder='Bar ID'
-            className='form-control login-input' />
-          <br />
-          <input
-            type='password'
-            onChange={(ev) => this.setState({ password: ev.target.value })}
-            placeholder='Password'
-            className='form-control login-input' />
-          <br />
           <button className='btn btn-dark'> { signup ? 'Sign up' : 'Log in' }</button>
         </form>
         <hr className='login-hr'/>
