@@ -42,12 +42,10 @@ export default class CurrentGame extends Component {
         })
         socket.on('answer submitted', (info) => {
           const { answers } = this.state
-          // const answers = {}
-          // answers[team] = answer
           this.setState({ answers: [...answers, info ]})
         })
       });
-      // this.countdown()
+      this.countdown()
   }
 
   // componentWillUnmount() {
