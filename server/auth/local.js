@@ -5,6 +5,7 @@ const { Bar } = require('../db').models;
 const secret = process.env.SECRET;
 
 router.post('/register', (req, res) => {
+  console.log(req.body)
   Bar.create(req.body)
   .then(bar => {
     const token = jwt.sign({ id: bar.id }, secret, { expiresIn: 86400 });

@@ -29,9 +29,9 @@ const TeamsList = (props) => {
                   <div> {team.answer ? team.answer : null } </div>
                 :
                   showAll ? 
-                    <Link className='team-secondary' to={`mailto:${team.email}`}>{team.email}</Link>
+                    <div className='team-secondary'>{team.email}</div>
                   :
-                   <div> { team.score ? team.score : 0 } </div>
+                   <div className='team-secondary'> { team.score ? team.score : 0 } </div>
               }
             </div>
           );

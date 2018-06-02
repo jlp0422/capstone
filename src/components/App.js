@@ -62,7 +62,7 @@ class App extends Component {
           <Sidebar loggedIn={loggedIn} />
           <div className='container app'>
           <Switch>
-            <Route path="/" exact component={Home}/>
+            <Route path="/" exact render={() => <Home bar={bar}/> }/>
             <Route path="/login" render={({history}) => <Login login={this.login} history={history}/>}/>
             <Route path="/categories" exact component={Categories}/>
             <Route path="/categories/:id" component={Category}/>
