@@ -29,12 +29,10 @@ class App extends Component {
       .then(res => res.data)
       .then(bar => this.setState({ bar, login: true }))
     }
-  }  
+  }
 
-  render(){ 
-    console.log(this.state)
-    const { bar, login } = this.state; 
-    console.log(bar)
+  render(){
+    const { bar, login } = this.state;
     return (
       <Router>
         <div className='main'>

@@ -9,18 +9,17 @@ class Banner extends Component {
 
   render(){
     const { login } = this.state;
-    console.log(login)
     return (
       <div className='main-header'>
         <span className="">UnTapped Trivia</span>
-        { login ? 
-          <NavLink className='header-links' 
+        { login ?
+          <NavLink className='header-links'
             onClick={() => {
               this.setState({ login: !login })
               localStorage.removeItem('token')
-            }} 
+            }}
             to='/login'> Log Out </NavLink>
-        : 
+        :
           <NavLink className='header-links' to='/login'> Login </NavLink>
         }
       </div>

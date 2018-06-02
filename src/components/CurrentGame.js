@@ -38,8 +38,9 @@ export default class CurrentGame extends Component {
   }
 
   onNextQuestion() {
-    const { index } = this.state
-    this.setState({ index: index + 1 })
+    console.log('BEFORE STATE CHANGE: ', this.state.index)
+    this.setState({ index: this.state.index + 1 })
+    console.log('AFTER STATE CHANGE: ', this.state.index)
     socket.emit('send question', { index, question: this.state.questions[index] })
   }
 
