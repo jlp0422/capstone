@@ -22,6 +22,7 @@ class App extends Component {
     this.logout = this.logout.bind(this)
     this.login = this.login.bind(this)
     this.whoAmI = this.whoAmI.bind(this)
+    this.startGame = this.startGame.bind(this)
   }
 
   componentDidMount(){
@@ -30,6 +31,10 @@ class App extends Component {
 
   componentWillReceiveProps(){
     this.whoAmI();
+  }
+
+  startGame(){
+    console.log('game started')
   }
 
   whoAmI(){
@@ -62,7 +67,7 @@ class App extends Component {
           { loggedIn ? <Sidebar /> : null }
           <div className={`${ loggedIn ? 'container app' : 'loggedOut'}`}>
           <Switch>
-            <Route path="/" exact render={() => <Home bar={bar}/> }/>
+            <Route path="/" exact render={() => <Home bar={bar} startGame={this.startGame}/> }/>
             <Route path="/login" render={({history}) => <Login login={this.login} history={history}/>}/>
             <Route path="/categories" exact component={Categories}/>
             <Route path="/categories/:id" component={Category}/>

@@ -6,7 +6,7 @@ const Home = (props) => {
       <h1> Cheers, {props.bar.name} </h1>
       <img className='home-img' width='500' height='500' src='/public/images/UTT-logo.svg' />
       <br/>
-      <button> Click to Start a Game </button>
+      <button onClick={props.startGame}> Click to Start a Game </button>
     </div>
   )
 }

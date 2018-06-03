@@ -23,7 +23,7 @@ router.get('/:id/questions', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
-  Game.create(req.params.body).then(game => res.send(game));
+  Game.create().then(game => res.send(game));
 });
 
 module.exports = router;
