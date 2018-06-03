@@ -22,13 +22,25 @@ class Timer extends React.Component {
   }
 
   componentDidMount() {
+    const { questionTimerFunc, waitTimerFunc } = this.state
     const index = localStorage.getItem('index') * 1
     this.setState({ index })
     socket.on('game started', () => this.onStartTimer())
+    socket.on('game has ended', () => {
+      clearTimeout(questionTimerFunc)
+      clearTimeout(waitTimerFunc)
+    })
+    this.onQuestionCountdown()
   }
 
   onStartTimer() {
     this.onQuestionCountdown()
+  }
+
+  componentWillUnmount() {
+    const { questionTimerFunc, waitTimerFunc } = this.state
+    clearTimeout(questionTimerFunc)
+    clearTimeout(waitTimerFunc)
   }
 
   onPause(timer) {
@@ -46,17 +58,19 @@ class Timer extends React.Component {
 
   onQuestionCountdown() {
     let { questionTimerFunc, questionTimer } = this.state
-    if (questionTimer) {
-      this.setState({
-        questionTimer: questionTimer - 1,
-        questionTimerFunc: setTimeout(() => this.onQuestionCountdown(), 1000)
-      })
-      socket.emit('question countdown', this.state.questionTimer)
-    }
-    else {
-      socket.emit('question over')
-      this.onWaitCountdown()
-      this.setState({ questionTimer: 10, isQuestionActive: false })
+    if (localStorage.getItem('index') < 10) {
+      if (questionTimer) {
+        this.setState({
+          questionTimer: questionTimer - 1,
+          questionTimerFunc: setTimeout(() => this.onQuestionCountdown(), 1000)
+        })
+        socket.emit('question countdown', this.state.questionTimer)
+      }
+      else {
+          socket.emit('question over')
+          this.onWaitCountdown()
+          this.setState({ questionTimer: 10, isQuestionActive: false })
+      }
     }
   }
 
@@ -70,8 +84,11 @@ class Timer extends React.Component {
       socket.emit('wait countdown', this.state.waitTimer)
     }
     else {
-      socket.emit('get next question')
-      this.onQuestionCountdown()
+      const index = localStorage.getItem('index')
+      if (index < 10) {
+        this.onQuestionCountdown()
+        socket.emit('get next question')
+      }
       this.setState({ waitTimer: 10, isQuestionActive: true })
     }
   }

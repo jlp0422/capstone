@@ -24,7 +24,6 @@ module.exports = (io) => {
       io.emit('question requested')
     });
     socket.on('send question', (obj) => {
-      console.log('OBJ: ', obj)
       io.emit('sending question', obj)
     }),
     socket.on('start game', () => {
@@ -41,6 +40,9 @@ module.exports = (io) => {
     })
     socket.on('wait countdown', (timer) => {
       io.emit('wait timer', timer)
+    })
+    socket.on('game over', () => {
+      io.emit('game has ended')
     })
     socket.on('authenticate', (id) => {
       console.log('user id:', id)
