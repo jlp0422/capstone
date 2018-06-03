@@ -25,8 +25,7 @@ export default class CurrentGame extends Component {
     axios.get('/v1/games/active')
       .then(res => res.data)
       .then(game => {
-        axios
-          .get(`/v1/games/${game.id}/teams`)
+        axios.get(`/v1/games/${game.id}/teams`)
           .then(res => res.data)
           .then(teams => this.setState({ teams }));
         axios.get(`/v1/games/${game.id}/questions`)
@@ -124,7 +123,7 @@ export default class CurrentGame extends Component {
         }
           <br />
         { teams.length && <TeamsList answers={answers} game={true} /> }
-        {/* answers has team name and answers 
+        {/* answers has team name and answers
             <h3>Team Answers</h3>
             <ul>
             {
