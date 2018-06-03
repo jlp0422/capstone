@@ -11,6 +11,7 @@ import Teams from './Teams';
 import Home from './Home';
 import Sidebar from './Sidebar';
 import Banner from './Banner';
+import Timer from './Timer';
 
 class App extends Component {
   constructor(props){
@@ -61,6 +62,7 @@ class App extends Component {
           <Banner loggedIn={loggedIn} logout={this.logout} bar={bar} />
           { loggedIn ? <Sidebar /> : null }
           <div className={`${ loggedIn ? 'container app' : 'loggedOut'}`}>
+          <Timer />
           <Switch>
             <Route path="/" exact render={({ history }) => <Home history ={ history } bar={ bar } /> } />
             <Route path="/login" render={({history}) => <Login login={this.login} history={history} />} />

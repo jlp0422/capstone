@@ -47,7 +47,7 @@ export default class CurrentGame extends Component {
         })
       });
     this.setState({ questionActive: true })
-    this.countdown()
+    // this.countdown()
     this.setState({ index })
   }
 
@@ -143,7 +143,7 @@ export default class CurrentGame extends Component {
                   :
                     <div>
                     {/* questionActive && */}
-                      <h4 style={{ paddingTop: '20px' }}>Next Question starting in: {waitTimer}</h4>
+                    <h4 style={{ paddingTop: '20px' }}>Next Question starting in: 00:{waitTimer > 9 ? waitTimer : `0${waitTimer}`}</h4>
                       <button
                         className="btn btn-dark game-button"
                         disabled={index === questions.length - 1}
