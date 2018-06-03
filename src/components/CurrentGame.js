@@ -12,16 +12,12 @@ export default class CurrentGame extends Component {
       questions: [],
       teams: [],
       index: 0,
-      timer: 11,
-      countdownTimerFunc: {},
+      questionTimer: 10,
+      waitTimer: 10,
       answers: [],
       questionActive: false,
-      waitTimer: 10,
-      waitTimerFunc: {}
     }
     this.onNextQuestion = this.onNextQuestion.bind(this)
-    this.countdown = this.countdown.bind(this)
-    this.waitCountdown = this.waitCountdown.bind(this)
   }
 
   componentDidMount() {
@@ -37,83 +33,57 @@ export default class CurrentGame extends Component {
           .then(questions => this.setState({ questions }));
       })
       .then(() => {
-        const { timer, index } = this.state
+        const { index } = this.state
         socket.on('question requested', () => {
-          socket.emit('send question', { timer, index, question: this.state.questions[this.state.index] })
+          socket.emit('send question', { index, question: this.state.questions[this.state.index] })
         })
         socket.on('answer submitted', (info) => {
           const { answers } = this.state
           this.setState({ answers: [...answers, info ]})
         })
+        socket.on('game started', () => this.setState({ questionTimer: 10 }))
+        socket.on('ready for next question', () => this.onNextQuestion())
+        socket.on('question timer', (questionTimer) => this.setState({ questionTimer }))
+        socket.on('wait timer', (waitTimer) => this.setState({ waitTimer }))
+
       });
     this.setState({ questionActive: true })
-    // this.countdown()
     this.setState({ index })
   }
 
   componentWillUnmount() {
-    clearTimeout(this.state.countdownTimerFunc)
     localStorage.setItem('index', this.state.index)
-  }
-
-  waitCountdown() {
-    let { waitTimer } = this.state
-    if (waitTimer) {
-      this.setState({ waitTimer: waitTimer - 1, waitTimerFunc: setTimeout(() => this.waitCountdown(), 1000) })
-    }
-    else {
-      socket.emit('get next question')
-      this.onNextQuestion()
-      this.countdown()
-    }
-  }
-
-  countdown() {
-    let { timer, question, answer, countdownTimerFunc, index } = this.state
-    if (timer) {
-      this.setState({ timer: timer - 1, countdownTimerFunc: setTimeout(() => this.countdown(), 1000) })
-    }
-    else {
-      if (index < 9) {
-        socket.emit('question over')
-        this.setState({ questionActive: false })
-        this.waitCountdown()
-      }
-      else {
-        this.setState({})
-      }
-    }
+    socket.off('question timer')
+    socket.off('wait timer')
   }
 
   onNextQuestion() {
-    // console.log('BEFORE STATE CHANGE: ', this.state.index)
     this.setState({
       index: this.state.index + 1,
-      timer: 10,
+      questionTimer: 10,
+      waitTimer: 10,
       answers: [],
       questionActive: true,
-      waitTimer: 10
     })
-    // console.log('AFTER STATE CHANGE: ', this.state.index)
-    const { index, timer } = this.state
+    const { index } = this.state
     localStorage.setItem('index', this.state.index)
-    socket.emit('send question', { timer, index: index*1, question: this.state.questions[index] })
+    socket.emit('send question', { index: index*1, question: this.state.questions[index] })
   }
 
   render() {
-    const { teams, questions, timer, answers, questionActive, waitTimer } = this.state;
+    const { teams, questions, questionTimer, answers, questionActive, waitTimer } = this.state;
     const { changeState, onNextQuestion } = this;
-    const index = localStorage.getItem('index')*1
+    const index = localStorage.getItem('index') * 1
     return (
       <div id='game'>
         {
           questions.length ?
           <div className="question">
-          { index < 9 || timer ?
+          { index < 9 || questionTimer ?
               <div>
                 { index === questions.length - 1 && <h1>LAST QUESTION</h1> }
-                <h2 className="question-header">Question No.{index + 1}</h2>
-                <h3 className="timer">00:{timer > 9 ? timer : `0${timer}`}</h3>
+                <h2 className="question-header">Question #{index + 1}</h2>
+                <h3 className="timer">00:{questionTimer > 9 ? questionTimer : `0${questionTimer}`}</h3>
                 <div dangerouslySetInnerHTML={{ __html: `<strong>Question: </strong>${questions[index].question}` }}></div>
                 <div className="answer">
                   <div dangerouslySetInnerHTML={{ __html: `<strong> Correct Answer: </strong>${questions[index].correct_answer}` }}></div>
@@ -160,7 +130,7 @@ export default class CurrentGame extends Component {
           : null
         }
           <br />
-        { teams.length ? <TeamsList answers={ answers } game={timer ? true : false} /> : null }
+        { teams.length ? <TeamsList answers={ answers } game={questionTimer ? true : false} /> : null }
       </div>
     );
   }

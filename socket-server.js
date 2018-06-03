@@ -36,6 +36,12 @@ module.exports = (io) => {
     socket.on('get next question', () => {
       io.emit('ready for next question')
     })
+    socket.on('question countdown', (timer) => {
+      io.emit('question timer', timer)
+    })
+    socket.on('wait countdown', (timer) => {
+      io.emit('wait timer', timer)
+    })
     socket.on('authenticate', (id) => {
       console.log('user id:', id)
       io.emit('authenticated', id)
