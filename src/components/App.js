@@ -11,7 +11,6 @@ import Teams from './Teams';
 import Home from './Home';
 import Sidebar from './Sidebar';
 import Banner from './Banner';
-import socket from '../../socket-client';
 
 class App extends Component {
   constructor(props){
@@ -23,7 +22,6 @@ class App extends Component {
     this.logout = this.logout.bind(this)
     this.login = this.login.bind(this)
     this.whoAmI = this.whoAmI.bind(this)
-    this.startGame = this.startGame.bind(this)
   }
 
   componentDidMount(){
@@ -32,12 +30,6 @@ class App extends Component {
 
   componentWillReceiveProps(){
     this.whoAmI();
-  }
-
-  startGame() {
-    console.log('game started')
-    socket.emit('start game')
-    location.hash = '/games/active'
   }
 
   whoAmI(){
@@ -70,13 +62,13 @@ class App extends Component {
           { loggedIn ? <Sidebar /> : null }
           <div className={`${ loggedIn ? 'container app' : 'loggedOut'}`}>
           <Switch>
-            <Route path="/" exact render={() => <Home bar={bar} startGame={this.startGame}/> }/>
-            <Route path="/login" render={({history}) => <Login login={this.login} history={history}/>}/>
-            <Route path="/categories" exact component={Categories}/>
-            <Route path="/categories/:id" component={Category}/>
-            <Route path="/teams" component={Teams}/>
-            <Route path="/games/active" exact component={CurrentGame}/>
-            <Route path="/games/past" exact component={PastGames}/>
+            <Route path="/" exact render={({ history }) => <Home history ={ history } bar={ bar } /> } />
+            <Route path="/login" render={({history}) => <Login login={this.login} history={history} />} />
+            <Route path="/categories" exact component={Categories} />
+            <Route path="/categories/:id" component={Category} />
+            <Route path="/teams" component={Teams} />
+            <Route path="/games/active" exact component={CurrentGame} />
+            <Route path="/games/past" exact component={PastGames} />
           </Switch>
           </div>
         </div>

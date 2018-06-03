@@ -9,20 +9,20 @@ const TeamsList = (props) => {
     <div className='teams-list'>
       <div className='team'>
         <h3 className='team-name header'>Team</h3>
-        <h3 className='team-secondary header'>{ showAll ? 'Email' : 'Score' }</h3>
+        <h3 className='team-secondary header'>{ showAll ? 'Email' : 'Answer' }</h3>
+        {/* !showAll && <h3 className='team-tertiary header'>Answer</h3> */}
       </div>
        {
          answers ?
          answers.map(answer => {
           return (
-            <div className='team' key={answer.team}>
+            <div key={answer.team}>
               {
                 answer.team ?
-                  <div>
-                    <div>{answer.team}</div>
-                    {/* will show team answer
-                      <div>{answer.answer}</div>
-                    */}
+                  <div className="team">
+                    <div className="team-name">{answer.team}</div>
+                    <div className="team-secondary">{answer.answer}</div>
+                    {/*<div className="team-tertiary">{answer.answer}</div>*/}
                   </div>
                 :
                   <div> Team Name N/A </div>

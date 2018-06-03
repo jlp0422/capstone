@@ -30,6 +30,12 @@ module.exports = (io) => {
     socket.on('start game', () => {
       io.emit('game started')
     })
+    socket.on('question over', () => {
+      io.emit('waiting for next question')
+    })
+    socket.on('get next question', () => {
+      io.emit('ready for next question')
+    })
     socket.on('authenticate', (id) => {
       console.log('user id:', id)
       io.emit('authenticated', id)
