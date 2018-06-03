@@ -33,10 +33,8 @@ export default class CurrentGame extends Component {
           .then(questions => this.setState({ questions }));
       })
       .then(() => {
-        const { index } = this.state
-        socket.on('question requested', () => {
-          socket.emit('send question', { index, question: this.state.questions[this.state.index] })
-        })
+        // const { index } = this.state
+        setTimeout(() => socket.emit('send question', { index, question: this.state.questions[index] }), 100)
         socket.on('answer submitted', (info) => {
           const { answers } = this.state
           this.setState({ answers: [...answers, info ]})
@@ -45,10 +43,8 @@ export default class CurrentGame extends Component {
         socket.on('ready for next question', () => this.onNextQuestion())
         socket.on('question timer', (questionTimer) => this.setState({ questionTimer }))
         socket.on('wait timer', (waitTimer) => this.setState({ waitTimer }))
-
       });
-    this.setState({ questionActive: true })
-    this.setState({ index })
+    this.setState({ questionActive: true, index })
   }
 
   componentWillUnmount() {
@@ -114,7 +110,7 @@ export default class CurrentGame extends Component {
                     <div>
                     {/* questionActive && */}
                     <h4 style={{ paddingTop: '20px' }}>Next Question starting in: 00:{waitTimer > 9 ? waitTimer : `0${waitTimer}`}</h4>
-                      <button
+                      {/*<button
                         className="btn btn-dark game-button"
                         disabled={index === questions.length - 1}
                         onClick={() => {
@@ -123,7 +119,7 @@ export default class CurrentGame extends Component {
                         }}
                       >
                         Next Question
-                      </button>
+                      </button>*/}
                     </div>
                 }
             </div>

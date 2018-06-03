@@ -24,7 +24,7 @@ module.exports = (io) => {
       io.emit('question requested')
     });
     socket.on('send question', (obj) => {
-      // console.log('OBJ: ', obj)
+      console.log('OBJ: ', obj)
       io.emit('sending question', obj)
     }),
     socket.on('start game', () => {
