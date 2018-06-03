@@ -5,13 +5,16 @@ const Banner = (props) => {
   const { loggedIn, logout, bar } = props;
   return (
     <div className='main-header'>
-      <span className="">UnTapped Trivia</span>
+      <div className='header-brand'>
+        <img className='header-img' width='60' height='60' src='/public/images/UTT-logo.svg' />
+        <div className='header-title'>UnTapped Trivia</div>
+      </div>
       { loggedIn ? 
         <div className='header-links'> 
           <NavLink 
             className='header-links' 
             onClick={logout} 
-            to='/login'> { bar.name }, Log Out 
+            to='/login'> Log Out of { bar.name }
           </NavLink>
         </div>
       : 

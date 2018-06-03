@@ -5,7 +5,8 @@ export default class Categories extends Component {
   constructor() {
     super();
     this.state = {
-      categories: []
+      categories: [],
+      questions: []
     };
   }
 
@@ -15,25 +16,33 @@ export default class Categories extends Component {
       .then(questions => {
         const categories = []
         questions.forEach(question => categories.includes(question.category) ? categories : categories.push(question.category))
-        this.setState({ categories })
+        this.setState({ categories, questions })
       })
       .catch(err => console.log(err))
   }
 
   render() {
-    const { categories } = this.state;
+    const { categories, questions } = this.state;
     return (
-      <div>
-        <h1> Categories featured in this Game: </h1>
+      <div id='categories'>
+        <div className='categories-title'>Categories featured in this Game</div>
+          <div className='categories-list'>
+            <div className='category'>
+              <div className='category-name header'>Name</div>
+              <div className='category-number header'>Num of Questions</div>
+            </div>
+            <br />
           {
             categories.map(category => {
               return ( 
-                <div key={category}>
-                  <Link to={`/categories/${category}`}> {category} </Link> 
+                <div className='category' key={category}>
+                  <Link className='category-name' to={`/categories/${category}`}> {category} </Link>
+                  <div className='category-number'> {questions.filter(question => question.category === category).length} </div>  
                 </div>
               )
             })
           }
+          </div>
       </div>
     );
   }
