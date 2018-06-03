@@ -5,52 +5,52 @@ const chance = require('chance').Chance();
 const bcrypt = require('bcryptjs');
 const faker = require('faker');
 
-const numOfTeams = 4;
+let numOfTeams = 5;
 
-const doTimes = (num, cb) => {
-  const results = [];
-  while (num--) {
-    results.push(cb());
-  }
-};
-
-const createTeam = () => {
+const createTeam = (game) => {
   return Team.create({
     team_name: `${chance.capitalize(faker.commerce.color())} ${chance.animal()}s`,
     email: chance.email()
-  });
+  })
+  .then(team => team.setGame(game))
 };
 
-const populateTeams = () => {
-  return doTimes(numOfTeams, createTeam);
+const populateTeams = (game) => {
+  while (numOfTeams--) {
+    createTeam(game)
+  }
 }
 
 const seed = () => {
-  return axios.get('https://opentdb.com/api.php?amount=10')
-  .then(res => res.data.results)
-  .then(questions => {
-    questions.map(question => {
-      Question.create({
-        question: question.question,
-        answers: question.answers,
-        correct_answer: question.correct_answer,
-        difficulty: question.difficulty,
-        category: question.category
+  return Game.create()
+  .then((game) => {
+    populateTeams(game)
+    return axios.get('https://opentdb.com/api.php?amount=10')
+    .then(res => res.data.results)
+    .then(questions => {
+      questions.map(question => {
+        Question.create({
+          question: question.question,
+          answers: question.answers,
+          correct_answer: question.correct_answer,
+          incorrect_answers: question.incorrect_answers,
+          difficulty: question.difficulty,
+          category: question.category
+        })
+        .then(question => question.setGame(game))
       })
     })
-  })
-  .then(() => {
-    const hashPassword = bcrypt.hashSync('admin', 6)
-    return Bar.create({
-      id: Math.floor(Math.random() * 10000),
-      email: chance.email(),
-      password: hashPassword,
-      name: `${chance.animal()} Town`
+    .then(() => {
+      const hashPassword = bcrypt.hashSync('admin', 6)
+      return Bar.create({
+        id: Math.floor(Math.random() * 10000),
+        email: chance.email(),
+        password: hashPassword,
+        name: `${chance.animal()} Town`
+      })
     })
-    .then(() => Game.create())
-    .then(() => populateTeams())
-  })
-  .catch(err => console.log(err))
+    .catch(err => console.log(err))
+  }) 
 }
 
 conn
@@ -61,8 +61,6 @@ conn
   })
   .then(() => console.log('Seed Complete!'))
   .then(() => {
-    conn.close();
-    console.log('Connection Closed...');
-    return null;
+    return conn.close();
   })
   .catch(err => console.log('*** Error Seeding Database ***', err));

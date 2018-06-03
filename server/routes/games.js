@@ -6,29 +6,19 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/active', (req, res, next) => {
-  Game.find({
-    where: { active: true }
-  }).then(game => res.send(game));
+  Game.findOne({ where: { active: true }})
+  .then(game => res.send(game));
 });
 
 router.get('/:id/teams', (req, res, next) => {
   Game.findById(req.params.id)
-    .then(game =>
-      game.getTeams({
-        where: { game_id: game.id }
-      })
-    )
+    .then(game => Team.findAll({ where: { game_id: game.id }}))
     .then(teams => res.send(teams));
 });
 
 router.get('/:id/questions', (req, res, next) => {
   Game.findById(req.params.id)
-    .then(game =>
-      game.getQuestions({
-        where: { game_id: game.id },
-        include: [{ model: Question }]
-      })
-    )
+    .then(game => Question.findAll({ where: { game_id: game.id }}))
     .then(questions => res.send(questions));
 });
 
