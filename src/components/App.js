@@ -11,6 +11,7 @@ import Teams from './Teams';
 import Home from './Home';
 import Sidebar from './Sidebar';
 import Banner from './Banner';
+import socket from '../../socket-client';
 
 class App extends Component {
   constructor(props){
@@ -33,8 +34,10 @@ class App extends Component {
     this.whoAmI();
   }
 
-  startGame(){
+  startGame() {
     console.log('game started')
+    socket.emit('start game')
+    location.hash = '/games/active'
   }
 
   whoAmI(){
@@ -57,8 +60,8 @@ class App extends Component {
     this.setState({ loggedIn: true })
   }
 
-  render(){ 
-    const { bar, loggedIn } = this.state; 
+  render(){
+    const { bar, loggedIn } = this.state;
     if (!bar.name) this.whoAmI()
     return (
       <Router>
@@ -80,6 +83,6 @@ class App extends Component {
       </Router>
     );
   }
-};
+}
 
 export default App;

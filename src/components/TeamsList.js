@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 const TeamsList = (props) => {
   const { answers, showAll, game, teams } = props;
-  console.log(props)
+  // console.log(props)
   return (
     <div className='teams-list'>
       <div className='team'>
@@ -18,7 +18,12 @@ const TeamsList = (props) => {
             <div className='team' key={answer.team}>
               {
                 answer.team ?
-                  <div>{answer.team}</div>
+                  <div>
+                    <div>{answer.team}</div>
+                    {/* will show team answer
+                      <div>{answer.answer}</div>
+                    */}
+                  </div>
                 :
                   <div> Team Name N/A </div>
               }

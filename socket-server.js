@@ -26,6 +26,9 @@ module.exports = (io) => {
     socket.on('send question', (obj) => {
       // console.log('OBJ: ', obj)
       io.emit('sending question', obj)
+    }),
+    socket.on('start game', () => {
+      io.emit('game started')
     })
     socket.on('authenticate', (id) => {
       console.log('user id:', id)
