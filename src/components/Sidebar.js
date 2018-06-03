@@ -10,7 +10,6 @@ const Sidebar = (props) => {
       <NavLink to='/games/active'> Active Game </NavLink>
       <NavLink to='/games/past'> Past Games </NavLink>
     </div>
-    : null
   )
 }
 
