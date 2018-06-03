@@ -16,6 +16,7 @@ const Sidebar = (props) => {
       <NavLink to='/teams'> Teams </NavLink>
       <NavLink to='/games/active'> Active Game </NavLink>
       <NavLink to='/games/past'> Past Games </NavLink>
+      <NavLink to='/scores'> Scores </NavLink>
     </div>
     : null
   )

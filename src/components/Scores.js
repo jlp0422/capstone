@@ -41,10 +41,10 @@ export default class Scores extends Component {
           teams.map(team => {
             return (
               <div key={team.id} className="grid-container">
-                <div className="grid-item-3">
+                <div className="grid-item-1">
                    { team.team_name }
                 </div>
-                <div className="grid-item44">
+                <div className="grid-item-2">
                   { team.score }
                 </div>
               </div>

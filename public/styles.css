@@ -125,4 +125,10 @@
 	margin-bottom: 15px;
 }
 
-.grid-item
+.grid-item-1 {
+	grid-column: 1;
+}
+
+.grid-item-2 {
+	grid-column: 2;
+}

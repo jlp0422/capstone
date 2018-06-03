@@ -33,12 +33,12 @@ export default class PastGames extends Component {
           pastGames.map(game => {
             return (
               <div key={game.id} className="grid-container">
-                <div className="grid-item-3">
+                <div className="grid-item-1">
                   <Link to={`/pastgames/${game.id}`}>
                     { moment(game.createdAt).format('mm:dd:yy') }
                   </Link>
                 </div>
-                <div className="grid-item-4">
+                <div className="grid-item-2">
                   { game.num_of_teams }
                 </div>
               </div>
