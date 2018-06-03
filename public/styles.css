@@ -1,51 +1,70 @@
-.grid-container {
+/* MAIN PAGE */
+body {
+	background-color: #E7F1F5;
+}
+
+.app {
+	grid-column: 2;
+	padding-top: 20px;
+}
+
+.loggedOut {
+	grid-column: 1 / -1;
+	padding-top: 20px;
+}
+
+.main {
 	display: grid;
-	grid-column-gap: 50px;
+	grid-template-columns: 1fr 7fr;
+	background-color: #E7F1F5;
 }
 
-.team-name {
-	grid-column: 1;
-}
+/* BANNER */
 
-.grid-answer {
-	grid-column: 2;
-	grid-row: 1;
-}
-
-.team-secondary {
-	grid-column: 2;
-}
-
-.team {
+.main-header {
 	display: grid;
-	grid-template-columns: 1fr 1fr;
+	grid-template-columns: 60% 40%;
+	grid-column: 1 / -1;
+	padding: 10px 15px;
+	background-color: #006992;
+	color: white;
+	font-size: 20px;
+	align-self: center;
 }
 
-.teams {
-	padding-bottom: 20px;
-}
-
-.question-header {
+.header-brand {
+	display: grid;
+	grid-template-columns: min-content;
 	grid-column: 1;
-	grid-row: 1;
+	justify-items: start;
+	align-items: center;
 }
 
-.grid-button {
-	margin-top: 20px;
+.header-img {
 	grid-column: 1;
-	grid-row: 2;
-	max-width: 150px;
 }
 
-.question {
+.header-title {
 	grid-column: 2;
-	grid-row: 2;
+	margin-left: 20px;
+	font-size: 32px;
 }
 
-.answer {
-	grid-column: 3;
-	grid-row: 2;
+.header-links {
+	grid-column: 2;
+	justify-self: end;
+	align-self: center;
+	margin-right: 5px;
+	color: white;
+	font-size: 18px;
 }
+
+.header-links:hover {
+	text-decoration: none;
+	color: lightgrey;
+}
+
+/* SIDEBAR */
 
 .sidebar {
 	padding: 30px 20px;
@@ -69,43 +88,129 @@
 	grid-row: auto;
 }
 
-/* Main Page */
+/* HOME */
 
-.app {
-	grid-column: 2;
-	padding-top: 40px;
+.home {
+	text-align: center;
 }
 
-.main {
+.home-img {
+	margin: 0 auto;
+}
+
+/* CATEGORIES */
+
+#categories {
+	text-align: left;
+	margin-left: 10%;
+}
+
+.categories-title {
+	font-size: 38px;
+	font-weight: 500;
+	margin-bottom: 20px;
+}
+
+.categories-list {
 	display: grid;
-	grid-template-columns: 1fr 7fr;
-	background-color: #E7F1F5;
 }
 
-.main-header {
+.category {
+	grid-column: 1;
 	display: grid;
-	grid-template-columns: 80% 20%;
-	grid-column: 1 / -1;
-	padding: 20px 15px;
-	background-color: #006992;
-	color: white;
-	font-size: 20px;
+	grid-auto-flow: column;
+	grid-template-columns: 35% 65%;
 }
 
-.header-links {
+.category .header {
+	font-size: 24px;
+	font-weight: 500;
+}
+
+.category-name {
+	grid-column: 1;
+}
+
+.category-number {
 	grid-column: 2;
-	justify-self: end;
-	margin-right: 20px;
-	color: white;
-	font-size: 18px;
+	justify-self: center;
 }
 
-.header-links:hover {
-	text-decoration: none;
-	color: lightgrey;
+/* TEAMS */
+
+#teams {
+	text-align: left;
+	margin-left: 10%;
+	margin-bottom: 20px;
 }
 
-/* Login */
+.teams-title {
+	font-size: 38px;
+	font-weight: 500;
+}
+
+.teams-list {
+	display: grid;
+	margin-top: 20px;
+}
+
+.teams-button {
+	display: grid;
+	margin-top: 20px;
+}
+
+.team {
+	grid-column: 1;
+	display: grid;
+	grid-auto-flow: column;
+	grid-template-columns: 35% 65%;
+}
+
+.team .header {
+	font-size: 24px;
+	font-weight: 500;
+}
+
+.team-name {
+	grid-column: 1;
+}
+
+.team-secondary {
+	grid-column: 2;
+	justify-self: center;
+}
+
+/* ACTIVE GAME */
+
+#game {
+	text-align: left;
+	margin-left: 10%;
+	margin-bottom: 20px;
+}
+
+.question-header {
+	grid-column: 1;
+	grid-row: 1;
+}
+
+.question {
+	grid-column: 2;
+	grid-row: 2;
+}
+
+.answer {
+	grid-column: 3;
+	grid-row: 2;
+}
+
+.game-button {
+	margin-top: 20px;
+	grid-column: 1;
+	grid-row: 2;
+	max-width: 150px;
+}
+
+/* LOGIN */
 
 .login {
 	text-align: center;
@@ -129,7 +234,7 @@
 	background-color: darkgrey;
 }
 
-/* Sign-Up */
+/* SIGN-UP */
 
 .sign-up {
 	margin: 20px auto;
