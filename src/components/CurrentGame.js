@@ -12,21 +12,21 @@ export default class CurrentGame extends Component {
       questions: [],
       teams: [],
       index: 0,
-      timer: 11,
-      countdownTimer: {},
-      answers: []
+      questionTimer: 10,
+      waitTimer: 10,
+      answers: [],
+      questionActive: false,
     }
     this.onNextQuestion = this.onNextQuestion.bind(this)
-    this.countdown = this.countdown.bind(this)
+    this.onRestartGame = this.onRestartGame.bind(this)
   }
 
   componentDidMount() {
-    const index = localStorage.getItem('index')*1
+    const index = localStorage.getItem('index') * 1
     axios.get('/v1/games/active')
       .then(res => res.data)
       .then(game => {
-        axios
-          .get(`/v1/games/${game.id}/teams`)
+        axios.get(`/v1/games/${game.id}/teams`)
           .then(res => res.data)
           .then(teams => this.setState({ teams }));
         axios.get(`/v1/games/${game.id}/questions`)
@@ -34,104 +34,100 @@ export default class CurrentGame extends Component {
           .then(questions => this.setState({ questions }));
       })
       .then(() => {
-        const { timer, index } = this.state
-        socket.on('question requested', () => {
-          socket.emit('send question', { timer, index, question: this.state.questions[this.state.index] })
-        })
+        // const { index } = this.state
+        setTimeout(() => socket.emit('send question', { index, question: this.state.questions[index] }), 100)
         socket.on('answer submitted', (info) => {
           const { answers } = this.state
           this.setState({ answers: [...answers, info ]})
         })
+        socket.on('game started', () => this.setState({ questionTimer: 10 }))
+        socket.on('ready for next question', () => this.onNextQuestion())
+        socket.on('question timer', (questionTimer) => this.setState({ questionTimer }))
+        socket.on('wait timer', (waitTimer) => this.setState({ waitTimer }))
       });
-    this.countdown()
-    this.setState({ index })
+    this.setState({ questionActive: true, index })
   }
 
   componentWillUnmount() {
-    clearTimeout(this.state.countdownTimer)
     localStorage.setItem('index', this.state.index)
-  }
-
-  countdown() {
-    let { timer, question, answer, countdownTimer, index } = this.state
-    if (timer) this.setState({ timer: timer - 1, countdownTimer: setTimeout(() => this.countdown(), 1000) })
-    else {
-      if(index < 9){
-        this.onNextQuestion()
-        this.countdown()
-      }
-      else {
-        this.setState({ })
-      }
-    }
+    socket.off('question timer')
+    socket.off('wait timer')
   }
 
   onNextQuestion() {
-    console.log('BEFORE STATE CHANGE: ', this.state.index)
-    this.setState({ index: this.state.index + 1, timer: 10, answers: [] })
-    console.log('AFTER STATE CHANGE: ', this.state.index)
-    const { index, timer } = this.state
-    localStorage.setItem('index', this.state.index)
-    socket.emit('send question', { timer, index: index*1, question: this.state.questions[index] })
+    this.setState({
+      index: this.state.index + 1,
+      questionTimer: 10,
+      waitTimer: 10,
+      answers: [],
+      questionActive: true,
+    })
+    const { index } = this.state
+    localStorage.setItem('index', index)
+    if (index > 9) socket.emit('game over')
+    else socket.emit('send question', {index: index * 1, question: this.state.questions[index]})
+  }
+
+  onRestartGame() {
+    this.setState({ index: 0 })
+    localStorage.setItem('index', 0)
   }
 
   render() {
-    const { teams, questions, timer, answers } = this.state;
-    const { changeState, onNextQuestion } = this;
-    const index = localStorage.getItem('index')*1
+    const { teams, questions, questionTimer, answers, questionActive, waitTimer } = this.state;
+    const { changeState, onNextQuestion, onRestartGame } = this;
+    const index = localStorage.getItem('index') * 1
     return (
       <div id='game'>
-        {
-          questions.length ? 
+        { questions.length &&
           <div className="question">
-          { index < 9 || timer ? 
-              <div>
+          { index < 10 ?
+            ( <div>
                 { index === questions.length - 1 && <h1>LAST QUESTION</h1> }
-                <h2 className="question-header">Question No.{index + 1}</h2>
-                <h3 className="timer">00:{timer > 9 ? timer : `0${timer}`}</h3> 
+                <h2 className="question-header">Question #{index + 1}</h2>
+                <h3 className="timer">00:{questionTimer > 9 ? questionTimer : `0${questionTimer}`}</h3>
                 <div dangerouslySetInnerHTML={{ __html: `<strong>Question: </strong>${questions[index].question}` }}></div>
                 <div className="answer">
                   <div dangerouslySetInnerHTML={{ __html: `<strong> Correct Answer: </strong>${questions[index].correct_answer}` }}></div>
                 </div>
               </div>
-            : 
-            <h1> GAME OVER </h1>
+            ) : (
+              <h1>Game over</h1>
+            )
           }
           </div>
-          : null
         }
-        {
-          teams.length ?
+        { teams.length &&
             <div>
-                {
-                  index === questions.length - 1 ?
-                    <button
-                      className="btn btn-dark game-button"
-                      disabled={index !== questions.length - 1}
-                      onClick={() => {
-                        this.setState({ index: 0 })
-                        localStorage.setItem('index', 0)
-                      }}
-                    >
-                      Restart Game
+                { index === questions.length ?
+                  ( <button
+                    className="btn btn-dark game-button"
+                    disabled={index !== questions.length}
+                    onClick={ onRestartGame }>
+                    Restart Game
                     </button>
-                  :
-                    <button
-                      className="btn btn-dark game-button"
-                      disabled={index === questions.length - 1}
-                      onClick={() => {
-                        this.setState({ index: this.state.index + 1 })
-                        localStorage.setItem('index', this.state.index + 1)
-                      }}
-                    >
-                      Next Question
-                    </button>
+                  ) : (
+                    <div>
+                    {/* questionActive && */}
+                    <h4 style={{ paddingTop: '20px' }}>
+                      Next Question starting in: 00:{waitTimer > 9 ? waitTimer : `0${waitTimer}`}
+                    </h4>
+                      {/*<button
+                        className="btn btn-dark game-button"
+                        disabled={index === questions.length - 1}
+                        onClick={() => {
+                          this.setState({ index: this.state.index + 1 })
+                          localStorage.setItem('index', this.state.index + 1)
+                        }}
+                      >
+                        Next Question
+                      </button>*/}
+                    </div>
+                  )
                 }
             </div>
-          : null
-        }
-          <br />
-        { teams.length ? <TeamsList answers={answers} game={timer ? true : false} /> : null }
+          }
+        { teams.length && <TeamsList answers={ answers } game={questionTimer ? true : false} />}
       </div>
     );
   }
