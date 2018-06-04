@@ -12,6 +12,7 @@ import Home from './Home';
 import Sidebar from './Sidebar';
 import Banner from './Banner';
 import Scores from './Scores';
+import Timer from './Timer';
 
 class App extends Component {
   constructor(props){
@@ -53,22 +54,23 @@ class App extends Component {
     this.setState({ loggedIn: true })
   }
 
-  render(){ 
-    const { bar, loggedIn } = this.state; 
+  render(){
+    const { bar, loggedIn } = this.state;
     if (!bar.name) this.whoAmI()
     return (
       <Router>
         <div className='main'>
           <Banner loggedIn={loggedIn} logout={this.logout} bar={bar} />
-          <Sidebar loggedIn={loggedIn} />
-          <div className='container app'>
+          { loggedIn ? <Sidebar /> : null }
+          <div className={`${ loggedIn ? 'container app' : 'loggedOut'}`}>
+          <Timer />
           <Switch>
-            <Route path="/" exact render={() => <Home bar={bar}/> }/>
-            <Route path="/login" render={({history}) => <Login login={this.login} history={history}/>}/>
-            <Route path="/categories" exact component={Categories}/>
-            <Route path="/categories/:id" component={Category}/>
-            <Route path="/teams" component={Teams}/>
-            <Route path="/games/active" exact component={CurrentGame}/>
+            <Route path="/" exact render={({ history }) => <Home history ={ history } bar={ bar } /> } />
+            <Route path="/login" render={({history}) => <Login login={this.login} history={history} />} />
+            <Route path="/categories" exact component={Categories} />
+            <Route path="/categories/:id" component={Category} />
+            <Route path="/teams" component={Teams} />
+            <Route path="/games/active" exact component={CurrentGame} />
             <Route path="/games/past" exact component={PastGames} />
             <Route path="/scores" exact component={Scores} />
           </Switch>

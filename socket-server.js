@@ -24,8 +24,25 @@ module.exports = (io) => {
       io.emit('question requested')
     });
     socket.on('send question', (obj) => {
-      // console.log('OBJ: ', obj)
       io.emit('sending question', obj)
+    }),
+    socket.on('start game', () => {
+      io.emit('game started')
+    })
+    socket.on('question over', () => {
+      io.emit('waiting for next question')
+    })
+    socket.on('get next question', () => {
+      io.emit('ready for next question')
+    })
+    socket.on('question countdown', (timer) => {
+      io.emit('question timer', timer)
+    })
+    socket.on('wait countdown', (timer) => {
+      io.emit('wait timer', timer)
+    })
+    socket.on('game over', () => {
+      io.emit('game has ended')
     })
     socket.on('authenticate', (id) => {
       console.log('user id:', id)
