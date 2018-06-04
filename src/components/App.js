@@ -11,6 +11,7 @@ import Teams from './Teams';
 import Home from './Home';
 import Sidebar from './Sidebar';
 import Banner from './Banner';
+import Scores from './Scores';
 import Timer from './Timer';
 
 class App extends Component {
@@ -71,6 +72,7 @@ class App extends Component {
             <Route path="/teams" component={Teams} />
             <Route path="/games/active" exact component={CurrentGame} />
             <Route path="/games/past" exact component={PastGames} />
+            <Route path="/scores" exact component={Scores} />
           </Switch>
           </div>
         </div>

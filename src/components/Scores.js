@@ -1,45 +1,51 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import moment from 'moment';
 
-export default class PastGames extends Component {
+export default class Scores extends Component {
   constructor() {
     super();
     this.state = {
-      pastGames: [],
-    };
+      teams: []
+    }
   }
   componentDidMount() {
     axios
-      .get('/v1/games')
+      .get('/v1/teams')
       .then(res => res.data)
-      .then(_games => _games.filter(game => game.active === false))
-      .then(pastGames => this.setState({ pastGames }));
+      .then(team => {
+        this.setState({
+          teams: [
+            ...this.state.teams,
+            {
+              name: team.team_name,
+              score: team.score
+            }
+          ]
+        })
+      });
   }
   render() {
-    const { pastGames } = this.state;
+    const { teams } = this.state;
     return (
       <div className="container">
         <div className="grid-container">
           <div className="grid-item-1">
-            <h3>Date</h3>
+            <h3>Team</h3>
           </div>
           <div className="grid-item-2">
-            <h3>No. of Teams</h3>
+            <h3>Score</h3>
           </div>
         </div>
         {
-          pastGames.map(game => {
+          teams.map(team => {
             return (
-              <div key={game.id} className="grid-container">
+              <div key={team.id} className="grid-container">
                 <div className="grid-item-1">
-                  <Link to={`/pastgames/${game.id}`}>
-                    { moment(game.createdAt).format('mm:dd:yy') }
-                  </Link>
+                   { team.team_name }
                 </div>
                 <div className="grid-item-2">
-                  { game.num_of_teams }
+                  { team.score }
                 </div>
               </div>
             );
