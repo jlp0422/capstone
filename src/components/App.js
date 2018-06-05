@@ -59,21 +59,25 @@ class App extends Component {
     if (!bar.name) this.whoAmI()
     return (
       <Router>
-        <div className='main'>
+        <div id='main'>
           <Banner loggedIn={loggedIn} logout={this.logout} bar={bar} />
-          { loggedIn ? <Sidebar /> : null }
+          { loggedIn && <Sidebar /> }
           <div className={`${ loggedIn ? 'container app' : 'loggedOut'}`}>
-          <Timer />
-          <Switch>
-            <Route path="/" exact render={({ history }) => <Home history ={ history } bar={ bar } /> } />
-            <Route path="/login" render={({history}) => <Login login={this.login} history={history} />} />
-            <Route path="/categories" exact component={Categories} />
-            <Route path="/categories/:id" component={Category} />
-            <Route path="/teams" component={Teams} />
-            <Route path="/games/active" exact component={CurrentGame} />
-            <Route path="/games/past" exact component={PastGames} />
-            <Route path="/scores" exact component={Scores} />
-          </Switch>
+          { loggedIn && <Timer /> }
+          { 
+            loggedIn ?
+            <Switch>
+              <Route path="/" exact render={({ history }) => <Home history ={ history } bar={ bar } /> } />
+              <Route path="/categories" exact component={Categories} />
+              <Route path="/categories/:id" component={Category} />
+              <Route path="/teams" component={Teams} />
+              <Route path="/games/active" exact component={CurrentGame} />
+              <Route path="/games/past" exact component={PastGames} />
+              <Route path="/scores" exact component={Scores} />
+            </Switch>
+            :
+            <Route path="/" render={({history}) => <Login login={this.login} history={history} />} />
+          }
           </div>
         </div>
       </Router>

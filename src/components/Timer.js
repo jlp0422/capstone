@@ -95,23 +95,34 @@ class Timer extends React.Component {
 
   render() {
     const { questionTimer, waitTimer, isQuestionActive, isPaused } = this.state
-    const { onPause, onResume } = this
-    return (
-      <div>
-        <h4>Question timer: { questionTimer }</h4>
-        <h4>Wait timer: { waitTimer }</h4>
-        <button
-          disabled={ isPaused }
-          onClick={() => onPause( isQuestionActive ? 'question' : 'wait' )}>
-          Pause
-        </button>
-        <button
-          disabled={ !isPaused }
-          onClick={() => onResume( isQuestionActive ? 'question' : 'wait' ) }>
-          Resume
-        </button>
-      </div>
-    )
+    const { onPause, onResume } = this;
+    const index = localStorage.getItem('index')*1
+    if(index > 9) return null
+      return (
+        <div id='timer' className={ isQuestionActive ? questionTimer > 3 ? 'good' : questionTimer === 0 ? 'warning' : 'warning-animate' : 'wait' }>
+          <div className='banner-question'>Question {index+1}</div>
+            {
+              isQuestionActive ? 
+              <div className='question-time'>00:0{ questionTimer }</div> 
+            :
+              <div className='wait-time'>Next question in... { waitTimer }</div>
+            }
+          <div className='timer-buttons'>
+            <button
+              className='btn btn-dark mr-1'
+              disabled={ isPaused }
+              onClick={() => onPause( isQuestionActive ? 'question' : 'wait' )}>
+              Pause
+            </button>
+            <button
+              className='btn btn-dark'
+              disabled={ !isPaused }
+              onClick={() => onResume( isQuestionActive ? 'question' : 'wait' ) }>
+              Resume
+            </button>
+          </div> 
+        </div>
+      )
   }
 }
 

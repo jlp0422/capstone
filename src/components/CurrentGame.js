@@ -80,50 +80,34 @@ export default class CurrentGame extends Component {
     return (
       <div id='game'>
         { questions.length &&
-          <div className="question">
-          { index < 10 ?
-            ( <div>
+          <div>
+          { 
+            index < 10 ?
+              <div>
                 { index === questions.length - 1 && <h1>LAST QUESTION</h1> }
-                <h2 className="question-header">Question #{index + 1}</h2>
-                <h3 className="timer">00:{questionTimer > 9 ? questionTimer : `0${questionTimer}`}</h3>
-                <div dangerouslySetInnerHTML={{ __html: `<strong>Question: </strong>${questions[index].question}` }}></div>
+                <div className="question">
+                  <div dangerouslySetInnerHTML={{ __html: `<strong>Question: </strong>${questions[index].question}` }}></div>
+                </div>
                 <div className="answer">
-                  <div dangerouslySetInnerHTML={{ __html: `<strong> Correct Answer: </strong>${questions[index].correct_answer}` }}></div>
+                  <div dangerouslySetInnerHTML={{ __html: `<strong>Correct Answer: </strong>${questions[index].correct_answer}` }}></div>
                 </div>
               </div>
-            ) : (
+            : 
               <h1>Game over</h1>
-            )
           }
           </div>
         }
-        { teams.length &&
+        { 
+          teams.length &&
             <div>
-                { index === questions.length ?
-                  ( <button
+                { 
+                  index === questions.length &&
+                  <button
                     className="btn btn-dark game-button"
                     disabled={index !== questions.length}
                     onClick={ onRestartGame }>
                     Restart Game
-                    </button>
-                  ) : (
-                    <div>
-                    {/* questionActive && */}
-                    <h4 style={{ paddingTop: '20px' }}>
-                      Next Question starting in: 00:{waitTimer > 9 ? waitTimer : `0${waitTimer}`}
-                    </h4>
-                      {/*<button
-                        className="btn btn-dark game-button"
-                        disabled={index === questions.length - 1}
-                        onClick={() => {
-                          this.setState({ index: this.state.index + 1 })
-                          localStorage.setItem('index', this.state.index + 1)
-                        }}
-                      >
-                        Next Question
-                      </button>*/}
-                    </div>
-                  )
+                  </button> 
                 }
             </div>
           }
