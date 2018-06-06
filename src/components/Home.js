@@ -12,8 +12,13 @@ class Home extends React.Component {
   }
 
   componentDidMount() {
+    const teams = localStorage.getItem('teams')
+    if (teams) this.setState({ teams: teams.split(', ') })
     socket.on('team register', (team) => {
       this.setState({ teams: [ team, ...this.state.teams ]})
+      const teams = localStorage.getItem('teams')
+      const teamString = teams ? `${teams}, ${team}` : team
+      localStorage.setItem('teams', teamString)
     })
   }
 
@@ -41,7 +46,7 @@ class Home extends React.Component {
             <p key={team}>{team}</p>
           )) : null
         }
-        <button onClick={ onStartGame }> Click to Start a Game </button>
+        <div><button onClick={ onStartGame }> Click to Start a Game </button></div>
         <img className='home-img' width='500' height='500' src='/public/images/UTT-logo.svg' />
         <br/>
       </div>

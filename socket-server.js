@@ -1,7 +1,9 @@
 /* eslint-disable */
+const devices = {}
+
 const sock = (io) => {
   io.on('connection', (socket) => {
-    console.log(socket.id)
+    devices[socket.id] = socket
     socket.on('login', (type) => {
       console.log(`socket server: login attempt with ${type}`)
     });
@@ -12,8 +14,6 @@ const sock = (io) => {
     socket.on('choose bar', (bar_id) => {
       socket.join(bar_id)
       io.to(bar_id).emit('bar register', bar_id)
-      // io.to(bar_id).emit('team connected', bar_id)
-      // io.emit('bar register', bar_id)
     });
     socket.on('choose team name', ({ name, bar_id }) => {
       io.to(bar_id).emit('team register', name)
@@ -22,11 +22,8 @@ const sock = (io) => {
       // const { team, answer } = info
       io.emit('answer submitted', info)
     });
-    // socket.on('request question', () => {
-    //   io.emit('question requested')
-    // });
-    socket.on('send question', (obj) => {
-      io.emit('sending question', obj)
+    socket.on('send question', (question) => {
+      io.emit('sending question', question)
     }),
     socket.on('start game', () => {
       io.emit('game started')
@@ -50,6 +47,7 @@ const sock = (io) => {
       io.emit('authenticated', id)
     });
     socket.on('disconnect', () => {
+      delete devices[socket.id]
       console.log('user has disconnected')
     })
   })

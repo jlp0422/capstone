@@ -3,6 +3,7 @@ import Login from './Login';
 import { NavLink, Route, HashRouter as Router, Switch } from 'react-router-dom';
 import jwt from 'jsonwebtoken';
 import axios from 'axios';
+import socket from '../../socket-client';
 import Categories from './Categories';
 import CurrentGame from './CurrentGame';
 import PastGames from './PastGames';
@@ -41,11 +42,13 @@ class App extends Component {
       axios.post(`/v1/bars/${token.id}`, token)
       .then(res => res.data)
       .then(bar => this.setState({ bar, loggedIn: true }))
+      .then(() => socket.emit('bar login', token.id))
     }
   }
 
   logout(){
     localStorage.removeItem('token')
+    localStorage.removeItem('teams')
     this.setState({ loggedIn: false })
   }
 
