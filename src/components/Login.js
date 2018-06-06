@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import bcrypt from 'bcryptjs';
+import socket from '../../socket-client';
 
 export default class Login extends Component {
   constructor(props){
@@ -25,12 +26,14 @@ export default class Login extends Component {
     ev.preventDefault();
     if ( signup ) {
       const newId = Math.floor(Math.random() * 10000)
+      socket.emit('bar login', newId)
       axios.post('/auth/register', { name, id: newId, password: hashPassword, email })
       .then(res => res.data)
       .then(user => this.props.login(user))
       .then(() => this.props.history.push('/'))
     }
     else {
+      socket.emit('bar login', id)
       axios.post('/auth/login', { id, password })
       .then(res => res.data)
       .then(user => this.props.login(user))
@@ -91,7 +94,7 @@ export default class Login extends Component {
               <span> {passwordStrength} </span>
               <span> {passwordMatch ? 'match' : 'nope'} </span>
             </div>
-            : 
+            :
             <div>
               <input
                 type='number'
@@ -119,7 +122,7 @@ export default class Login extends Component {
           }
           <button className='btn btn-dark'
             onClick={()=> this.setState({ signup: !signup })}>
-            { signup ? 'Click here to Log in' : 'Create one!'} 
+            { signup ? 'Click here to Log in' : 'Create one!'}
           </button>
         </div>
       </div>

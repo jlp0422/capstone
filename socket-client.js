@@ -2,10 +2,8 @@ const io = require('socket.io-client');
 const socket = io(process.env.HOST)
 
 socket.on('connect', () => {
-  console.log('socket client: connected!')
-  socket.on('team-name', (name) => {
-    console.log(`socket client: team ${name} has signed up!`)
-  })
+  console.log('socket web: connected!')
+
 });
 
 module.exports = socket;
