@@ -1,5 +1,5 @@
 /* eslint-disable */
-module.exports = (io) => {
+const sock = (io) => {
   io.on('connection', (socket) => {
     console.log(socket.id)
     socket.on('login', (type) => {
@@ -22,11 +22,10 @@ module.exports = (io) => {
       // const { team, answer } = info
       io.emit('answer submitted', info)
     });
-    socket.on('request question', () => {
-      io.emit('question requested')
-    });
+    // socket.on('request question', () => {
+    //   io.emit('question requested')
+    // });
     socket.on('send question', (obj) => {
-      // io.to(BAR_ID).emit('sending question', obj)
       io.emit('sending question', obj)
     }),
     socket.on('start game', () => {
@@ -35,8 +34,8 @@ module.exports = (io) => {
     socket.on('question over', () => {
       io.emit('waiting for next question')
     })
-    socket.on('get next question', () => {
-      io.emit('ready for next question')
+    socket.on('get next question', (index) => {
+      io.emit('ready for next question', index)
     })
     socket.on('question countdown', (timer) => {
       io.emit('question timer', timer)
@@ -55,3 +54,5 @@ module.exports = (io) => {
     })
   })
 }
+
+module.exports = sock
