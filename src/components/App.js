@@ -66,7 +66,7 @@ class App extends Component {
           <Banner loggedIn={loggedIn} logout={this.logout} bar={bar} />
           { loggedIn && <Sidebar /> }
           <div className={`${ loggedIn ? 'container app' : 'loggedOut'}`}>
-          { loggedIn && <Timer /> }
+          { loggedIn && <Timer bar={ bar } /> }
           {
             loggedIn ?
             <Switch>
@@ -74,7 +74,7 @@ class App extends Component {
               <Route path="/categories" exact component={Categories} />
               <Route path="/categories/:id" component={Category} />
               <Route path="/teams" component={Teams} />
-              <Route path="/games/active" exact component={CurrentGame} />
+              <Route path="/games/active" exact render={() => <CurrentGame bar={ bar } /> } />
               <Route path="/games/past" exact component={PastGames} />
               <Route path="/scores" exact component={Scores} />
             </Switch>

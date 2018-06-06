@@ -56,6 +56,7 @@ class Timer extends React.Component {
   }
 
   onQuestionCountdown() {
+    const { bar } = this.props
     let { questionTimerFunc, questionTimer } = this.state
     if (localStorage.getItem('index') < 10) {
       if (questionTimer) {
@@ -63,10 +64,10 @@ class Timer extends React.Component {
           questionTimer: questionTimer - 1,
           questionTimerFunc: setTimeout(() => this.onQuestionCountdown(), 1000)
         })
-        socket.emit('question countdown', this.state.questionTimer)
+        socket.emit('question countdown', { bar, timer: this.state.questionTimer })
       }
       else {
-          socket.emit('question over')
+          socket.emit('question over', bar)
           this.onWaitCountdown()
           this.setState({ questionTimer: 5, isQuestionActive: false })
       }
@@ -74,19 +75,20 @@ class Timer extends React.Component {
   }
 
   onWaitCountdown() {
+    const { bar } = this.props
     let { waitTimerFunc, waitTimer } = this.state
     if (waitTimer) {
       this.setState({
         waitTimer: waitTimer - 1,
         waitTimerFunc: setTimeout(() => this.onWaitCountdown(), 1000)
       })
-      socket.emit('wait countdown', this.state.waitTimer)
+      socket.emit('wait countdown', { bar, timer: this.state.waitTimer })
     }
     else {
       const index = localStorage.getItem('index')
       if (index < 10) {
         this.onQuestionCountdown()
-        socket.emit('get next question', index)
+        socket.emit('get next question', { bar, index })
       }
       this.setState({ waitTimer: 5, isQuestionActive: true })
     }

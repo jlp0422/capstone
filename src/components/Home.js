@@ -27,9 +27,9 @@ class Home extends React.Component {
   }
 
   onStartGame() {
-    const { history } = this.props
+    const { history, bar } = this.props
     localStorage.setItem('index', 0)
-    socket.emit('start game')
+    socket.emit('start game', bar.id)
     history.push('/games/active')
   }
 

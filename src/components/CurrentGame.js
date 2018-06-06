@@ -35,7 +35,8 @@ export default class CurrentGame extends Component {
       })
       .then(() => {
         // const { index } = this.state
-        setTimeout(() => socket.emit('send question', { index, question: this.state.questions[index] }), 100)
+        const { bar } = this.props
+        setTimeout(() => socket.emit('send question', { index, question: this.state.questions[index], bar }), 100)
         socket.on('answer submitted', (info) => {
           const { answers } = this.state
           this.setState({ answers: [ ...answers, info ]})
@@ -65,9 +66,10 @@ export default class CurrentGame extends Component {
       questionActive: true,
     })
     const { index } = this.state
+    const { bar } = this.props
     localStorage.setItem('index', index)
-    if (index > 9) socket.emit('game over')
-    else socket.emit('send question', {index: index * 1, question: this.state.questions[index]})
+    if (index > 9) socket.emit('game over', bar)
+    else socket.emit('send question', {index: index * 1, question: this.state.questions[index], bar })
   }
 
   onRestartGame() {
