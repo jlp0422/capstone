@@ -38,7 +38,7 @@ export default class CurrentGame extends Component {
         setTimeout(() => socket.emit('send question', { index, question: this.state.questions[index] }), 100)
         socket.on('answer submitted', (info) => {
           const { answers } = this.state
-          this.setState({ answers: [...answers, info ]})
+          this.setState({ answers: [ ...answers, info ]})
         })
         socket.on('game started', () => this.setState({ questionTimer: 10 }))
         socket.on('ready for next question', () => this.onNextQuestion())
@@ -52,6 +52,8 @@ export default class CurrentGame extends Component {
     localStorage.setItem('index', this.state.index)
     socket.off('question timer')
     socket.off('wait timer')
+    socket.off('game started')
+    socket.off('ready for next question')
   }
 
   onNextQuestion() {
@@ -81,7 +83,7 @@ export default class CurrentGame extends Component {
       <div id='game'>
         { questions.length &&
           <div>
-          { 
+          {
             index < 10 ?
               <div>
                 { index === questions.length - 1 && <h1>LAST QUESTION</h1> }
@@ -92,22 +94,22 @@ export default class CurrentGame extends Component {
                   <div dangerouslySetInnerHTML={{ __html: `<strong>Correct Answer: </strong>${questions[index].correct_answer}` }}></div>
                 </div>
               </div>
-            : 
+            :
               <h1>Game over</h1>
           }
           </div>
         }
-        { 
+        {
           teams.length &&
             <div>
-                { 
+                {
                   index === questions.length &&
                   <button
                     className="btn btn-dark game-button"
                     disabled={index !== questions.length}
                     onClick={ onRestartGame }>
                     Restart Game
-                  </button> 
+                  </button>
                 }
             </div>
           }

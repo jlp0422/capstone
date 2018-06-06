@@ -59,12 +59,12 @@ class App extends Component {
     if (!bar.name) this.whoAmI()
     return (
       <Router>
-        <div id='main'>
+        <div id="main">
           <Banner loggedIn={loggedIn} logout={this.logout} bar={bar} />
           { loggedIn && <Sidebar /> }
           <div className={`${ loggedIn ? 'container app' : 'loggedOut'}`}>
           { loggedIn && <Timer /> }
-          { 
+          {
             loggedIn ?
             <Switch>
               <Route path="/" exact render={({ history }) => <Home history ={ history } bar={ bar } /> } />

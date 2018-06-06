@@ -1,23 +1,17 @@
 /* eslint-disable */
 module.exports = (io) => {
   io.on('connection', (socket) => {
-    console.log('socket server connected:', socket.id)
     socket.on('login', (type) => {
       console.log(`socket server: login attempt with ${type}`)
     });
     socket.on('choose-bar', (bar_id) => {
-      console.log(`socket server: bar id: ${bar_id}`)
-      // only works with io.emit
       io.emit('bar register', bar_id)
     });
     socket.on('team-name', (name) => {
-      console.log(`socket server: team name: ${name}`)
-      // only works with io.emit
       io.emit('team register', name)
     });
     socket.on('answer', (info) => {
-      const { team, answer } = info
-      console.log(`socket server: team: ${team}, answer: ${answer}`)
+      // const { team, answer } = info
       io.emit('answer submitted', info)
     });
     socket.on('request question', () => {
@@ -45,7 +39,6 @@ module.exports = (io) => {
       io.emit('game has ended')
     })
     socket.on('authenticate', (id) => {
-      console.log('user id:', id)
       io.emit('authenticated', id)
     });
     socket.on('disconnect', () => {

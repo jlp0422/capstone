@@ -30,7 +30,6 @@ class Timer extends React.Component {
       clearTimeout(questionTimerFunc)
       clearTimeout(waitTimerFunc)
     })
-    this.onQuestionCountdown()
   }
 
   onStartTimer() {
@@ -96,16 +95,16 @@ class Timer extends React.Component {
   render() {
     const { questionTimer, waitTimer, isQuestionActive, isPaused } = this.state
     const { onPause, onResume } = this;
-    const index = localStorage.getItem('index')*1
+    const index = localStorage.getItem('index') * 1
     if(index > 9) return null
       return (
         <div id='timer' className={ isQuestionActive ? questionTimer > 3 ? 'good' : questionTimer === 0 ? 'warning' : 'warning-animate' : 'wait' }>
-          <div className='banner-question'>Question {index+1}</div>
+          <div className='banner-question'>Question { index + 1 }</div>
             {
-              isQuestionActive ? 
-              <div className='question-time'>00:0{ questionTimer }</div> 
+              isQuestionActive ?
+              <div className='question-time'>00:{ questionTimer < 10 ? `0${questionTimer}` : questionTimer }</div>
             :
-              <div className='wait-time'>Next question in... { waitTimer }</div>
+              <div className='wait-time'>Next question in... { waitTimer < 10 ? `0${waitTimer}` : waitTimer }</div>
             }
           <div className='timer-buttons'>
             <button
@@ -120,7 +119,7 @@ class Timer extends React.Component {
               onClick={() => onResume( isQuestionActive ? 'question' : 'wait' ) }>
               Resume
             </button>
-          </div> 
+          </div>
         </div>
       )
   }
