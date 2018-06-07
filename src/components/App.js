@@ -27,8 +27,11 @@ class App extends Component {
     this.whoAmI = this.whoAmI.bind(this)
   }
 
-  componentDidMount(){
-    this.whoAmI();
+  componentDidMount() {
+    this.whoAmI()
+    socket.once('need bar name', () => {
+      socket.emit('bar name here', this.state.bar)
+    })
   }
 
   componentWillReceiveProps(){

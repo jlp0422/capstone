@@ -17,9 +17,15 @@ const sock = (io) => {
     // team choosing bar
     socket.on('choose bar', (bar_id) => {
       socket.join(bar_id)
-      // only logging this right now, can probably delete
-      io.to(bar_id).emit('bar register', bar_id)
     });
+
+    socket.on('get bar name', () => {
+      io.emit('need bar name')
+    })
+
+    socket.on('bar name here', (bar) => {
+      io.emit('sending bar name', bar)
+    })
 
     // team choosing team name
     socket.on('choose team name', ({ name, bar_id }) => {
