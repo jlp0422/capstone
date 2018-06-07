@@ -6,9 +6,9 @@ class Timer extends React.Component {
   constructor() {
     super()
     this.state = {
-      questionTimer: 10,
+      questionTimer: 5,
       questionTimerFunc: {},
-      waitTimer: 10,
+      waitTimer: 5,
       waitTimerFunc: {},
       isQuestionActive: true,
       isPaused: false,
@@ -30,7 +30,6 @@ class Timer extends React.Component {
       clearTimeout(questionTimerFunc)
       clearTimeout(waitTimerFunc)
     })
-    this.onQuestionCountdown()
   }
 
   onStartTimer() {
@@ -57,6 +56,7 @@ class Timer extends React.Component {
   }
 
   onQuestionCountdown() {
+    const { bar } = this.props
     let { questionTimerFunc, questionTimer } = this.state
     if (localStorage.getItem('index') < 10) {
       if (questionTimer) {
@@ -64,48 +64,49 @@ class Timer extends React.Component {
           questionTimer: questionTimer - 1,
           questionTimerFunc: setTimeout(() => this.onQuestionCountdown(), 1000)
         })
-        socket.emit('question countdown', this.state.questionTimer)
+        socket.emit('question countdown', { bar, timer: this.state.questionTimer })
       }
       else {
-          socket.emit('question over')
+          socket.emit('question over', bar)
           this.onWaitCountdown()
-          this.setState({ questionTimer: 10, isQuestionActive: false })
+          this.setState({ questionTimer: 5, isQuestionActive: false })
       }
     }
   }
 
   onWaitCountdown() {
+    const { bar } = this.props
     let { waitTimerFunc, waitTimer } = this.state
     if (waitTimer) {
       this.setState({
         waitTimer: waitTimer - 1,
         waitTimerFunc: setTimeout(() => this.onWaitCountdown(), 1000)
       })
-      socket.emit('wait countdown', this.state.waitTimer)
+      socket.emit('wait countdown', { bar, timer: this.state.waitTimer })
     }
     else {
       const index = localStorage.getItem('index')
       if (index < 10) {
         this.onQuestionCountdown()
-        socket.emit('get next question')
+        socket.emit('get next question', { bar, index })
       }
-      this.setState({ waitTimer: 10, isQuestionActive: true })
+      this.setState({ waitTimer: 5, isQuestionActive: true })
     }
   }
 
   render() {
     const { questionTimer, waitTimer, isQuestionActive, isPaused } = this.state
     const { onPause, onResume } = this;
-    const index = localStorage.getItem('index')*1
+    const index = localStorage.getItem('index') * 1
     if(index > 9) return null
       return (
         <div id='timer' className={ isQuestionActive ? questionTimer > 3 ? 'good' : questionTimer === 0 ? 'warning' : 'warning-animate' : 'wait' }>
-          <div className='banner-question'>Question {index+1}</div>
+          <div className='banner-question'>Question { index + 1 }</div>
             {
-              isQuestionActive ? 
-              <div className='question-time'>00:0{ questionTimer }</div> 
+              isQuestionActive ?
+              <div className='question-time'>00:{ questionTimer < 10 ? `0${questionTimer}` : questionTimer }</div>
             :
-              <div className='wait-time'>Next question in... { waitTimer }</div>
+              <div className='wait-time'>Next question in... { waitTimer < 10 ? `0${waitTimer}` : waitTimer }</div>
             }
           <div className='timer-buttons'>
             <button
@@ -120,7 +121,7 @@ class Timer extends React.Component {
               onClick={() => onResume( isQuestionActive ? 'question' : 'wait' ) }>
               Resume
             </button>
-          </div> 
+          </div>
         </div>
       )
   }
