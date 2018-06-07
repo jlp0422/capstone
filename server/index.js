@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const path = require('path');
 
@@ -8,7 +9,6 @@ const app = express();
 const server = http.Server(app);
 const io = socketio(server);
 
-require('dotenv').config();
 app.use(require('body-parser').json());
 
 app.use('/v1', require('./routes'));
