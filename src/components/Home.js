@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React from 'react';
 import socket from '../../socket-client';
+import qr from 'qr-image';
 
 class Home extends React.Component {
   constructor(props) {

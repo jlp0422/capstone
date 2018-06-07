@@ -24,7 +24,8 @@ export default class Login extends Component {
     const hashPassword = bcrypt.hashSync(password, 6)
     ev.preventDefault();
     if ( signup ) {
-      const newId = Math.floor(Math.random() * 10000)
+      const randomNum = Math.floor(Math.random() * 10000)
+      const newId = randomNum > 1000 ? String(randomNum) : `0${randomNum}` 
       axios.post('/auth/register', { name, id: newId, password: hashPassword, email })
       .then(res => res.data)
       .then(user => this.props.login(user))
@@ -61,6 +62,7 @@ export default class Login extends Component {
 
   render(){
     const { signup, passwordStrength, passwordMatch } = this.state;
+    console.log(this.state)
     return (
       <div className='login'>
         <div className='login-header'> { signup ? 'Create an Account' : 'Please Log in' } </div>
