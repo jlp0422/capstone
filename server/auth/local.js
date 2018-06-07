@@ -8,10 +8,11 @@ router.post('/register', (req, res) => {
   console.log(req.body)
   Bar.create(req.body)
   .then(bar => {
+    console.log(bar)
     const token = jwt.sign({ id: bar.id }, secret, { expiresIn: 86400 });
     res.send({ token });
   })
-  .catch(err => res.status(404).send({ error: err }));
+  .catch(err => res.status(404).send({ error: err.stack }));
 });
 
 router.post('/login', (req, res) => {

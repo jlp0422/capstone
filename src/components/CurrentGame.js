@@ -12,8 +12,8 @@ export default class CurrentGame extends Component {
       questions: [],
       teams: [],
       index: 0,
-      questionTimer: 10,
-      waitTimer: 10,
+      questionTimer: 5,
+      waitTimer: 5,
       answers: [],
       questionActive: false
     };
@@ -23,51 +23,41 @@ export default class CurrentGame extends Component {
 
   componentDidMount() {
     const index = localStorage.getItem('index') * 1;
-    axios
-      .get('/v1/games/active')
+    axios.get('/v1/games/active')
       .then(res => res.data)
       .then(game => {
-        axios
-          .get(`/v1/games/${game.id}/teams`)
+        axios.get(`/v1/games/${game.id}/teams`)
           .then(res => res.data)
           .then(teams => this.setState({ teams }));
-        axios
-          .get(`/v1/games/${game.id}/questions`)
+        axios.get(`/v1/games/${game.id}/questions`)
           .then(res => res.data)
           .then(questions => this.setState({ questions }));
       })
       .then(game => {
-        // const { index } = this.state
-        setTimeout(
-          () =>
-            socket.emit('send question', {
-              index,
-              question: this.state.questions[index]
-            }),
-          100
-        );
-        socket.on('answer submitted', info => {
+        const { bar } = this.props
+        setTimeout(() => socket.emit('send question', { index, question: this.state.questions[index], bar }), 100)
+        socket.on('answer submitted', (info) => {
           const question = this.state.questions[index];
           info.answer === question.correct_answer
             ? axios.put(`/v1/games/${game.id}/question`, question)
             : null;
-          const { answers } = this.state;
-          this.setState({ answers: [...answers, info] });
-        });
-        socket.on('game started', () => this.setState({ questionTimer: 10 }));
-        socket.on('ready for next question', () => this.onNextQuestion());
-        socket.on('question timer', questionTimer =>
-          this.setState({ questionTimer })
-        );
-        socket.on('wait timer', waitTimer => this.setState({ waitTimer }));
+          const { answers } = this.state
+          this.setState({ answers: [ ...answers, info ]})
+        })
+        socket.on('game started', () => this.setState({ questionTimer: 10 }))
+        socket.on('ready for next question', (index) => this.onNextQuestion())
+        socket.on('question timer', (questionTimer) => this.setState({ questionTimer }))
+        socket.on('wait timer', (waitTimer) => this.setState({ waitTimer }))
       });
     this.setState({ questionActive: true, index });
   }
 
   componentWillUnmount() {
-    localStorage.setItem('index', this.state.index);
-    socket.off('question timer');
-    socket.off('wait timer');
+    localStorage.setItem('index', this.state.index)
+    socket.off('question timer')
+    socket.off('wait timer')
+    socket.off('game started')
+    socket.off('ready for next question')
   }
 
   onNextQuestion() {
@@ -76,16 +66,13 @@ export default class CurrentGame extends Component {
       questionTimer: 10,
       waitTimer: 10,
       answers: [],
-      questionActive: true
-    });
-    const { index } = this.state;
-    localStorage.setItem('index', index);
-    if (index > 9) socket.emit('game over');
-    else
-      socket.emit('send question', {
-        index: index * 1,
-        question: this.state.questions[index]
-      });
+      questionActive: true,
+    })
+    const { index } = this.state
+    const { bar } = this.props
+    localStorage.setItem('index', index)
+    if (index > 9) socket.emit('game over', bar)
+    else socket.emit('send question', {index: index * 1, question: this.state.questions[index], bar })
   }
 
   onRestartGame() {

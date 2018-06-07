@@ -3,6 +3,7 @@ import Login from './Login';
 import { NavLink, Route, HashRouter as Router, Switch } from 'react-router-dom';
 import jwt from 'jsonwebtoken';
 import axios from 'axios';
+import socket from '../../socket-client';
 import Categories from './Categories';
 import CurrentGame from './CurrentGame';
 import PastGames from './PastGames';
@@ -28,7 +29,10 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.whoAmI();
+    this.whoAmI()
+    socket.once('need bar name', () => {
+      socket.emit('bar name here', this.state.bar)
+    })
   }
 
   componentWillReceiveProps() {
@@ -38,17 +42,18 @@ class App extends Component {
   whoAmI() {
     const user = localStorage.getItem('token');
     if (user) {
-      const token = jwt.verify(user, 'untappedpotential');
-      axios
-        .post(`/v1/bars/${token.id}`, token)
-        .then(res => res.data)
-        .then(bar => this.setState({ bar, loggedIn: true }));
+      const token = jwt.verify(user, 'untappedpotential')
+      axios.post(`/v1/bars/${token.id}`, token)
+      .then(res => res.data)
+      .then(bar => this.setState({ bar, loggedIn: true }))
+      .then(() => socket.emit('bar login', token.id))
     }
   }
 
-  logout() {
-    localStorage.removeItem('token');
-    this.setState({ loggedIn: false });
+  logout(){
+    localStorage.removeItem('token')
+    localStorage.removeItem('teams')
+    this.setState({ loggedIn: false })
   }
 
   login(user) {
@@ -63,32 +68,24 @@ class App extends Component {
       <Router>
         <div id="main">
           <Banner loggedIn={loggedIn} logout={this.logout} bar={bar} />
-          {loggedIn && <Sidebar />}
-          <div className={`${loggedIn ? 'container app' : 'loggedOut'}`}>
-            {loggedIn && <Timer />}
-            {loggedIn ? (
-              <Switch>
-                <Route
-                  path="/"
-                  exact
-                  render={({ history }) => <Home history={history} bar={bar} />}
-                />
-                <Route path="/categories" exact component={Categories} />
-                <Route path="/categories/:id" component={Category} />
-                <Route path="/teams" component={Teams} />
-                <Route path="/games/active" exact component={CurrentGame} />
-                <Route path="/games/past" exact component={PastGames} />
-                <Route path="/stats/" exact component={Stats} />
-                <Route path="/scores" exact component={Scores} />
-              </Switch>
-            ) : (
-              <Route
-                path="/"
-                render={({ history }) => (
-                  <Login login={this.login} history={history} />
-                )}
-              />
-            )}
+          { loggedIn && <Sidebar /> }
+          <div className={`${ loggedIn ? 'container app' : 'loggedOut'}`}>
+          { loggedIn && <Timer bar={bar} /> }
+          {
+            loggedIn ?
+            <Switch>
+              <Route path="/" exact render={({ history }) => <Home history ={history} bar={bar} /> } />
+              <Route path="/categories" exact component={Categories} />
+              <Route path="/categories/:id" component={Category} />
+              <Route path="/teams" component={Teams} />
+              <Route path="/games/active" exact render={() => <CurrentGame bar={bar} /> } />
+              <Route path="/games/past" exact component={PastGames} />
+              <Route path="/stats/" exact component={Stats} />
+              <Route path="/scores" exact component={Scores} />
+            </Switch>
+            :
+            <Route path="/" render={({history}) => <Login login={this.login} history={history} />} />
+          }
           </div>
         </div>
       </Router>
