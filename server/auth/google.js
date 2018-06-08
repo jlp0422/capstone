@@ -35,7 +35,7 @@ router.get('/', passport.authenticate('google', { scope: 'email', session: false
 
 router.get('/callback', passport.authenticate('google', { session: false }), (req, res) => {
   socket.emit('authenticate', req.user.id)
-  res.redirect(`unptappedtrivia://`)
+  res.redirect(`untappedtrivia://`)
 })
 
 
