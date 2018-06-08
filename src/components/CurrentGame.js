@@ -19,9 +19,14 @@ export default class CurrentGame extends Component {
     }
     this.onNextQuestion = this.onNextQuestion.bind(this)
     this.onRestartGame = this.onRestartGame.bind(this)
+    this.onNewGame = this.onNewGame.bind(this)
   }
 
   componentDidMount() {
+    this.onNewGame()
+  }
+
+  onNewGame() {
     const index = localStorage.getItem('index') * 1
     axios.get('/v1/games/active')
       .then(res => res.data)
@@ -39,7 +44,7 @@ export default class CurrentGame extends Component {
         setTimeout(() => socket.emit('send question', { index, question: this.state.questions[index], bar }), 100)
         socket.on('answer submitted', (info) => {
           const { answers } = this.state
-          this.setState({ answers: [ ...answers, info ]})
+          this.setState({ answers: [...answers, info] })
         })
         socket.on('game started', () => this.setState({ questionTimer: 10 }))
         socket.on('ready for next question', (index) => this.onNextQuestion())
@@ -68,18 +73,25 @@ export default class CurrentGame extends Component {
     const { index } = this.state
     const { bar } = this.props
     localStorage.setItem('index', index)
-    if (index > 9) socket.emit('game over', bar)
-    else socket.emit('send question', {index: index * 1, question: this.state.questions[index], bar })
+    if (index > 9) {
+      this.setState({ index })
+      socket.emit('game over', bar)
+    }
+    else {
+      socket.emit('send question', {index: index * 1, question: this.state.questions[index], bar })
+    }
   }
 
   onRestartGame() {
     this.setState({ index: 0 })
     localStorage.setItem('index', 0)
+    this.onNewGame()
+    socket.emit('new game')
   }
 
   render() {
     const { teams, questions, questionTimer, answers, questionActive, waitTimer } = this.state;
-    const { changeState, onNextQuestion, onRestartGame } = this;
+    const { onRestartGame } = this;
     const index = localStorage.getItem('index') * 1
     return (
       <div id='game'>
@@ -115,7 +127,7 @@ export default class CurrentGame extends Component {
                 }
             </div>
           }
-        { teams.length && <TeamsList answers={ answers } game={questionTimer ? true : false} />}
+        { teams.length && <TeamsList answers={ answers } game={questionTimer ? true : false} /> }
       </div>
     );
   }
