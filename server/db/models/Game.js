@@ -1,6 +1,7 @@
 const conn = require('../conn');
 const { Sequelize } = conn;
 const Team = require('./Team');
+const axios = require('axios')
 
 const Game = conn.define(
   'game',
