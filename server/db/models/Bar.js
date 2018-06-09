@@ -17,7 +17,9 @@ const Bar = conn.define('bar',
     name: {
       type: Sequelize.STRING,
       allowNull: false,
-    }
+    },
+    latitude: Sequelize.STRING,
+    longitude: Sequelize.STRING
   },{ underscored: true }
 );
 
