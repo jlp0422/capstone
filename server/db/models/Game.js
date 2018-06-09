@@ -18,7 +18,7 @@ const Game = conn.define(
 );
 
 Game.prototype.getAllTeams = function(){
-  return Team.findAll({ where: { team_id: this.id }})
+  return Team.findAll({ where: { game_id: this.id }})
 }
 
 module.exports = Game;
