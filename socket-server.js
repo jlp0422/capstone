@@ -27,7 +27,6 @@ const sock = (io) => {
     socket.on('choose team name', ({ name, bar_id, team }) => {
       axios.put(`https://untapped-trivia.herokuapp.com/v1/teams/${team}`, { team_name: name })
       .then(() => io.to(bar_id).emit('team register', name))
-       // need for web home page
     });
 
     // new game
@@ -50,7 +49,6 @@ const sock = (io) => {
 
     // team submitting answer
     socket.on('answer', (info) => {
-      // const { team, answer } = info
       io.emit('answer submitted', info)
     });
 
@@ -87,8 +85,8 @@ const sock = (io) => {
     })
 
     // new game
-    socket.on('new game', () => {
-      io.emit('new game has started')
+    socket.on('new game', (bar) => {
+      io.to(bar.id).emit('new game has started')
     })
 
     socket.on('disconnect', () => {

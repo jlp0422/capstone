@@ -1,6 +1,5 @@
 /* eslint-disable */
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import TeamsList from './TeamsList';
 import socket from '../../socket-client';
@@ -16,6 +15,7 @@ export default class CurrentGame extends Component {
       waitTimer: 10,
       answers: [],
       questionActive: false,
+      finalScores: []
     }
     this.onNextQuestion = this.onNextQuestion.bind(this)
     this.onRestartGame = this.onRestartGame.bind(this)
@@ -43,18 +43,22 @@ export default class CurrentGame extends Component {
         setTimeout(() => socket.emit('send question', { index, question: this.state.questions[index], bar }), 100)
         socket.on('answer submitted', (info) => {
           const question = this.state.questions[index];
-          info.answer === question.correct_answer
-            ? axios.put(`/v1/games/${game.id}/question`, question)
-            : null;
+          if (info.answer === question.correct_answer) {
+            axios.put(`/v1/games/${game.id}/question`, question)
+          }
           const { answers } = this.state
           this.setState({ answers: [...answers, info] })
         })
         socket.on('game started', (teams) => this.setState({ questionTimer: 10, teams }))
-        socket.on('ready for next question', (index) => this.onNextQuestion())
+        socket.on('ready for next question', () => this.onNextQuestion())
         socket.on('question timer', (questionTimer) => this.setState({ questionTimer }))
         socket.on('wait timer', (waitTimer) => this.setState({ waitTimer }))
+        socket.on('game has ended', (scores) => {
+          // this.setState({ finalScores: scores })
+          console.log('final scores: ', scores)
+        })
       });
-    this.setState({ questionActive: true, index });
+      this.setState({ index, questionActive: true });
   }
 
   componentWillUnmount() {
@@ -81,28 +85,30 @@ export default class CurrentGame extends Component {
       socket.emit('game over', bar)
     }
     else {
-      socket.emit('send question', {index: index * 1, question: this.state.questions[index], bar })
+      this.setState({ index })
+      socket.emit('send question', { index: index * 1, question: this.state.questions[index], bar })
     }
   }
 
   onRestartGame() {
+    const { bar } = this.props
     this.setState({ index: 0 })
     localStorage.setItem('index', 0)
+    socket.emit('new game', bar)
     this.onNewGame()
-    socket.emit('new game')
   }
 
   render() {
-    const { teams, questions, questionTimer, answers, questionActive, waitTimer } = this.state;
-    const { changeState, onNextQuestion, onRestartGame } = this;
+    const { teams, questions, answers, finalScores } = this.state;
+    const { onRestartGame } = this;
     const index = localStorage.getItem('index') * 1
     return (
       <div id="game">
-        {questions.length && (
+        { questions.length && (
           <div>
-            {index < 10 ? (
+            { index < 10 ? (
               <div>
-                {index === questions.length - 1 && <h1>LAST QUESTION</h1>}
+                {index === questions.length - 1 && <h1>Last Question!</h1>}
                 <div className="question">
                   <div
                     dangerouslySetInnerHTML={{
@@ -127,21 +133,21 @@ export default class CurrentGame extends Component {
             )}
           </div>
         )}
-        {teams.length && (
+        { teams.length && (
           <div>
-            {index === questions.length && (
+            { index === questions.length && (
               <button
                 className="btn btn-dark game-button"
                 disabled={index !== questions.length}
-                onClick={onRestartGame}
-              >
-                Restart Game
+                onClick={onRestartGame}>
+                  Restart Game
               </button>
             )}
           </div>
         )}
-        {teams.length && (
-          <TeamsList answers={answers} game={questionTimer ? true : false} />
+        { index > 9 && <h3>Final Scores</h3> }
+        { teams.length && (
+          <TeamsList scores={ finalScores } answers={answers} />
         )}
       </div>
     );
