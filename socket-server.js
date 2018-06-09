@@ -20,8 +20,10 @@ const sock = (io) => {
     });
 
     // team choosing team name
-    socket.on('choose team name', ({ name, bar_id }) => {
-      io.to(bar_id).emit('team register', name) // need for web home page
+    socket.on('choose team name', ({ name, bar_id, team }) => {
+      axios.put(`/v1/teams/${team}`, { team_name: name })
+      .then(() => io.to(bar_id).emit('team register', name))
+       // need for web home page
     });
 
     // new game

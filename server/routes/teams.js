@@ -8,9 +8,9 @@ router.get('/', (req, res, next) => {
 
 router.put('/:id', (req, res, next) => {
   Team.findById(req.params.id)
-  // .then(team => team.update(req.body))
-  .then(() => res.send(req))
-  .catch(err => res.send(`this is an error with ${req.body}!!!: ${err}`))
+  .then(team => team.update(req.body))
+  .then(() => res.sendStatus(200))
+  .catch(err => res.send(`this is an error!!!: ${err}`))
 })
 
 module.exports = router;
