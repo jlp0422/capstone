@@ -12,8 +12,8 @@ export default class CurrentGame extends Component {
       questions: [],
       teams: [],
       index: 0,
-      questionTimer: 10,
-      waitTimer: 10,
+      questionTimer: 5,
+      waitTimer: 5,
       answers: [],
       questionActive: false
     };
@@ -68,6 +68,8 @@ export default class CurrentGame extends Component {
     localStorage.setItem('index', this.state.index);
     socket.off('question timer');
     socket.off('wait timer');
+    socket.off('game started');
+    socket.off('ready for next question');
   }
 
   onNextQuestion() {
@@ -79,12 +81,14 @@ export default class CurrentGame extends Component {
       questionActive: true
     });
     const { index } = this.state;
+    const { bar } = this.props;
     localStorage.setItem('index', index);
-    if (index > 9) socket.emit('game over');
+    if (index > 9) socket.emit('game over', bar);
     else
       socket.emit('send question', {
         index: index * 1,
-        question: this.state.questions[index]
+        question: this.state.questions[index],
+        bar
       });
   }
 

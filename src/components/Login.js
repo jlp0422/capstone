@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import bcrypt from 'bcryptjs';
+import socket from '../../socket-client';
 
 export default class Login extends Component {
   constructor(props){
@@ -10,6 +11,10 @@ export default class Login extends Component {
       signup: false,
       id: '',
       name: '',
+      street: '',
+      city: '',
+      state: '',
+      zip: '',
       password: '',
       email: '',
       passwordStrength: 'Weak',
@@ -20,17 +25,26 @@ export default class Login extends Component {
   }
 
   submit(ev){
-    const { id, name, password, signup, email } = this.state;
+    const { id, name, password, signup, email, street, city, state, zip } = this.state;
     const hashPassword = bcrypt.hashSync(password, 6)
     ev.preventDefault();
     if ( signup ) {
-      const newId = Math.floor(Math.random() * 10000)
-      axios.post('/auth/register', { name, id: newId, password: hashPassword, email })
+      const randomNum = Math.floor(Math.random() * 10000)
+      const newId = randomNum > 1000 ? String(randomNum) : `0${randomNum}` 
+      socket.emit('bar login', newId)
+      axios.post('/auth/register', { 
+        name, 
+        id: newId, 
+        password: hashPassword, 
+        email, 
+        address: { street, city, state, zip } 
+      })
       .then(res => res.data)
       .then(user => this.props.login(user))
       .then(() => this.props.history.push('/'))
     }
     else {
+      socket.emit('bar login', id)
       axios.post('/auth/login', { id, password })
       .then(res => res.data)
       .then(user => this.props.login(user))
@@ -72,6 +86,30 @@ export default class Login extends Component {
                 placeholder="Your Bar's Name"
                 className='form-control login-input mb-3' />
               <input
+                onChange={(ev) => this.setState({ street: ev.target.value })}
+                placeholder='Street Addres'
+                className='form-control login-input mb-3' />
+              <div className='form-row login-input mb-3'>
+                <div className='col-7 login-col-l'>
+                  <input
+                    onChange={(ev) => this.setState({ city: ev.target.value })}
+                    placeholder='City'
+                    className='form-control' />
+                </div>
+                <div className='col'>
+                  <input
+                    onChange={(ev) => this.setState({ state: ev.target.value })}
+                    placeholder='State'
+                    className='form-control' />
+                </div>
+                <div className='col login-col-r'>
+                  <input
+                    onChange={(ev) => this.setState({ zip: ev.target.value })}
+                    placeholder='Zip'
+                    className='form-control' />
+                </div>
+              </div>
+              <input
                 onChange={(ev) => this.setState({ email: ev.target.value })}
                 placeholder='Your Email'
                 className='form-control login-input mb-3' />
@@ -91,7 +129,7 @@ export default class Login extends Component {
               <span> {passwordStrength} </span>
               <span> {passwordMatch ? 'match' : 'nope'} </span>
             </div>
-            : 
+            :
             <div>
               <input
                 type='number'
@@ -119,7 +157,7 @@ export default class Login extends Component {
           }
           <button className='btn btn-dark'
             onClick={()=> this.setState({ signup: !signup })}>
-            { signup ? 'Click here to Log in' : 'Create one!'} 
+            { signup ? 'Click here to Log in' : 'Create one!'}
           </button>
         </div>
       </div>
