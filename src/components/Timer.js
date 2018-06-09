@@ -92,7 +92,7 @@ class Timer extends React.Component {
       if (questionTimer) {
         this.setState({
           questionTimer: questionTimer - 1,
-          questionTimerFunc: setTimeout(() => this.onQuestionCountdown(), 100)
+          questionTimerFunc: setTimeout(() => this.onQuestionCountdown(), 1000)
         })
         socket.emit('question countdown', { bar, timer: this.state.questionTimer })
       }
@@ -112,7 +112,7 @@ class Timer extends React.Component {
     if (waitTimer) {
       this.setState({
         waitTimer: waitTimer - 1,
-        waitTimerFunc: setTimeout(() => this.onWaitCountdown(), 100)
+        waitTimerFunc: setTimeout(() => this.onWaitCountdown(), 1000)
       })
       socket.emit('wait countdown', { bar, timer: this.state.waitTimer })
     }
