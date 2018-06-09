@@ -8,7 +8,11 @@ const Question = conn.define('question',
     correct_answer: Sequelize.STRING,
     incorrect_answers: Sequelize.ARRAY(Sequelize.STRING),
     category: Sequelize.STRING,
-    difficulty: Sequelize.STRING
+    difficulty: Sequelize.STRING,
+    answered_correctly: {
+      type: Sequelize.INTEGER,
+      defaultValue: 0
+    }
   },
   {
     getterMethods: {
@@ -20,5 +24,6 @@ const Question = conn.define('question',
     underscored: true
   }
 );
+
 
 module.exports = Question;

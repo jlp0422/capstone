@@ -1,7 +1,9 @@
 const conn = require('../conn');
 const { Sequelize } = conn;
 
-const Game = conn.define('game', {
+const Game = conn.define(
+  'game',
+  {
     active: {
       type: Sequelize.BOOLEAN,
       defaultValue: true
@@ -10,7 +12,8 @@ const Game = conn.define('game', {
       type: Sequelize.INTEGER,
       defaultValue: 0
     }
-  }, { underscored: true }
+  },
+  { underscored: true }
 );
 
 module.exports = Game;
