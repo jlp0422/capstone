@@ -32,10 +32,9 @@ const sock = (io) => {
     // new game
     socket.on('start game', (bar_id, teams) => {
       console.log('game started!')
-      const tms = 'jeremy, jacob, ed'
       Game.create()
       .then(game => {
-        tms.split(', ').map(team => {
+        teams.split(', ').map(team => {
           console.log('team is: ', team)
           Team.findAll({ where: { team_name: team }})
           .then(team => team.game_id = game.id)
