@@ -4,6 +4,7 @@ import { injectStripe, CardElement } from 'react-stripe-elements';
 import axios from 'axios';
 import moment from 'moment';
 import jwt from 'jsonwebtoken';
+const charge = require('./stripe');
 
 class Checkout extends React.Component {
   constructor(props) {
@@ -19,7 +20,7 @@ class Checkout extends React.Component {
       zip: '',
       email: '',
       bar: {},
-      endOfMembershipDate: {},
+      endOfMembershipDate: '',
       payment: false,
       errors: {}
     };
@@ -97,28 +98,30 @@ class Checkout extends React.Component {
     }
     const name = `${this.state.billingFirstName} ${this.state.billingLastName}`;
     this.props.stripe.createToken({type: 'card', name })
-      .then(() => this.setState({ endOfMembershipDate: {}}))  //figure out date object
+      .then(() => this.setState({ endOfMembershipDate: moment().add(1, 'months')})  //figure out date object
       .then(() => {
         axios.put(`/v1/bars/${this.state.bar.id}`, this.state.bar.endOfMembershipDate);
-      });
-  }
+      })
+    );}
 
   handleChange(event) {
     this.setState({ [event.target.name]: event.target.value });
   }
 
   handlePaymentChange(event) {
-    this.setState({ payment: event.complete });
+    this.setState({ payment: event.complete });  
   }
-
-  render(){
-    const { bar, endOfMembershipDate, errors } = this.state;
+  render() {
+    const { bar, billingFirstName, billingLastName, firstName, lastName, address, city, state, zip, email,endOfMembershipDate, errors } = this.state;
     
     if (!bar) return null;
     
     return (
       <div>
-        <form onSubmit={ event => this.handleSubmit(bar.id) }>
+        {
+          endOfMembershipDate ? (<p>Signed Up!</p>) : <p>No membership</p>
+        }
+        <form onSubmit={ event => this.handleSubmit(event, bar.id) }>
           <h2 className='header'>Billing Information</h2>
           <div className='form-group'>
             <input name='billingFirstName' value={ billingFirstName } className='element' onChange={ this.handleChange } placeholder='Billing First Name' />
@@ -128,8 +131,8 @@ class Checkout extends React.Component {
             <input name='billingLastName' value={ billingLastName } className='element' onChange={ this.handleChange } placeholder='Billing Last Name' />
             <p className='error'>{ errors.billingFirstName }</p>
           </div>
-          <div className='form-group'>
-            <CardElement className='CardElement element' onChange={ this.handlePaymentChange } />
+          <div>
+            <CardElement onChange={ this.handlePaymentChange } />
             <p className='error'>{ errors.payment }</p>
           </div>
           <hr className='style-eight' />
