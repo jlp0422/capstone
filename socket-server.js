@@ -3,6 +3,7 @@ const axios = require('axios')
 const Game = require('./server/db/models/Game')
 const Team = require('./server/db/models/Team')
 const devices = {}
+
 const sock = (io) => {
   io.on('connection', (socket) => {
     devices[socket.id] = socket
@@ -87,7 +88,6 @@ const sock = (io) => {
 
     // new game
     socket.on('new game', () => {
-      Game.create({ active: true })
       io.emit('new game has started')
     })
 
