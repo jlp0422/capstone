@@ -13,6 +13,7 @@ class Home extends React.Component {
   }
 
   componentDidMount() {
+    this.props.whoAmI()
     const teams = localStorage.getItem('teams')
     if (teams) this.setState({ teams: teams.split(', ') })
     socket.on('team register', (team) => {
@@ -30,6 +31,9 @@ class Home extends React.Component {
   onStartGame() {
     const { history, bar } = this.props
     localStorage.setItem('index', 0)
+    localStorage.setItem('waitTimer', 10)
+    localStorage.setItem('questionTimer', 10)
+    localStorage.setItem('questionActive', 'yes')
     socket.emit('start game', bar.id)
     history.push('/games/active')
   }
