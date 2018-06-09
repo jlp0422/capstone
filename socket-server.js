@@ -1,4 +1,5 @@
 /* eslint-disable */
+const axios = require('axios');
 const devices = {}
 const sock = (io) => {
   io.on('connection', (socket) => {
@@ -19,17 +20,11 @@ const sock = (io) => {
       socket.join(bar_id)
     });
 
-    socket.on('get bar name', () => {
-      io.emit('need bar name')
-    })
-
-    socket.on('bar name here', (bar) => {
-      io.emit('sending bar name', bar)
-    })
-
     // team choosing team name
-    socket.on('choose team name', ({ name, bar_id }) => {
-      io.to(bar_id).emit('team register', name) // need for web home page
+    socket.on('choose team name', ({ name, bar_id, team }) => {
+      axios.put(`https://untapped-trivia.herokuapp.com/v1/teams/${team}`, { team_name: name })
+      .then(() => io.to(bar_id).emit('team register', name))
+       // need for web home page
     });
 
     // new game

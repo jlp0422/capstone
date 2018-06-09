@@ -30,9 +30,6 @@ class App extends Component {
 
   componentDidMount() {
     this.whoAmI()
-    socket.once('need bar name', () => {
-      socket.emit('bar name here', this.state.bar)
-    })
   }
 
   componentWillReceiveProps() {

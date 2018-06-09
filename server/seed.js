@@ -42,8 +42,10 @@ const seed = () => {
     })
     .then(() => {
       const hashPassword = bcrypt.hashSync('admin', 6)
+      const randomNum = Math.floor(Math.random() * 10000)
+      const newId = randomNum > 1000 ? String(randomNum) : `0${randomNum}` 
       return Bar.create({
-        id: Math.floor(Math.random() * 10000),
+        id: newId,
         email: chance.email(),
         password: hashPassword,
         name: `${chance.animal()} Town`
