@@ -31,6 +31,8 @@ class Home extends React.Component {
   onStartGame() {
     const { history, bar } = this.props
     localStorage.setItem('index', 0)
+    localStorage.removeItem('waitTimer')
+    localStorage.removeItem('questionTimer')
     socket.emit('start game', bar.id)
     history.push('/games/active')
   }

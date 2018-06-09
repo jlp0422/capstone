@@ -24,8 +24,19 @@ class Timer extends React.Component {
   componentDidMount() {
     const { questionTimerFunc, waitTimerFunc } = this.state
     const index = localStorage.getItem('index') * 1
-    this.setState({ index })
-    socket.on('game started', () => this.onStartTimer())
+    const waitTimer = localStorage.getItem('waitTimer')
+    const questionTimer = localStorage.getItem('questionTimer')
+    this.setState({
+      waitTimer: waitTimer ? waitTimer : 5,
+      questionTimer: questionTimer ? questionTimer : 5,
+      index,
+      isPaused: true
+    })
+    socket.on('game started', () => {
+      console.log('game started')
+      this.setState({ isPaused: false })
+      this.onStartTimer()
+    })
     socket.on('game has ended', () => {
       clearTimeout(questionTimerFunc)
       clearTimeout(waitTimerFunc)
@@ -43,9 +54,15 @@ class Timer extends React.Component {
   }
 
   onPause(timer) {
-    const { waitTimerFunc, questionTimerFunc } = this.state
-    if (timer === 'question') clearTimeout(questionTimerFunc)
-    if (timer === 'wait') clearTimeout(waitTimerFunc)
+    const { waitTimerFunc, questionTimerFunc, questionTimer, waitTimer } = this.state
+    if (timer === 'question') {
+      localStorage.setItem('questionTimer', questionTimer)
+      clearTimeout(questionTimerFunc)
+    }
+    if (timer === 'wait') {
+      localStorage.setItem('waitTimer', waitTimer)
+      clearTimeout(waitTimerFunc)
+    }
     this.setState({ isPaused: true })
   }
 
