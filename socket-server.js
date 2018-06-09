@@ -65,6 +65,7 @@ const sock = (io) => {
 
     // game over
     socket.on('game over', (bar) => {
+      console.log('game over')
       return axios.get('https://untapped-trivia.herokuapp.com/v1/games/active')
         .then(res => res.data)
         .then(game => {

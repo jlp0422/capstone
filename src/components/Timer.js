@@ -125,6 +125,7 @@ class Timer extends React.Component {
         socket.emit('get next question', { bar, index })
         this.onQuestionCountdown()
       }
+      this.setState({ index })
     }
   }
 
