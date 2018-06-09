@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import QuestionsChart from './QuestionsInAGame';
 import AllQuestionsChart from './AllQuestions';
+import CompareGamesChart from './CompareGames';
 
 export default class Stats extends Component {
   constructor() {
@@ -13,10 +14,10 @@ export default class Stats extends Component {
     this.gameState = this.gameState.bind(this);
   }
   gameState() {
-    this.setState({ game: !this.state.game });
+    this.setState({ game: !this.state.game, games: false });
   }
   gamesState() {
-    this.setState({ games: !this.state.games });
+    this.setState({ games: !this.state.games, game: false });
   }
   render() {
     const { games, game } = this.state;
@@ -27,6 +28,7 @@ export default class Stats extends Component {
         <button onClick={() => gamesState()}>all games stats on/off</button>
         {game && <QuestionsChart />}
         {games && <AllQuestionsChart />}
+        {games && <CompareGamesChart />}
       </div>
     );
   }
