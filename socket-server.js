@@ -1,6 +1,7 @@
 /* eslint-disable */
 const axios = require('axios')
 const Game = require('./server/db/models/Game')
+const Team = require('./server/db/models/Team')
 const devices = {}
 const sock = (io) => {
   io.on('connection', (socket) => {
@@ -29,8 +30,9 @@ const sock = (io) => {
     });
 
     // new game
-    socket.on('start game', (bar_id) => {
-      io.to(bar_id).emit('game started')
+    socket.on('start game', (bar_id, teams) => {
+      teams.map(team => Team.findAll({ where: { team_name: team }}))
+      .then(teams => io.to(bar_id).emit('game started', teams))
     });
 
     // new question

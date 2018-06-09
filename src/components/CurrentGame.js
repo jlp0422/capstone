@@ -49,7 +49,7 @@ export default class CurrentGame extends Component {
           const { answers } = this.state
           this.setState({ answers: [...answers, info] })
         })
-        socket.on('game started', () => this.setState({ questionTimer: 10 }))
+        socket.on('game started', (teams) => this.setState({ questionTimer: 10, teams }))
         socket.on('ready for next question', (index) => this.onNextQuestion())
         socket.on('question timer', (questionTimer) => this.setState({ questionTimer }))
         socket.on('wait timer', (waitTimer) => this.setState({ waitTimer }))
