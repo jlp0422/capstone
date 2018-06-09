@@ -1,55 +1,82 @@
 /* eslint-disable */
-module.exports = (io) => {
+const devices = {}
+const sock = (io) => {
   io.on('connection', (socket) => {
-    console.log('socket server connected:', socket.id)
-    socket.on('login', (type) => {
-      console.log(`socket server: login attempt with ${type}`)
-    });
-    socket.on('choose-bar', (bar_id) => {
-      console.log(`socket server: bar id: ${bar_id}`)
-      // only works with io.emit
-      io.emit('bar register', bar_id)
-    });
-    socket.on('team-name', (name) => {
-      console.log(`socket server: team name: ${name}`)
-      // only works with io.emit
-      io.emit('team register', name)
-    });
-    socket.on('answer', (info) => {
-      const { team, answer } = info
-      console.log(`socket server: team: ${team}, answer: ${answer}`)
-      io.emit('answer submitted', info)
-    });
-    socket.on('request question', () => {
-      io.emit('question requested')
-    });
-    socket.on('send question', (obj) => {
-      io.emit('sending question', obj)
-    }),
-    socket.on('start game', () => {
-      io.emit('game started')
-    })
-    socket.on('question over', () => {
-      io.emit('waiting for next question')
-    })
-    socket.on('get next question', () => {
-      io.emit('ready for next question')
-    })
-    socket.on('question countdown', (timer) => {
-      io.emit('question timer', timer)
-    })
-    socket.on('wait countdown', (timer) => {
-      io.emit('wait timer', timer)
-    })
-    socket.on('game over', () => {
-      io.emit('game has ended')
-    })
+    devices[socket.id] = socket
+
+    // user logging in (won't have bar id yet)
     socket.on('authenticate', (id) => {
-      console.log('user id:', id)
       io.emit('authenticated', id)
     });
+
+    // bar logging in
+    socket.on('bar login', (id) => {
+      socket.join(id)
+    });
+
+    // team choosing bar
+    socket.on('choose bar', (bar_id) => {
+      socket.join(bar_id)
+    });
+
+    socket.on('get bar name', () => {
+      io.emit('need bar name')
+    })
+
+    socket.on('bar name here', (bar) => {
+      io.emit('sending bar name', bar)
+    })
+
+    // team choosing team name
+    socket.on('choose team name', ({ name, bar_id }) => {
+      io.to(bar_id).emit('team register', name) // need for web home page
+    });
+
+    // new game
+    socket.on('start game', (bar_id) => {
+      io.to(bar_id).emit('game started')
+    });
+
+    // new question
+    socket.on('send question', (question) => {
+      const { bar } = question
+      io.to(bar.id).emit('sending question', question)
+    });
+
+    // team submitting answer
+    socket.on('answer', (info) => {
+      // const { team, answer } = info
+      io.emit('answer submitted', info)
+    });
+
+    // question active is over
+    socket.on('question over', (bar) => {
+      io.to(bar.id).emit('waiting for next question')
+    })
+
+    // question waiting is over
+    socket.on('get next question', ({ bar, index }) => {
+      io.to(bar.id).emit('ready for next question', index)
+    })
+
+    // timers
+    socket.on('question countdown', ({ bar, timer }) => {
+      io.to(bar.id).emit('question timer', timer)
+    })
+    socket.on('wait countdown', ({ bar, timer }) => {
+      io.to(bar.id).emit('wait timer', timer)
+    })
+
+    // game over
+    socket.on('game over', (bar) => {
+      io.to(bar.id).emit('game has ended')
+    })
+
     socket.on('disconnect', () => {
+      delete devices[socket.id]
       console.log('user has disconnected')
     })
   })
 }
+
+module.exports = sock

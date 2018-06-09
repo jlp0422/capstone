@@ -12,8 +12,8 @@ export default class CurrentGame extends Component {
       questions: [],
       teams: [],
       index: 0,
-      questionTimer: 10,
-      waitTimer: 10,
+      questionTimer: 5,
+      waitTimer: 5,
       answers: [],
       questionActive: false,
     }
@@ -35,13 +35,14 @@ export default class CurrentGame extends Component {
       })
       .then(() => {
         // const { index } = this.state
-        setTimeout(() => socket.emit('send question', { index, question: this.state.questions[index] }), 100)
+        const { bar } = this.props
+        setTimeout(() => socket.emit('send question', { index, question: this.state.questions[index], bar }), 100)
         socket.on('answer submitted', (info) => {
           const { answers } = this.state
-          this.setState({ answers: [...answers, info ]})
+          this.setState({ answers: [ ...answers, info ]})
         })
         socket.on('game started', () => this.setState({ questionTimer: 10 }))
-        socket.on('ready for next question', () => this.onNextQuestion())
+        socket.on('ready for next question', (index) => this.onNextQuestion())
         socket.on('question timer', (questionTimer) => this.setState({ questionTimer }))
         socket.on('wait timer', (waitTimer) => this.setState({ waitTimer }))
       });
@@ -52,6 +53,8 @@ export default class CurrentGame extends Component {
     localStorage.setItem('index', this.state.index)
     socket.off('question timer')
     socket.off('wait timer')
+    socket.off('game started')
+    socket.off('ready for next question')
   }
 
   onNextQuestion() {
@@ -63,9 +66,10 @@ export default class CurrentGame extends Component {
       questionActive: true,
     })
     const { index } = this.state
+    const { bar } = this.props
     localStorage.setItem('index', index)
-    if (index > 9) socket.emit('game over')
-    else socket.emit('send question', {index: index * 1, question: this.state.questions[index]})
+    if (index > 9) socket.emit('game over', bar)
+    else socket.emit('send question', {index: index * 1, question: this.state.questions[index], bar })
   }
 
   onRestartGame() {
@@ -81,7 +85,7 @@ export default class CurrentGame extends Component {
       <div id='game'>
         { questions.length &&
           <div>
-          { 
+          {
             index < 10 ?
               <div>
                 { index === questions.length - 1 && <h1>LAST QUESTION</h1> }
@@ -92,22 +96,22 @@ export default class CurrentGame extends Component {
                   <div dangerouslySetInnerHTML={{ __html: `<strong>Correct Answer: </strong>${questions[index].correct_answer}` }}></div>
                 </div>
               </div>
-            : 
+            :
               <h1>Game over</h1>
           }
           </div>
         }
-        { 
+        {
           teams.length &&
             <div>
-                { 
+                {
                   index === questions.length &&
                   <button
                     className="btn btn-dark game-button"
                     disabled={index !== questions.length}
                     onClick={ onRestartGame }>
                     Restart Game
-                  </button> 
+                  </button>
                 }
             </div>
           }

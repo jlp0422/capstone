@@ -3,6 +3,7 @@ import Login from './Login';
 import { NavLink, Route, HashRouter as Router, Switch } from 'react-router-dom';
 import jwt from 'jsonwebtoken';
 import axios from 'axios';
+import socket from '../../socket-client';
 import Categories from './Categories';
 import CurrentGame from './CurrentGame';
 import PastGames from './PastGames';
@@ -27,8 +28,11 @@ class App extends Component {
     this.whoAmI = this.whoAmI.bind(this)
   }
 
-  componentDidMount(){
-    this.whoAmI();
+  componentDidMount() {
+    this.whoAmI()
+    socket.once('need bar name', () => {
+      socket.emit('bar name here', this.state.bar)
+    })
   }
 
   componentWillReceiveProps(){
@@ -42,11 +46,13 @@ class App extends Component {
       axios.post(`/v1/bars/${token.id}`, token)
       .then(res => res.data)
       .then(bar => this.setState({ bar, loggedIn: true }))
+      .then(() => socket.emit('bar login', token.id))
     }
   }
 
   logout(){
     localStorage.removeItem('token')
+    localStorage.removeItem('teams')
     this.setState({ loggedIn: false })
   }
 
@@ -60,19 +66,19 @@ class App extends Component {
     if (!bar.name) this.whoAmI()
     return (
       <Router>
-        <div id='main'>
+        <div id="main">
           <Banner loggedIn={loggedIn} logout={this.logout} bar={bar} />
           { loggedIn && <Sidebar /> }
           <div className={`${ loggedIn ? 'container app' : 'loggedOut'}`}>
-          { loggedIn && <Timer /> }
-          { 
+          { loggedIn && <Timer bar={ bar } /> }
+          {
             loggedIn ?
             <Switch>
               <Route path="/" exact render={({ history }) => <Home history ={ history } bar={ bar } /> } />
               <Route path="/categories" exact component={Categories} />
               <Route path="/categories/:id" component={Category} />
               <Route path="/teams" component={Teams} />
-              <Route path="/games/active" exact component={CurrentGame} />
+              <Route path="/games/active" exact render={() => <CurrentGame bar={ bar } /> } />
               <Route path="/games/past" exact component={PastGames} />
               <Route path="/scores" exact component={Scores} />
               <Route path="/checkout" component={ Checkout } />
