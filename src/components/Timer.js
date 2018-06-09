@@ -122,8 +122,8 @@ class Timer extends React.Component {
       localStorage.setItem('index', (index * 1) + 1 )
       if (index < 10) {
         localStorage.setItem('questionActive', 'yes')
-        socket.emit('get next question', { bar, index })
         this.onQuestionCountdown()
+        socket.emit('get next question', { bar, index })
       }
       this.setState({ index })
     }

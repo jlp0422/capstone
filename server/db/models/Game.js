@@ -1,5 +1,6 @@
 const conn = require('../conn');
 const { Sequelize } = conn;
+const Team = require('./Team');
 
 const Game = conn.define(
   'game',
@@ -15,5 +16,9 @@ const Game = conn.define(
   },
   { underscored: true }
 );
+
+Game.prototype.getAllTeams = function () {
+  return Team.findAll({ where: { team_id: this.id } })
+}
 
 module.exports = Game;

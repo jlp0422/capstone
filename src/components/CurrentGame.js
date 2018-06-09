@@ -15,7 +15,6 @@ export default class CurrentGame extends Component {
       waitTimer: 5,
       answers: [],
       questionActive: false,
-      isGameActive: true,
       finalScores: []
     }
     this.onNextQuestion = this.onNextQuestion.bind(this)
@@ -59,7 +58,7 @@ export default class CurrentGame extends Component {
           console.log('final scores: ', scores)
         })
       });
-    this.setState({ questionActive: true, index });
+      this.setState({ index, questionActive: true });
   }
 
   componentWillUnmount() {
@@ -82,7 +81,7 @@ export default class CurrentGame extends Component {
     const { bar } = this.props
     localStorage.setItem('index', index)
     if (index > 9) {
-      this.setState({ index, isGameActive: false  })
+      this.setState({ index })
       socket.emit('game over', bar)
     }
     else {
@@ -100,7 +99,7 @@ export default class CurrentGame extends Component {
   }
 
   render() {
-    const { teams, questions, answers, isGameActive, finalScores } = this.state;
+    const { teams, questions, answers, finalScores } = this.state;
     const { onRestartGame } = this;
     const index = localStorage.getItem('index') * 1
     return (
@@ -136,7 +135,7 @@ export default class CurrentGame extends Component {
         )}
         { teams.length && (
           <div>
-            {index === questions.length && (
+            { index === questions.length && (
               <button
                 className="btn btn-dark game-button"
                 disabled={index !== questions.length}
@@ -146,9 +145,9 @@ export default class CurrentGame extends Component {
             )}
           </div>
         )}
-        { !isGameActive && <h3>Final Scores</h3> }
+        { index > 9 && <h3>Final Scores</h3> }
         { teams.length && (
-          <TeamsList mapper={ isGameActive ? answers : finalScores } scores={ finalScores } answers={answers} game={ !isGameActive ? true : false } />
+          <TeamsList scores={ finalScores } answers={answers} />
         )}
       </div>
     );
