@@ -31,14 +31,17 @@ const sock = (io) => {
 
     // new game
     socket.on('start game', (bar_id, teams) => {
+      console.log('game started!')
+      const tms = 'jeremy, jacob, ed'
       Game.create()
       .then(game => {
-        teams.map(team => {
+        tms.split(', ').map(team => {
+          console.log('team is: ', team)
           Team.findAll({ where: { team_name: team }})
           .then(team => team.setGame(game))
         })
-        .then(teams => io.to(bar_id).emit('game started', teams))
       })
+      .then(teams => io.to(bar_id).emit('game started', teams))
     });
 
     // new question

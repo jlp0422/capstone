@@ -29,6 +29,7 @@ class Home extends React.Component {
 
   onStartGame() {
     const { history, bar } = this.props
+    const { teams } = this.state
     localStorage.setItem('index', 0)
     localStorage.setItem('waitTimer', 10)
     localStorage.setItem('questionTimer', 10)
