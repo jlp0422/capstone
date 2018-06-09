@@ -34,7 +34,8 @@ class Home extends React.Component {
     localStorage.setItem('waitTimer', 10)
     localStorage.setItem('questionTimer', 10)
     localStorage.setItem('questionActive', 'yes')
-    socket.emit('start game', bar.id, teams)
+    console.log('home teams; ', teams)
+    socket.emit('start game', { bar_id: bar.id, teams })
     history.push('/games/active')
   }
 
