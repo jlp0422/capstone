@@ -38,11 +38,14 @@ export default class CurrentGame extends Component {
           .then(res => res.data)
           .then(questions => this.setState({ questions }));
       })
-      .then(() => {
-        // const { index } = this.state
+      .then(game => {
         const { bar } = this.props
         setTimeout(() => socket.emit('send question', { index, question: this.state.questions[index], bar }), 100)
         socket.on('answer submitted', (info) => {
+          const question = this.state.questions[index];
+          info.answer === question.correct_answer
+            ? axios.put(`/v1/games/${game.id}/question`, question)
+            : null;
           const { answers } = this.state
           this.setState({ answers: [...answers, info] })
         })
@@ -51,7 +54,7 @@ export default class CurrentGame extends Component {
         socket.on('question timer', (questionTimer) => this.setState({ questionTimer }))
         socket.on('wait timer', (waitTimer) => this.setState({ waitTimer }))
       });
-    this.setState({ questionActive: true, index })
+    this.setState({ questionActive: true, index });
   }
 
   componentWillUnmount() {
@@ -91,43 +94,55 @@ export default class CurrentGame extends Component {
 
   render() {
     const { teams, questions, questionTimer, answers, questionActive, waitTimer } = this.state;
-    const { onRestartGame } = this;
+    const { changeState, onNextQuestion, onRestartGame } = this;
     const index = localStorage.getItem('index') * 1
     return (
-      <div id='game'>
-        { questions.length &&
+      <div id="game">
+        {questions.length && (
           <div>
-          {
-            index < 10 ?
+            {index < 10 ? (
               <div>
-                { index === questions.length - 1 && <h1>LAST QUESTION</h1> }
+                {index === questions.length - 1 && <h1>LAST QUESTION</h1>}
                 <div className="question">
-                  <div dangerouslySetInnerHTML={{ __html: `<strong>Question: </strong>${questions[index].question}` }}></div>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: `<strong>Question: </strong>${
+                        questions[index].question
+                      }`
+                    }}
+                  />
                 </div>
                 <div className="answer">
-                  <div dangerouslySetInnerHTML={{ __html: `<strong>Correct Answer: </strong>${questions[index].correct_answer}` }}></div>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: `<strong>Correct Answer: </strong>${
+                        questions[index].correct_answer
+                      }`
+                    }}
+                  />
                 </div>
               </div>
-            :
+            ) : (
               <h1>Game over</h1>
-          }
+            )}
           </div>
-        }
-        {
-          teams.length &&
-            <div>
-                {
-                  index === questions.length &&
-                  <button
-                    className="btn btn-dark game-button"
-                    disabled={index !== questions.length}
-                    onClick={ onRestartGame }>
-                    Restart Game
-                  </button>
-                }
-            </div>
-          }
-        { teams.length && <TeamsList answers={ answers } game={questionTimer ? true : false} /> }
+        )}
+        {teams.length && (
+          <div>
+            {index === questions.length && (
+              <button
+                className="btn btn-dark game-button"
+                disabled={index !== questions.length}
+                onClick={onRestartGame}
+              >
+                Restart Game
+              </button>
+            )}
+          </div>
+        )}
+        {teams.length && (
+          <TeamsList answers={answers} game={questionTimer ? true : false} />
+        )}
       </div>
     );
   }
