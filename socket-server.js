@@ -65,11 +65,16 @@ const sock = (io) => {
 
     // game over
     socket.on('game over', (bar) => {
-      axios.get('https://untapped-trivia.herokuapp.com/v1/games/active')
-        .then(res => res.data.id)
-        .then(gameId => Game.findById(gameId))
-        .then(game => game.getAllTeams())
-        .then(teams => io.to(bar.id).emit('game has ended', teams))
+      return axios.get('https://untapped-trivia.herokuapp.com/v1/games/active')
+        .then(res => res.data)
+        .then(game => {
+          console.log(game)
+          game.getAllTeams()
+        })
+        .then(teams => {
+          console.log(teams)
+          io.to(bar.id).emit('game has ended', teams)
+        })
     })
 
     // new game
