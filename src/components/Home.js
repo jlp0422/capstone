@@ -13,6 +13,7 @@ class Home extends React.Component {
   }
 
   componentDidMount() {
+    this.props.whoAmI()
     const teams = localStorage.getItem('teams')
     if (teams) this.setState({ teams: teams.split(', ') })
     socket.on('team register', (team) => {
