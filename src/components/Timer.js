@@ -6,9 +6,9 @@ class Timer extends React.Component {
   constructor() {
     super()
     this.state = {
-      questionTimer: 5,
+      questionTimer: 10,
       questionTimerFunc: {},
-      waitTimer: 5,
+      waitTimer: 10,
       waitTimerFunc: {},
       isQuestionActive: true,
       isPaused: false,
@@ -28,8 +28,8 @@ class Timer extends React.Component {
     const questionTimer = localStorage.getItem('questionTimer')
     const isActive = localStorage.getItem('questionActive')
     this.setState({
-      waitTimer: waitTimer ? waitTimer * 1 : 5,
-      questionTimer: questionTimer ? questionTimer * 1 : 5,
+      waitTimer: waitTimer ? waitTimer * 1 : 10,
+      questionTimer: questionTimer ? questionTimer * 1 : 10,
       index,
       isPaused: true,
       isQuestionActive: isActive === 'yes' ? true : false
@@ -37,8 +37,8 @@ class Timer extends React.Component {
     socket.on('game started', () => {
       console.log(questionTimer)
       this.setState({
-        waitTimer: waitTimer ? waitTimer * 1 : 5,
-        questionTimer: questionTimer ? questionTimer * 1 : 5,
+        waitTimer: waitTimer ? waitTimer * 1 : 10,
+        questionTimer: questionTimer ? questionTimer * 1 : 10,
         isPaused: false
       })
       this.onStartTimer()
@@ -74,11 +74,11 @@ class Timer extends React.Component {
 
   onResume(timer) {
     if (timer === 'question') {
-      localStorage.setItem('questionTimer', 5)
+      localStorage.setItem('questionTimer', 10)
       this.onQuestionCountdown()
     }
     if (timer === 'wait') {
-      localStorage.setItem('waitTimer', 5)
+      localStorage.setItem('waitTimer', 10)
       this.onWaitCountdown()
     }
     this.setState({ isPaused: false })
@@ -98,7 +98,7 @@ class Timer extends React.Component {
       else {
         socket.emit('question over', bar)
         this.onWaitCountdown()
-        this.setState({ questionTimer: 5, isQuestionActive: false })
+        this.setState({ questionTimer: 10, isQuestionActive: false })
         localStorage.setItem('questionActive', 'no')
       }
     }
@@ -116,9 +116,9 @@ class Timer extends React.Component {
     }
     else {
       const index = localStorage.getItem('index')
-      this.setState({ waitTimer: 5, isQuestionActive: true })
-      localStorage.setItem('questionActive', 'yes')
+      this.setState({ waitTimer: 10, isQuestionActive: true })
       if (index < 10) {
+        localStorage.setItem('questionActive', 'yes')
         socket.emit('get next question', { bar, index })
         this.onQuestionCountdown()
       }
