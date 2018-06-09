@@ -6,9 +6,9 @@ class Timer extends React.Component {
   constructor() {
     super()
     this.state = {
-      questionTimer: 10,
+      questionTimer: 3,
       questionTimerFunc: {},
-      waitTimer: 10,
+      waitTimer: 3,
       waitTimerFunc: {},
       isQuestionActive: true,
       isPaused: false,
