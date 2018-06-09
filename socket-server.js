@@ -70,6 +70,11 @@ const sock = (io) => {
         .then(teams => io.to(bar.id).emit('game has ended', teams))
     })
 
+    // new game
+    socket.on('new game', () => {
+      io.emit('new game has started')
+    })
+
     socket.on('disconnect', () => {
       delete devices[socket.id]
       console.log('user has disconnected')

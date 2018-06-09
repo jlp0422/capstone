@@ -60,7 +60,8 @@ class App extends Component {
 
   render() {
     const { bar, loggedIn } = this.state;
-    if (!bar.name) this.whoAmI();
+    const { whoAmI } = this
+    if (!bar.name) this.whoAmI()
     return (
       <Router>
         <div id="main">
@@ -71,7 +72,7 @@ class App extends Component {
           {
             loggedIn ?
             <Switch>
-              <Route path="/" exact render={({ history }) => <Home history ={history} bar={bar} /> } />
+              <Route path="/" exact render={({ history }) => <Home whoAmI={ whoAmI } history={ history } bar={ bar } /> } />
               <Route path="/categories" exact component={Categories} />
               <Route path="/categories/:id" component={Category} />
               <Route path="/teams" component={Teams} />

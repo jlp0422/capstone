@@ -15,14 +15,19 @@ export default class CurrentGame extends Component {
       questionTimer: 5,
       waitTimer: 5,
       answers: [],
-      questionActive: false
-    };
-    this.onNextQuestion = this.onNextQuestion.bind(this);
-    this.onRestartGame = this.onRestartGame.bind(this);
+      questionActive: false,
+    }
+    this.onNextQuestion = this.onNextQuestion.bind(this)
+    this.onRestartGame = this.onRestartGame.bind(this)
+    this.onNewGame = this.onNewGame.bind(this)
   }
 
   componentDidMount() {
-    const index = localStorage.getItem('index') * 1;
+    this.onNewGame()
+  }
+
+  onNewGame() {
+    const index = localStorage.getItem('index') * 1
     axios.get('/v1/games/active')
       .then(res => res.data)
       .then(game => {
@@ -42,7 +47,7 @@ export default class CurrentGame extends Component {
             ? axios.put(`/v1/games/${game.id}/question`, question)
             : null;
           const { answers } = this.state
-          this.setState({ answers: [ ...answers, info ]})
+          this.setState({ answers: [...answers, info] })
         })
         socket.on('game started', () => this.setState({ questionTimer: 10 }))
         socket.on('ready for next question', (index) => this.onNextQuestion())
@@ -71,26 +76,26 @@ export default class CurrentGame extends Component {
     const { index } = this.state
     const { bar } = this.props
     localStorage.setItem('index', index)
-    if (index > 9) socket.emit('game over', bar )
-    else socket.emit('send question', {index: index * 1, question: this.state.questions[index], bar })
+    if (index > 9) {
+      this.setState({ index })
+      socket.emit('game over', bar)
+    }
+    else {
+      socket.emit('send question', {index: index * 1, question: this.state.questions[index], bar })
+    }
   }
 
   onRestartGame() {
-    this.setState({ index: 0 });
-    localStorage.setItem('index', 0);
+    this.setState({ index: 0 })
+    localStorage.setItem('index', 0)
+    this.onNewGame()
+    socket.emit('new game')
   }
 
   render() {
-    const {
-      teams,
-      questions,
-      questionTimer,
-      answers,
-      questionActive,
-      waitTimer
-    } = this.state;
+    const { teams, questions, questionTimer, answers, questionActive, waitTimer } = this.state;
     const { changeState, onNextQuestion, onRestartGame } = this;
-    const index = localStorage.getItem('index') * 1;
+    const index = localStorage.getItem('index') * 1
     return (
       <div id="game">
         {questions.length && (
