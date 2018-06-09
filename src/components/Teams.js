@@ -26,10 +26,10 @@ export default class Teams extends Component {
   render() {
     const { teams, showAll, currentGame } = this.state;
     return (
-      <div id='teams'>
-        <div className='teams-title'> { showAll ? 'All Teams' : "Teams in this Game" } </div>
-        <TeamsList showAll={showAll} teams={ showAll ? teams : teams.filter(team => team.game_id === currentGame )}/>
-        <button className='teams-button' onClick={() => this.setState({ showAll: !this.state.showAll })}>
+      <div id="teams">
+        <div className="teams-title"> { showAll ? 'All Teams' : 'Teams in this Game' } </div>
+        <TeamsList showAll={ showAll } teams={ showAll ? teams : teams.filter(team => team.game_id === currentGame )} />
+        <button className="teams-button" onClick={() => this.setState({ showAll: !this.state.showAll })}>
           { showAll ? "Active Game's Teams" : 'All Teams' }
         </button>
       </div>
