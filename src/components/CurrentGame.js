@@ -71,7 +71,7 @@ export default class CurrentGame extends Component {
     const { index } = this.state
     const { bar } = this.props
     localStorage.setItem('index', index)
-    if (index > 9) socket.emit('game over', bar)
+    if (index > 9) socket.emit('game over', bar )
     else socket.emit('send question', {index: index * 1, question: this.state.questions[index], bar })
   }
 

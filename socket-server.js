@@ -64,7 +64,10 @@ const sock = (io) => {
 
     // game over
     socket.on('game over', (bar) => {
-      io.to(bar.id).emit('game has ended')
+      axios.get('https://untapped-trivia.herokuapp.com/v1/games/active')
+        .then(res => res.data)
+        .then(game => game.getAllTeams())
+        .then(teams => io.to(bar.id).emit('game has ended', teams))
     })
 
     socket.on('disconnect', () => {
