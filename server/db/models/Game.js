@@ -1,7 +1,8 @@
 const conn = require('../conn');
 const { Sequelize } = conn;
 const Team = require('./Team');
-const axios = require('axios')
+const axios = require('axios');
+const Question = require('./Question');
 
 const Game = conn.define(
   'game',
@@ -25,7 +26,7 @@ Game.prototype.getAllTeams = function(){
 Game.startGame = function(){
   return Game.create()
   .then((game) => {
-    return axios.get('/v1/questions')
+    return axios.get('https://untapped-trivia.herokuapp.com/v1/questions')
     .then(res => res.data.results)
     .then(questions => {
       questions.map(question => {
