@@ -30,7 +30,8 @@ const sock = (io) => {
     });
 
     // new game
-    socket.on('start game', (bar_id, teams) => {
+    socket.on('start game', ({ bar_id, teams }) => {
+      console.log('teams: ', teams )
       console.log('game started!')
       Game.create()
       .then(game => {

@@ -135,7 +135,7 @@ class Timer extends React.Component {
     const index = localStorage.getItem('index') * 1
     if(index > 9) return null
       return (
-        <div id='timer' className={ isQuestionActive ? questionTimer > 10 ? 'good' : questionTimer === 0 ? 'warning' : 'warning-animate' : 'wait' }>
+        <div id='timer' className={ isQuestionActive ? questionTimer > 3 ? 'good' : questionTimer === 0 ? 'warning' : 'warning-animate' : 'wait' }>
           <div className='banner-question'>Question { index + 1 }</div>
             {
               isQuestionActive ? (
