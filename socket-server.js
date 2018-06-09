@@ -1,4 +1,5 @@
 /* eslint-disable */
+const axios = require('axios');
 const devices = {}
 const sock = (io) => {
   io.on('connection', (socket) => {
