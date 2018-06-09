@@ -35,7 +35,7 @@ const sock = (io) => {
       console.log('game started!')
       Game.create()
       .then(game => {
-        teams.split(', ').map(team => {
+        teams.map(team => {
           console.log('team is: ', team)
           Team.findAll({ where: { team_name: team }})
           .then(team => team.game_id = game.id)
