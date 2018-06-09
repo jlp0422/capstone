@@ -13,6 +13,7 @@ import Sidebar from './Sidebar';
 import Banner from './Banner';
 import Scores from './Scores';
 import Timer from './Timer';
+import Checkout from './Checkout';
 
 class App extends Component {
   constructor(props){
@@ -74,6 +75,7 @@ class App extends Component {
               <Route path="/games/active" exact component={CurrentGame} />
               <Route path="/games/past" exact component={PastGames} />
               <Route path="/scores" exact component={Scores} />
+              <Route path="/checkout" component={ Checkout } />
             </Switch>
             :
             <Route path="/" render={({history}) => <Login login={this.login} history={history} />} />

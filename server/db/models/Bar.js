@@ -16,8 +16,11 @@ const Bar = conn.define('bar',
     name: {
       type: Sequelize.STRING,
       allowNull: false,
+    },
+    endOfMembershipDate: {
+      type: Sequelize.DATE
     }
-  },{ underscored: true }
+  }, { underscored: true }
 );
 
 module.exports = Bar;
