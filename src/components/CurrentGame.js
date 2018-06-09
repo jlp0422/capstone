@@ -12,8 +12,8 @@ export default class CurrentGame extends Component {
       questions: [],
       teams: [],
       index: 0,
-      questionTimer: 5,
-      waitTimer: 5,
+      questionTimer: 10,
+      waitTimer: 10,
       answers: [],
       questionActive: false,
     }
