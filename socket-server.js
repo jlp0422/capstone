@@ -38,10 +38,10 @@ const sock = (io) => {
         tms.split(', ').map(team => {
           console.log('team is: ', team)
           Team.findAll({ where: { team_name: team }})
-          .then(team => team.setGame(game))
+          .then(team => team.game_id = game.id)
         })
       })
-      .then(teams => io.to(bar_id).emit('game started', teams))
+      .then(_teams => io.to(bar_id).emit('game started', _teams))
     });
 
     // new question
