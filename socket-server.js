@@ -1,6 +1,6 @@
 /* eslint-disable */
 const axios = require('axios')
-const { Game } = require('./server/db/')
+const Game = require('./server/db/models/Game')
 const devices = {}
 const sock = (io) => {
   io.on('connection', (socket) => {
