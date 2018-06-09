@@ -13,15 +13,10 @@ const googleCredentials = {
 }
 
 const verificationCb = (token, refreshToken, profile, done) => {
-  const info = {
-    firstname: profile.name.givenName,
-    lastname: profile.name.familyName,
-    email: profile.emails[0].value,
-  };
-
+  
   Team.findOrCreate({
     where: { googleId: profile.id },
-    defaults: info
+    defaults: { email: profile.emails[0].value }
   })
   .spread((team, created) => {
       done(null, team);
