@@ -12,7 +12,7 @@ class Timer extends React.Component {
       waitTimerFunc: {},
       isQuestionActive: true,
       isPaused: false,
-      index: 0
+      index: 8
     }
     this.onQuestionCountdown = this.onQuestionCountdown.bind(this)
     this.onWaitCountdown = this.onWaitCountdown.bind(this)
