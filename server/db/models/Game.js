@@ -21,4 +21,25 @@ Game.prototype.getAllTeams = function(){
   return Team.findAll({ where: { game_id: this.id }})
 }
 
+Game.startGame = function(){
+  return Game.create()
+  .then((game) => {
+    return axios.get('/v1/questions')
+    .then(res => res.data.results)
+    .then(questions => {
+      questions.map(question => {
+        Question.create({
+          question: question.question,
+          answers: question.answers,
+          correct_answer: question.correct_answer,
+          incorrect_answers: question.incorrect_answers,
+          difficulty: question.difficulty,
+          category: question.category,
+        })
+        .then(question => question.setGame(game))
+      })
+    })
+  })
+}
+
 module.exports = Game;

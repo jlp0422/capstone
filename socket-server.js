@@ -33,13 +33,14 @@ const sock = (io) => {
     socket.on('start game', ({ bar_id, teams }) => {
       console.log('teams: ', teams )
       console.log('game started!')
-      Game.create()
+      Game.startGame()
       .then(game => {
+        console.log('game: ', game)
         teams.map(team => {
-          console.log('team is: ', team)
+          console.log('team map: ', team)
           Team.findAll({ where: { team_name: team }})
           .then(_team => {
-            console.log('THE TEAM IS...', _team)
+            console.log('returned team', _team)
             _team.game_id = game.id
           })
         })

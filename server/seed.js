@@ -22,7 +22,7 @@ const populateTeams = (game) => {
 }
 
 const seed = () => {
-  return Game.create()
+  return Game.create({ active: false })
   .then((game) => {
     return axios.get('https://opentdb.com/api.php?amount=10')
     .then(res => res.data.results)
@@ -35,7 +35,6 @@ const seed = () => {
           incorrect_answers: question.incorrect_answers,
           difficulty: question.difficulty,
           category: question.category,
-          active: false
         })
         .then(question => question.setGame(game))
       })
