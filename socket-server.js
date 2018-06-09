@@ -1,7 +1,9 @@
 /* eslint-disable */
 const axios = require('axios')
 const Game = require('./server/db/models/Game')
+const Team = require('./server/db/models/Team')
 const devices = {}
+
 const sock = (io) => {
   io.on('connection', (socket) => {
     devices[socket.id] = socket
@@ -29,8 +31,15 @@ const sock = (io) => {
     });
 
     // new game
-    socket.on('start game', (bar_id) => {
-      io.to(bar_id).emit('game started')
+    socket.on('start game', (bar_id, teams) => {
+      Game.create()
+      .then(game => {
+        teams.map(team => {
+          Team.findAll({ where: { team_name: team }})
+          .then(team => team.setGame(game))
+        })
+        .then(teams => io.to(bar_id).emit('game started', teams))
+      })
     });
 
     // new question
@@ -69,7 +78,10 @@ const sock = (io) => {
         .then(res => res.data.id)
         .then(gameId => {
           Game.findById(gameId)
-          .then(game => game.getAllTeams())
+          .then(game => {
+            game.getAllTeams()
+            game.update({ active: false })
+          })
           .then(teams => io.to(bar.id).emit('game has ended', teams))
         })
     })
