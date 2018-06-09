@@ -77,13 +77,17 @@ const sock = (io) => {
         .then(res => res.data.id)
         .then(gameId => {
           Game.findById(gameId)
-          .then(game => game.getAllTeams())
+          .then(game => {
+            game.getAllTeams()
+            game.update({ active: false })
+          })
           .then(teams => io.to(bar.id).emit('game has ended', teams))
         })
     })
 
     // new game
     socket.on('new game', () => {
+      Game.create({ active: true })
       io.emit('new game has started')
     })
 
