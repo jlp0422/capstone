@@ -38,7 +38,10 @@ const sock = (io) => {
         teams.map(team => {
           console.log('team is: ', team)
           Team.findAll({ where: { team_name: team }})
-          .then(_team => _team.game_id = game.id)
+          .then(_team => {
+            console.log('THE TEAM IS...', _team)
+            _team.game_id = game.id
+          })
         })
       })
       .then(_teams => io.to(bar_id).emit('game started', _teams))

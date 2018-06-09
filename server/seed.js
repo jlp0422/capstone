@@ -34,7 +34,8 @@ const seed = () => {
           correct_answer: question.correct_answer,
           incorrect_answers: question.incorrect_answers,
           difficulty: question.difficulty,
-          category: question.category
+          category: question.category,
+          active: false
         })
         .then(question => question.setGame(game))
       })
@@ -42,7 +43,7 @@ const seed = () => {
     .then(() => {
       const hashPassword = bcrypt.hashSync('admin', 6)
       const randomNum = Math.floor(Math.random() * 10000)
-      const newId = randomNum > 1000 ? String(randomNum) : `0${randomNum}` 
+      const newId = randomNum > 1000 ? String(randomNum) : `0${randomNum}`
       return Bar.create({
         id: newId,
         email: chance.email(),
@@ -51,7 +52,7 @@ const seed = () => {
       })
     })
     .catch(err => console.log(err))
-  }) 
+  })
 }
 
 conn
