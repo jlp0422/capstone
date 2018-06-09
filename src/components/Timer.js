@@ -125,6 +125,7 @@ class Timer extends React.Component {
         socket.emit('get next question', { bar, index })
         this.onQuestionCountdown()
       }
+      this.setState({ index })
     }
   }
 
@@ -135,7 +136,7 @@ class Timer extends React.Component {
     // console.log(index)
     if(index > 9) return null
       return (
-        <div id='timer' className={ isQuestionActive ? questionTimer > 3 ? 'good' : questionTimer === 0 ? 'warning' : 'warning-animate' : 'wait' }>
+        <div id='timer' className={ isQuestionActive ? questionTimer > 10 ? 'good' : questionTimer === 0 ? 'warning' : 'warning-animate' : 'wait' }>
           <div className='banner-question'>Question { index + 1 }</div>
             {
               isQuestionActive ?
