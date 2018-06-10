@@ -38,9 +38,9 @@ const sock = (io) => {
         console.log('game: ', game)
         teams.map(team => {
           console.log('team map: ', team)
-          Team.findAll({ where: { team_name: team }})
+          Team.findOne({ where: { team_name: team }})
           .then(_team => {
-            console.log('returned team', _team)
+            console.log('returned team', _team.get())
             _team.game_id = game.id
           })
         })
