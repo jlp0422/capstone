@@ -8,11 +8,12 @@ const devices = {}
 const sock = (io) => {
   io.on('connection', (socket) => {
     devices[socket.id] = socket
-
+    console.log('****** connection with: ', socket.id)
     // user logging in (won't have bar id yet)
     socket.on('authenticate', (id) => {
+      console.log('***** sending to: ', socket.id)
       console.log('***** user authenticated: ', id)
-      io.emit('authenticated', id)
+      io.to(socket.id).emit('authenticated', id)
     });
 
     // bar logging in
@@ -39,7 +40,7 @@ const sock = (io) => {
       console.log('*******game started!')
       Game.create()
       .then(game => {
-        console.log('********game: ', game)
+        console.log('********game: ', game.get())
         teams.map(team => {
           console.log('*******team map: ', team)
           Team.findOne({ where: { team_name: team } })
