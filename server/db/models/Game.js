@@ -24,7 +24,7 @@ Game.prototype.getAllTeams = function(){
 }
 
 Game.startGame = function(){
-  return Game.create()
+  Game.create()
   .then((game) => {
     return axios.get('https://untapped-trivia.herokuapp.com/v1/questions')
     .then(res => res.data.results)
