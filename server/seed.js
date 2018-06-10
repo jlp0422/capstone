@@ -67,7 +67,8 @@ const createBar = () => {
     password: hashPassword,
     name: `${chance.animal()} Town`,
     latitude: chance.latitude({ min: 29, max: 64.85694 }),
-    longitude: chance.longitude({ min: -115, max: -85 })
+    longitude: chance.longitude({ min: -115, max: -85 }),
+    endOfMembershipDate: chance.date({ string: true })
   });
 };
 
