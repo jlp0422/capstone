@@ -13,18 +13,17 @@ const sock = (io) => {
     // user logging in (won't have bar id yet)
     socket.on('authenticate', (id) => {
       console.log('***** user authenticated: ', id)
-      socket.join(`${id}`)
       io.emit('authenticated', { id, socket: socket.id })
     });
 
     // bar logging in
     socket.on('bar login', (id) => {
-      socket.join(`${id}`)
+      socket.join(id)
     });
 
     // team choosing bar
     socket.on('choose bar', (bar_id) => {
-      socket.join(`${bar_id}`)
+      socket.join(bar_id)
     });
 
     // team choosing team name
@@ -33,7 +32,7 @@ const sock = (io) => {
       console.log('****** team name: ', name)
       console.log('****** team id: ', team)
       axios.put(`https://untapped-trivia.herokuapp.com/v1/teams/${team}`, { team_name: name })
-      .then(() => io.to(`${bar_id}`).emit('team register', name))
+      .then(() => io.to(bar_id).emit('team register', name))
     });
 
     // start game
@@ -51,8 +50,8 @@ const sock = (io) => {
               console.log('****** bar id', bar_id)
               _team.setGame(game)
             })
-          })
-        .then(_teams => io.to(bar_id).emit('game started', _teams))
+            .then(_teams => io.to(bar_id).emit('game started', _teams))
+        })
         axios.get('https://untapped-trivia.herokuapp.com/v1/questions')
           .then(res => res.data.results)
           .then(questions => {
@@ -74,7 +73,7 @@ const sock = (io) => {
     // new question
     socket.on('send question', (question) => {
       const { bar } = question
-      io.to(`${bar.id}`).emit('sending question', question)
+      io.to(bar.id).emit('sending question', question)
     });
 
     // team submitting answer
@@ -84,20 +83,20 @@ const sock = (io) => {
 
     // question active is over
     socket.on('question over', (bar) => {
-      io.to(`${bar.id}`).emit('waiting for next question')
+      io.to(bar.id).emit('waiting for next question')
     })
 
     // question waiting is over
     socket.on('get next question', ({ bar, index }) => {
-      io.to(`${bar.id}`).emit('ready for next question', index)
+      io.to(bar.id).emit('ready for next question', index)
     })
 
     // timers
     socket.on('question countdown', ({ bar, timer }) => {
-      io.to(`${bar.id}`).emit('question timer', timer)
+      io.to(bar.id).emit('question timer', timer)
     })
     socket.on('wait countdown', ({ bar, timer }) => {
-      io.to(`${bar.id}`).emit('wait timer', timer)
+      io.to(bar.id).emit('wait timer', timer)
     })
 
     // game over
@@ -110,13 +109,13 @@ const sock = (io) => {
             game.getAllTeams()
             game.update({ active: false })
           })
-          .then(teams => io.to(`${bar.id}`).emit('game has ended', teams))
+          .then(teams => io.to(bar.id).emit('game has ended', teams))
         })
     })
 
     // new game
     socket.on('new game', (bar) => {
-      io.to(`${bar.id}`).emit('new game has started')
+      io.to(bar.id).emit('new game has started')
     })
 
     socket.on('disconnect', () => {
