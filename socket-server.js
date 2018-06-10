@@ -40,11 +40,11 @@ const sock = (io) => {
     socket.on('start game', ({ bar_id, teams }) => {
       console.log('***** teams: ', teams )
       console.log('******* game started!')
-      // let teamsToEmit
+      let teamsToEmit
       Game.create()
       .then(game => {
         console.log('******** game: ', game.get())
-        teams.map(team => {
+        teamsToEmit = teams.map(team => {
           console.log('******* team map: ', team)
           Team.findOne({ where: { team_name: team } })
             .then(_team => {
@@ -53,7 +53,6 @@ const sock = (io) => {
               console.log('***** returned team: ', _team.get())
             })
           })
-        .then(_teams => io.to(`${bar_id}`).emit('game started', _teams))
         axios.get('https://untapped-trivia.herokuapp.com/v1/questions')
           .then(res => res.data.results)
           .then(questions => {
@@ -70,8 +69,8 @@ const sock = (io) => {
             })
           })
         })
-        // io.to(`${bar_id}`).emit('game started', teamsToEmit)
-    });
+        .then(() => io.to(`${bar_id}`).emit('game started', teamsToEmit))
+      });
 
     // new question
     socket.on('send question', (question) => {
