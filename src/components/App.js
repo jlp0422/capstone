@@ -21,6 +21,7 @@ class App extends Component {
     super(props);
     this.state = {
       bar: {},
+
       loggedIn: false,
     };
     this.logout = this.logout.bind(this);
@@ -29,6 +30,7 @@ class App extends Component {
   }
 
   componentDidMount() {
+
     this.whoAmI()
   }
 
@@ -39,18 +41,19 @@ class App extends Component {
   whoAmI() {
     const user = localStorage.getItem('token');
     if (user) {
-      const token = jwt.verify(user, 'untappedpotential')
-      axios.post(`/v1/bars/${token.id}`, token)
-      .then(res => res.data)
-      .then(bar => this.setState({ bar, loggedIn: true }))
-      .then(() => socket.emit('bar login', token.id))
+      const token = jwt.verify(user, 'untappedpotential');
+      axios
+        .post(`/v1/bars/${token.id}`, token)
+        .then(res => res.data)
+        .then(bar => this.setState({ bar, loggedIn: true }))
+        .then(() => socket.emit('bar login', token.id));
     }
   }
 
-  logout(){
-    localStorage.removeItem('token')
-    localStorage.removeItem('teams')
-    this.setState({ loggedIn: false })
+  logout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('teams');
+    this.setState({ loggedIn: false });
   }
 
   login(user) {
@@ -60,6 +63,7 @@ class App extends Component {
 
   render() {
     const { bar, loggedIn } = this.state;
+
     const { whoAmI, logout } = this
     if (!bar.name) this.whoAmI()
     return (
@@ -81,6 +85,7 @@ class App extends Component {
                 <Route path="/scores" exact component={Scores} />
               </Switch>
             ) : (
+
               <Route path="/" render={({history}) => <Login login={this.login} history={history} />} />
             )}
           </div>
