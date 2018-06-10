@@ -15,7 +15,6 @@ const sock = (io) => {
       socket.join(`${id}`)
       console.log(`***** socket has joined room ${id}`)
       io.to(`${id}`).emit('authenticated', id)
-      // io.to(socket.id).emit('authenticated', id)
     });
 
     // bar logging in
@@ -39,18 +38,18 @@ const sock = (io) => {
 
     // new game
     socket.on('start game', ({ bar_id, teams }) => {
-      // console.log('***** teams: ', teams )
+      console.log('***** teams: ', teams )
       console.log('******* game started!')
       // let teamsToEmit
       Game.create()
       .then(game => {
-        // console.log('******** game: ', game.get())
+        console.log('******** game: ', game.get())
         teams.map(team => {
-          // console.log('******* team map: ', team)
+          console.log('******* team map: ', team)
           Team.findOne({ where: { team_name: team } })
             .then(_team => {
-              // console.log('******* returned team', _team.get())
-              // console.log('****** bar id', bar_id)
+              console.log('******* returned team', _team.get())
+              console.log('****** bar id', bar_id)
               _team.setGame(game)
             })
             .then(_teams => io.to(`${bar_id}`).emit('game started', _teams))
