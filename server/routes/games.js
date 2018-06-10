@@ -20,6 +20,7 @@ router.get('/:id/questions', (req, res, next) => {
     .then(game => Question.findAll({ where: { game_id: game.id } }))
     .then(questions => res.send(questions));
 });
+
 router.put('/:id/question', (req, res, next) => {
   Game.findById(req.params.id)
     .then(game => Question.findAll({ where: { game_id: game.id } }))

@@ -6,7 +6,7 @@ const Banner = (props) => {
   return (
     <div className='main-header'>
       <div className='header-brand'>
-        <img className='header-img' width='60' height='60' src='/public/images/UTT-logo.svg' />
+        <img className='header-img' src='/public/images/untapped-logo.png' />
         <div className='header-title'>UnTapped Trivia</div>
       </div>
       { loggedIn ? 

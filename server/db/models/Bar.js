@@ -23,9 +23,10 @@ const Bar = conn.define('bar',
   },{ underscored: true }
 );
 
-Bar.hook('afterCreate', (bar) => {
-  newBar(bar)
-});
+// add back before start
+// Bar.hook('afterCreate', (bar) => {
+//   newBar(bar)
+// });
 
 
 module.exports = Bar;
