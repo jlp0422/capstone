@@ -11,6 +11,10 @@ export default class Login extends Component {
       signup: false,
       id: '',
       name: '',
+      street: '',
+      city: '',
+      state: '',
+      zip: '',
       password: '',
       email: '',
       passwordStrength: 'Weak',
@@ -21,14 +25,20 @@ export default class Login extends Component {
   }
 
   submit(ev){
-    const { id, name, password, signup, email } = this.state;
+    const { id, name, password, signup, email, street, city, state, zip } = this.state;
     const hashPassword = bcrypt.hashSync(password, 6)
     ev.preventDefault();
     if ( signup ) {
       const randomNum = Math.floor(Math.random() * 10000)
-      const newId = randomNum > 1000 ? String(randomNum) : `0${randomNum}` 
+      const newId = randomNum > 1000 ? String(randomNum) : `0${randomNum}`
       socket.emit('bar login', newId)
-      axios.post('/auth/register', { name, id: newId, password: hashPassword, email })
+      axios.post('/auth/register', {
+        name,
+        id: newId,
+        password: hashPassword,
+        email,
+        address: { street, city, state, zip }
+      })
       .then(res => res.data)
       .then(user => this.props.login(user))
       .then(() => this.props.history.push('/'))
@@ -65,7 +75,6 @@ export default class Login extends Component {
 
   render(){
     const { signup, passwordStrength, passwordMatch } = this.state;
-    console.log(this.state)
     return (
       <div className='login'>
         <div className='login-header'> { signup ? 'Create an Account' : 'Please Log in' } </div>
@@ -76,6 +85,30 @@ export default class Login extends Component {
                 onChange={(ev) => this.setState({ name: ev.target.value })}
                 placeholder="Your Bar's Name"
                 className='form-control login-input mb-3' />
+              <input
+                onChange={(ev) => this.setState({ street: ev.target.value })}
+                placeholder='Street Addres'
+                className='form-control login-input mb-3' />
+              <div className='form-row login-input mb-3'>
+                <div className='col-7 login-col-l'>
+                  <input
+                    onChange={(ev) => this.setState({ city: ev.target.value })}
+                    placeholder='City'
+                    className='form-control' />
+                </div>
+                <div className='col'>
+                  <input
+                    onChange={(ev) => this.setState({ state: ev.target.value })}
+                    placeholder='State'
+                    className='form-control' />
+                </div>
+                <div className='col login-col-r'>
+                  <input
+                    onChange={(ev) => this.setState({ zip: ev.target.value })}
+                    placeholder='Zip'
+                    className='form-control' />
+                </div>
+              </div>
               <input
                 onChange={(ev) => this.setState({ email: ev.target.value })}
                 placeholder='Your Email'

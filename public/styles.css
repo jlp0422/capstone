@@ -299,7 +299,15 @@ body {
 
 .login-input {
 	margin: 0 auto;
-	max-width: 60%;
+	max-width: 70%;
+}
+
+.login-col-l {
+	margin-left: -5px;
+}
+
+.login-col-r {
+	margin-right: -5px;
 }
 
 .login-hr {

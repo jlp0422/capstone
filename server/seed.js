@@ -22,9 +22,8 @@ const populateTeams = (game) => {
 }
 
 const seed = () => {
-  return Game.create()
+  return Game.create({ active: false })
   .then((game) => {
-    populateTeams(game)
     return axios.get('https://opentdb.com/api.php?amount=10')
     .then(res => res.data.results)
     .then(questions => {
@@ -35,22 +34,24 @@ const seed = () => {
           correct_answer: question.correct_answer,
           incorrect_answers: question.incorrect_answers,
           difficulty: question.difficulty,
-          category: question.category
+          category: question.category,
         })
         .then(question => question.setGame(game))
       })
     })
     .then(() => {
       const hashPassword = bcrypt.hashSync('admin', 6)
+      const randomNum = Math.floor(Math.random() * 10000)
+      const newId = randomNum > 1000 ? String(randomNum) : `0${randomNum}`
       return Bar.create({
-        id: Math.floor(Math.random() * 10000),
+        id: newId,
         email: chance.email(),
         password: hashPassword,
         name: `${chance.animal()} Town`
       })
     })
     .catch(err => console.log(err))
-  }) 
+  })
 }
 
 conn

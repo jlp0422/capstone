@@ -4,7 +4,6 @@ const qr = require('qr-image');
 const newBar = (bar) => {
   const qr_svg = qr.imageSync(bar.id)
   const qrcode = qr_svg.toString('base64')
-  console.log(qrcode)
   let transporter = nodemailer.createTransport({
     host: 'smtp.sendgrid.net',
     port: 587,

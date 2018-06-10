@@ -1,5 +1,10 @@
 /* eslint-disable */
+const axios = require('axios')
+const Game = require('./server/db/models/Game')
+const Team = require('./server/db/models/Team')
+const Question = require('./server/db/models/Question');
 const devices = {}
+
 const sock = (io) => {
   io.on('connection', (socket) => {
     devices[socket.id] = socket
@@ -19,22 +24,45 @@ const sock = (io) => {
       socket.join(bar_id)
     });
 
-    socket.on('get bar name', () => {
-      io.emit('need bar name')
-    })
-
-    socket.on('bar name here', (bar) => {
-      io.emit('sending bar name', bar)
-    })
-
     // team choosing team name
-    socket.on('choose team name', ({ name, bar_id }) => {
-      io.to(bar_id).emit('team register', name) // need for web home page
+    socket.on('choose team name', ({ name, bar_id, team }) => {
+      axios.put(`https://untapped-trivia.herokuapp.com/v1/teams/${team}`, { team_name: name })
+      .then(() => io.to(bar_id).emit('team register', name))
     });
 
     // new game
-    socket.on('start game', (bar_id) => {
-      io.to(bar_id).emit('game started')
+    socket.on('start game', ({ bar_id, teams }) => {
+      console.log('*****teams: ', teams )
+      console.log('*******game started!')
+      Game.create()
+      .then(game => {
+        console.log('********game: ', game)
+        teams.map(team => {
+          console.log('*******team map: ', team)
+          Team.findOne({ where: { team_name: team } })
+            .then(_team => {
+              console.log('*******returned team', _team.get())
+              console.log('****** bar id', bar_id)
+              _team.setGame(game)
+            })
+            .then(_teams => io.to(bar_id).emit('game started', _teams))
+        })
+        axios.get('https://untapped-trivia.herokuapp.com/v1/questions')
+          .then(res => res.data.results)
+          .then(questions => {
+            questions.map(question => {
+              Question.create({
+                question: question.question,
+                answers: question.answers,
+                correct_answer: question.correct_answer,
+                incorrect_answers: question.incorrect_answers,
+                difficulty: question.difficulty,
+                category: question.category,
+              })
+              .then(question => question.setGame(game))
+            })
+          })
+        })
     });
 
     // new question
@@ -45,7 +73,6 @@ const sock = (io) => {
 
     // team submitting answer
     socket.on('answer', (info) => {
-      // const { team, answer } = info
       io.emit('answer submitted', info)
     });
 
@@ -69,7 +96,21 @@ const sock = (io) => {
 
     // game over
     socket.on('game over', (bar) => {
-      io.to(bar.id).emit('game has ended')
+      return axios.get('https://untapped-trivia.herokuapp.com/v1/games/active')
+        .then(res => res.data.id)
+        .then(gameId => {
+          Game.findById(gameId)
+          .then(game => {
+            game.getAllTeams()
+            game.update({ active: false })
+          })
+          .then(teams => io.to(bar.id).emit('game has ended', teams))
+        })
+    })
+
+    // new game
+    socket.on('new game', (bar) => {
+      io.to(bar.id).emit('new game has started')
     })
 
     socket.on('disconnect', () => {

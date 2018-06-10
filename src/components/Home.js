@@ -1,7 +1,6 @@
 /* eslint-disable */
 import React from 'react';
 import socket from '../../socket-client';
-import qr from 'qr-image';
 
 class Home extends React.Component {
   constructor(props) {
@@ -13,6 +12,7 @@ class Home extends React.Component {
   }
 
   componentDidMount() {
+    this.props.whoAmI()
     const teams = localStorage.getItem('teams')
     if (teams) this.setState({ teams: teams.split(', ') })
     socket.on('team register', (team) => {
@@ -29,8 +29,13 @@ class Home extends React.Component {
 
   onStartGame() {
     const { history, bar } = this.props
+    const { teams } = this.state
     localStorage.setItem('index', 0)
-    socket.emit('start game', bar.id)
+    localStorage.setItem('waitTimer', 10)
+    localStorage.setItem('questionTimer', 10)
+    localStorage.setItem('questionActive', 'yes')
+    console.log('home teams; ', teams)
+    socket.emit('start game', { bar_id: bar.id, teams })
     history.push('/games/active')
   }
 
