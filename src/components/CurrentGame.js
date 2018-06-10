@@ -31,15 +31,23 @@ export default class CurrentGame extends Component {
     axios.get('/v1/games/active')
       .then(res => res.data)
       .then(game => {
+        console.log(game)
         axios.get(`/v1/games/${game.id}/teams`)
           .then(res => res.data)
-          .then(teams => this.setState({ teams }));
+          .then(teams => {
+            console.log(teams)
+            this.setState({ teams })
+          })
         axios.get(`/v1/games/${game.id}/questions`)
           .then(res => res.data)
-          .then(questions => this.setState({ questions }));
+          .then(questions => {
+            console.log(questions)
+            this.setState({ questions })
+          });
         return game
       })
       .then(game => {
+        console.log('game number 2: ', game)
         const { bar } = this.props
         setTimeout(() => socket.emit('send question', { index, question: this.state.questions[index], bar }), 100)
         socket.on('answer submitted', (info) => {
@@ -69,7 +77,7 @@ export default class CurrentGame extends Component {
     localStorage.setItem('index', this.state.index)
     socket.off('question timer')
     socket.off('wait timer')
-    // socket.off('game started')
+    socket.off('game started')
     socket.off('ready for next question')
   }
 
