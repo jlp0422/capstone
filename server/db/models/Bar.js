@@ -2,7 +2,7 @@ const conn = require('../conn');
 const { Sequelize } = conn;
 const { newBar } = require('../../automail');
 
-const Bar = conn.define('bar', 
+const Bar = conn.define('bar',
   {
     id: {
       allowNull: false,
@@ -23,9 +23,10 @@ const Bar = conn.define('bar',
   },{ underscored: true }
 );
 
-Bar.hook('afterCreate', (bar) => {
-  newBar(bar)
-});
+// ran out of calls per day :(
+// Bar.hook('afterCreate', (bar) => {
+//   newBar(bar)
+// });
 
 
 module.exports = Bar;
