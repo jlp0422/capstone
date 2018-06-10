@@ -45,7 +45,9 @@ class Home extends React.Component {
     const { bar } = this.props
     return (
       <div className='home'>
-        <h1> Cheers, { bar.name } </h1>
+        <img className='home-img mb-3' src='/public/images/wordmark.png' />
+        <br />
+        <h1 className='mt-4'> Cheers, { bar.name } </h1>
         <h3>Teams connected:</h3>
         { teams.length ?
           teams.map(team => (
@@ -53,7 +55,6 @@ class Home extends React.Component {
           )) : null
         }
         <div><button onClick={ onStartGame }> Click to Start a Game </button></div>
-        <img className='home-img' width='500' height='500' src='/public/images/UTT-logo.svg' />
         <br/>
       </div>
     )

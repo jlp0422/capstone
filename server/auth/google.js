@@ -30,7 +30,6 @@ router.get('/', passport.authenticate('google', { scope: 'email', session: false
 
 router.get('/callback', passport.authenticate('google', { session: false }), (req, res) => {
   socket.emit('authenticate', req.user.id)
-  // token = jwt.sign({ id: req.user.id }, process.env.SECRET, { expiresIn: 86400 })
   res.redirect(`untappedtrivia://`)
 })
 

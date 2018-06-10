@@ -1,6 +1,8 @@
 /* MAIN PAGE */
+
 body {
 	background-color: #E7F1F5;
+	font-family: 'Roboto';
 }
 
 .app {
@@ -74,6 +76,7 @@ body {
 	background-color: #27476E;
 	grid-column: 1;
 	display: grid;
+	
 	grid-template-rows: repeat(6, 50px);
 	height: 100vh;
 }
