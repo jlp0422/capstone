@@ -39,7 +39,7 @@ const sock = (io) => {
     socket.on('start game', ({ bar_id, teams }) => {
       console.log('*****teams: ', teams )
       console.log('*******game started!')
-      Game.create()
+      Game.findOne({ where: { active }})
       .then(game => {
         console.log('********game: ', game)
         teams.map(team => {

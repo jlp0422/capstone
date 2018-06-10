@@ -23,6 +23,7 @@ export default class CurrentGame extends Component {
   }
 
   componentDidMount() {
+    console.log('mounted current game')
     this.onNewGame()
   }
 
