@@ -13,8 +13,7 @@ const sock = (io) => {
     // user logging in (won't have bar id yet)
     socket.on('authenticate', (id) => {
       console.log('***** user authenticated: ', id)
-      socket.join(`${id}`)
-      console.log(`***** socket has joined room ${id}`)
+      console.log(`***** socket authenticated: ${socket.id}`)
       io.to(socket.id).emit('authenticated', id)
     });
 
