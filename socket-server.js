@@ -9,12 +9,13 @@ const sock = (io) => {
   io.on('connection', (socket) => {
     devices[socket.id] = socket
     console.log('****** connection with: ', socket.id)
+    console.log('*** DEVICES: ', Object.keys(devices))
     // user logging in (won't have bar id yet)
     socket.on('authenticate', (id) => {
       console.log('***** user authenticated: ', id)
       socket.join(`${id}`)
       console.log(`***** socket has joined room ${id}`)
-      io.to(`${id}`).emit('authenticated', id)
+      io.to(socket.id).emit('authenticated', id)
     });
 
     // bar logging in
