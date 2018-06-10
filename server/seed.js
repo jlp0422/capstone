@@ -20,7 +20,7 @@ const populateTeams = game => {
 
 const createGames = () => {
   return Promise.all([
-    Game.create({ active: false }),
+    Game.create(),
     Game.create({ active: false }),
     Game.create({ active: false })
   ]);

@@ -21,7 +21,6 @@ class App extends Component {
     super(props);
     this.state = {
       bar: {},
-
       loggedIn: false,
     };
     this.logout = this.logout.bind(this);
@@ -30,7 +29,6 @@ class App extends Component {
   }
 
   componentDidMount() {
-
     this.whoAmI()
   }
 
@@ -42,8 +40,7 @@ class App extends Component {
     const user = localStorage.getItem('token');
     if (user) {
       const token = jwt.verify(user, 'untappedpotential');
-      axios
-        .post(`/v1/bars/${token.id}`, token)
+      axios.post(`/v1/bars/${token.id}`, token)
         .then(res => res.data)
         .then(bar => this.setState({ bar, loggedIn: true }))
         .then(() => socket.emit('bar login', token.id));
@@ -58,8 +55,8 @@ class App extends Component {
 
   login(user) {
     localStorage.setItem('token', user.token);
-    const index = localStorage.getItem('index') * 1
-    if (!index) localStorage.removeItem('index')
+    // const index = localStorage.getItem('index') * 1
+    // if (!index) localStorage.removeItem('index')
     this.setState({ loggedIn: true });
   }
 
