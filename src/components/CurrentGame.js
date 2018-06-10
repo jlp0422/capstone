@@ -23,6 +23,7 @@ export default class CurrentGame extends Component {
   }
 
   componentDidMount() {
+    console.log('mounted current game')
     this.onNewGame()
   }
 
@@ -33,10 +34,11 @@ export default class CurrentGame extends Component {
       .then(game => {
         axios.get(`/v1/games/${game.id}/teams`)
           .then(res => res.data)
-          .then(teams => this.setState({ teams }));
+          .then(teams => this.setState({ teams }))
         axios.get(`/v1/games/${game.id}/questions`)
           .then(res => res.data)
           .then(questions => this.setState({ questions }));
+        return game
       })
       .then(game => {
         const { bar } = this.props
@@ -131,6 +133,7 @@ export default class CurrentGame extends Component {
             ) : (
               <h1>Game over</h1>
             )}
+
           </div>
         )}
         { teams.length && (
@@ -147,7 +150,7 @@ export default class CurrentGame extends Component {
         )}
         { index > 9 && <h3>Final Scores</h3> }
         { teams.length && (
-          <TeamsList scores={ finalScores } answers={answers} />
+          <TeamsList finalScores={ finalScores } answers={ answers } />
         )}
       </div>
     );

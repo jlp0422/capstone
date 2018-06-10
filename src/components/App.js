@@ -40,27 +40,30 @@ class App extends Component {
   whoAmI() {
     const user = localStorage.getItem('token');
     if (user) {
-      const token = jwt.verify(user, 'untappedpotential')
+      const token = jwt.verify(user, 'untappedpotential');
       axios.post(`/v1/bars/${token.id}`, token)
-      .then(res => res.data)
-      .then(bar => this.setState({ bar, loggedIn: true }))
-      .then(() => socket.emit('bar login', token.id))
+        .then(res => res.data)
+        .then(bar => this.setState({ bar, loggedIn: true }))
+        .then(() => socket.emit('bar login', token.id));
     }
   }
 
-  logout(){
-    localStorage.removeItem('token')
-    localStorage.removeItem('teams')
-    this.setState({ loggedIn: false })
+  logout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('teams');
+    this.setState({ loggedIn: false });
   }
 
   login(user) {
     localStorage.setItem('token', user.token);
+    // const index = localStorage.getItem('index') * 1
+    // if (!index) localStorage.removeItem('index')
     this.setState({ loggedIn: true });
   }
 
   render() {
     const { bar, loggedIn } = this.state;
+
     const { whoAmI, logout } = this
     if (!bar.name) this.whoAmI()
     return (
@@ -83,6 +86,7 @@ class App extends Component {
                 <Route path="/checkout" exact render={({history}) => <Checkout bar={ bar } history={history} /> } />
               </Switch>
             ) : (
+
               <Route path="/" render={({history}) => <Login login={this.login} history={history} />} />
             )}
           </div>

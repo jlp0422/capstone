@@ -8,10 +8,12 @@ const devices = {}
 const sock = (io) => {
   io.on('connection', (socket) => {
     devices[socket.id] = socket
-
+    // console.log('****** connection with: ', socket.id)
+    // console.log('*** DEVICES: ', Object.keys(devices))
     // user logging in (won't have bar id yet)
     socket.on('authenticate', (id) => {
-      io.emit('authenticated', id)
+      console.log('***** user authenticated: ', id)
+      io.emit('authenticated', { id, socket: socket.id })
     });
 
     // bar logging in
@@ -25,28 +27,31 @@ const sock = (io) => {
     });
 
     // team choosing team name
+    /* TEAM AND GAME BOTH HAVE BAR ID */
     socket.on('choose team name', ({ name, bar_id, team }) => {
+      console.log('****** team name: ', name)
+      console.log('****** team id: ', team)
       axios.put(`https://untapped-trivia.herokuapp.com/v1/teams/${team}`, { team_name: name })
       .then(() => io.to(bar_id).emit('team register', name))
     });
 
-    // new game
+    // start game
     socket.on('start game', ({ bar_id, teams }) => {
-      console.log('*****teams: ', teams )
-      console.log('*******game started!')
-      Game.create()
+      console.log('***** teams: ', teams )
+      console.log('******* game started!')
+      Game.findOne({ where: { active: true }})
       .then(game => {
-        console.log('********game: ', game)
-        teams.map(team => {
-          console.log('*******team map: ', team)
+        console.log('******** game: ', game.get())
+        io.to(bar_id).emit('game started', teams.map(team => {
+          console.log('******* team map: ', team)
           Team.findOne({ where: { team_name: team } })
             .then(_team => {
-              console.log('*******returned team', _team.get())
+              console.log('******* returned team', _team.get())
               console.log('****** bar id', bar_id)
               _team.setGame(game)
             })
-            .then(_teams => io.to(bar_id).emit('game started', _teams))
-        })
+            // .then(_teams => io.to(bar_id).emit('game started', _teams))
+        }))
         axios.get('https://untapped-trivia.herokuapp.com/v1/questions')
           .then(res => res.data.results)
           .then(questions => {
@@ -97,14 +102,17 @@ const sock = (io) => {
     // game over
     socket.on('game over', (bar) => {
       return axios.get('https://untapped-trivia.herokuapp.com/v1/games/active')
-        .then(res => res.data.id)
-        .then(gameId => {
-          Game.findById(gameId)
+        .then(res => res.data)
+        .then(game => {
+          Game.findById(game.id)
           .then(game => {
-            game.getAllTeams()
             game.update({ active: false })
+            game.getAllTeams()
           })
-          .then(teams => io.to(bar.id).emit('game has ended', teams))
+          .then(teams => {
+            console.log('game teams: ', teams)
+            io.to(bar.id).emit('game has ended', teams)
+          })
         })
     })
 
@@ -115,7 +123,7 @@ const sock = (io) => {
 
     socket.on('disconnect', () => {
       delete devices[socket.id]
-      console.log('user has disconnected')
+      console.log('user has disconnected: ', socket.id)
     })
   })
 }

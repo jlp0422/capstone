@@ -1,37 +1,21 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-export default class QuestionsChart extends Component {
+export default class AllQuestionsChart extends Component {
   constructor() {
     super();
     this.state = {
-      questions: [],
-      gameId: 0
+      allQuestions: []
     };
-    this.questionGraph = this.questionGraph.bind(this);
+    this.allQuestionGraph = this.allQuestionGraph.bind(this);
   }
   componentDidMount() {
     axios
-      .get('/v1/games')
+      .get('/v1/dbQuestions')
       .then(res => res.data)
-      .then(games =>
-        games.reduce((lastGame, game) => {
-          if (game.created_at > lastGame.created_at) lastGame = game;
-
-          return lastGame;
-        })
-      )
-      .then(game => {
-        axios
-          .get(`/v1/games/${game.id}/questions`)
-          .then(res => res.data)
-          .then(questions =>
-            this.setState({ questions: questions, gameId: game.id })
-          );
-      });
+      .then(allQuestions => this.setState({ allQuestions }));
   }
-  questionGraph() {
-    const gameNumber = this.state.gameId;
+  allQuestionGraph() {
     const getRandomColor = () => {
       var letters = '0123456789ABCDEF';
       var color = '#';
@@ -40,7 +24,7 @@ export default class QuestionsChart extends Component {
       }
       return color;
     };
-    let arr = [
+    let dataArr = [
       [
         'Question Id',
         'Answered Correctly',
@@ -48,19 +32,19 @@ export default class QuestionsChart extends Component {
         { role: 'annotation' }
       ]
     ];
-    this.state.questions.map(question =>
-      arr.push([
+    this.state.allQuestions.map(question => {
+      dataArr.push([
         `question # ${question.id}`,
         question.answered_correctly,
         getRandomColor(),
         question.answered_correctly
-      ])
-    );
+      ]);
+    });
     google.charts.load('current', { packages: ['corechart', 'bar'] });
     google.charts.setOnLoadCallback(drawBasic);
 
     function drawBasic() {
-      var data = google.visualization.arrayToDataTable(arr);
+      var data = google.visualization.arrayToDataTable(dataArr);
 
       var options = {
         animation: {
@@ -68,7 +52,7 @@ export default class QuestionsChart extends Component {
           duration: 3000,
           easing: 'inAndOut'
         },
-        title: `easiest question in game ${gameNumber}`,
+        title: `easiest question in all games`,
         hAxis: {
           title: 'question Id'
         },
@@ -78,7 +62,7 @@ export default class QuestionsChart extends Component {
       };
 
       var chart = new google.visualization.ColumnChart(
-        document.getElementById('draw')
+        document.getElementById('drawAll')
       );
 
       chart.draw(data, options);
@@ -86,7 +70,7 @@ export default class QuestionsChart extends Component {
   }
 
   render() {
-    this.questionGraph();
-    return <div id="draw" />;
+    this.allQuestionGraph();
+    return <div id="drawAll" />;
   }
 }

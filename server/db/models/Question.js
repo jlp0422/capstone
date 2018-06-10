@@ -17,7 +17,7 @@ const Question = conn.define('question',
   {
     getterMethods: {
       answers: function () {
-        const answers = [ this.correct_answer, ...this.incorrect_answers]
+        const answers = [this.correct_answer, ...this.incorrect_answers]
         return chance.shuffle(answers)
       }
     },

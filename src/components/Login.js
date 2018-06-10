@@ -87,7 +87,7 @@ export default class Login extends Component {
                 className='form-control login-input mb-3' />
               <input
                 onChange={(ev) => this.setState({ street: ev.target.value })}
-                placeholder='Street Addres'
+                placeholder='Street Address'
                 className='form-control login-input mb-3' />
               <div className='form-row login-input mb-3'>
                 <div className='col-7 login-col-l'>
@@ -132,9 +132,6 @@ export default class Login extends Component {
             :
             <div>
               <input
-                type='number'
-                max='9999'
-                min='1000'
                 onChange={(ev) => this.setState({ id: ev.target.value })}
                 placeholder='Bar ID'
                 className='form-control login-input mb-3' />

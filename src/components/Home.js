@@ -6,9 +6,9 @@ import { Link } from 'react-router-dom';
 
 class Home extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      teams: []
+      teams: [],
     }
     this.onStartGame = this.onStartGame.bind(this)
   }
@@ -26,7 +26,7 @@ class Home extends React.Component {
   }
 
   componentWillUnmount() {
-    socket.off('team register')
+    socket.off('team register');
   }
 
   onStartGame() {
@@ -36,7 +36,7 @@ class Home extends React.Component {
     localStorage.setItem('waitTimer', 10)
     localStorage.setItem('questionTimer', 10)
     localStorage.setItem('questionActive', 'yes')
-    console.log('home teams; ', teams)
+    console.log('home teams: ', teams)
     socket.emit('start game', { bar_id: bar.id, teams })
     history.push('/games/active')
   }
@@ -45,29 +45,30 @@ class Home extends React.Component {
     const { teams } = this.state
     const { onStartGame } = this
     const { bar } = this.props
-    console.log('bar is:', bar);
-
+    const index = localStorage.getItem('index')
     return (
       <div className='home'>
-        <h1> Cheers, { bar.name } </h1>
+        <img className='home-img mb-3' src='/public/images/wordmark.png' />
+        <br />
+        <h1 className='mt-4'> Cheers, { bar.name } </h1>
         <h3>Teams connected:</h3>
         { teams.length ?
           teams.map(team => (
             <p key={team}>{team}</p>
           )) : null
         }
-        <img className='home-img' width='500' height='500' src='/public/images/UTT-logo.svg' />
         <br/>
         {
           bar.endOfMembershipDate !== "Invalid date" && bar.endOfMembershipDate !== null ? (
-            <div><button onClick={ onStartGame }> Click to Start a Game </button></div>
+            { !index &&
+              <button onClick={ onStartGame }> Click to Start a Game </button> 
+            }
           ) : (<h3>Please <Link to='/checkout'>sign up!</Link></h3>)
         }
       </div>
-    )
+    );
   }
         
 }
 
 export default Home;
-
