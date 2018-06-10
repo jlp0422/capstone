@@ -4,9 +4,9 @@ import socket from '../../socket-client';
 
 class Home extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      teams: []
+      teams: [],
     }
     this.onStartGame = this.onStartGame.bind(this)
   }
@@ -24,7 +24,7 @@ class Home extends React.Component {
   }
 
   componentWillUnmount() {
-    socket.off('team register')
+    socket.off('team register');
   }
 
   onStartGame() {
@@ -43,6 +43,7 @@ class Home extends React.Component {
     const { teams } = this.state
     const { onStartGame } = this
     const { bar } = this.props
+    const index = localStorage.getItem('index')
     return (
       <div className='home'>
         <img className='home-img mb-3' src='/public/images/wordmark.png' />
@@ -54,12 +55,15 @@ class Home extends React.Component {
             <p key={team}>{team}</p>
           )) : null
         }
-        <div><button onClick={ onStartGame }> Click to Start a Game </button></div>
+        <div>
+          { !index &&
+            <button onClick={ onStartGame }> Click to Start a Game </button> 
+          }
+        </div>
         <br/>
       </div>
-    )
+    );
   }
 }
 
 export default Home;
-
