@@ -22,6 +22,7 @@ class Timer extends React.Component {
   }
 
   componentDidMount() {
+    console.log('mounted')
     const { questionTimerFunc, waitTimerFunc } = this.state
     const index = localStorage.getItem('index') * 1
     const waitTimer = localStorage.getItem('waitTimer')
@@ -35,7 +36,7 @@ class Timer extends React.Component {
       isQuestionActive: isActive === 'yes' ? true : false
     })
     socket.on('game started', () => {
-      console.log(questionTimer)
+      console.log('****** GAME HAS STARTED *******')
       this.setState({
         waitTimer: waitTimer ? waitTimer * 1 : 10,
         questionTimer: questionTimer ? questionTimer * 1 : 10,
@@ -88,7 +89,7 @@ class Timer extends React.Component {
   onQuestionCountdown() {
     const { bar } = this.props
     let { questionTimer } = this.state
-    if (localStorage.getItem('index') < 10) {
+    if ((localStorage.getItem('index') * 1) < 10) {
       if (questionTimer) {
         this.setState({
           questionTimer: questionTimer - 1,
@@ -106,7 +107,6 @@ class Timer extends React.Component {
   }
 
   onWaitCountdown() {
-    const index = localStorage.getItem('index')
     const { bar } = this.props
     let { waitTimer } = this.state
     if (waitTimer) {
@@ -117,7 +117,7 @@ class Timer extends React.Component {
       socket.emit('wait countdown', { bar, timer: this.state.waitTimer })
     }
     else {
-      const index = localStorage.getItem('index')
+      const index = localStorage.getItem('index') * 1
       this.setState({ waitTimer: 10, isQuestionActive: true })
       localStorage.setItem('index', (index * 1) + 1 )
       if (index < 10) {
@@ -133,12 +133,11 @@ class Timer extends React.Component {
     const { questionTimer, waitTimer, isQuestionActive, isPaused } = this.state
     const { onPause, onResume } = this;
     const index = localStorage.getItem('index') * 1
-    if(index > 9) return null
+    if (!index || index > 9) return null
       return (
         <div id='timer' className={ isQuestionActive ? questionTimer > 3 ? 'good' : questionTimer === 0 ? 'warning' : 'warning-animate' : 'wait' }>
           <div className='banner-question'>Question { index + 1 }</div>
-            {
-              isQuestionActive ? (
+            { isQuestionActive ? (
                 <div className='question-time'>00:{ questionTimer < 10 ? `0${questionTimer}` : questionTimer }</div>
               ) : (
                 <div className='wait-time'>{index < 9 ? ('Next question in... :') : ('Last question... :') }{ waitTimer < 10 ? `0${waitTimer}` : waitTimer }</div>
