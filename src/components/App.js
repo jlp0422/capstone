@@ -14,6 +14,7 @@ import Sidebar from './Sidebar';
 import Banner from './Banner';
 import Scores from './Scores';
 import Timer from './Timer';
+import Checkout from './Checkout';
 import Stats from './Stats';
 
 class App extends Component {
@@ -86,6 +87,7 @@ class App extends Component {
                 <Route path="/games/past" exact component={PastGames} />
                 <Route path="/stats/" exact component={Stats} />
                 <Route path="/scores" exact component={Scores} />
+                <Route path="/checkout" exact render={({history}) => <Checkout bar={ bar } history={history} /> } />
               </Switch>
             ) : (
 

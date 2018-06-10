@@ -14,6 +14,7 @@ const Sidebar = props => {
       <NavLink to="/games/past"> Past Games </NavLink>
       <NavLink to="/scores"> Scores </NavLink>
       <NavLink to="/stats">Stats</NavLink>
+      <NavLink to="/checkout"> Buy Membership </NavLink>
     </div>
   );
 };

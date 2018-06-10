@@ -1,6 +1,8 @@
 /* eslint-disable */
 import React from 'react';
 import socket from '../../socket-client';
+import moment from 'moment';
+import { Link } from 'react-router-dom';
 
 class Home extends React.Component {
   constructor(props) {
@@ -55,15 +57,18 @@ class Home extends React.Component {
             <p key={team}>{team}</p>
           )) : null
         }
-        <div>
-          { !index &&
-            <button onClick={ onStartGame }> Click to Start a Game </button> 
-          }
-        </div>
         <br/>
+        {
+          bar.endOfMembershipDate !== "Invalid date" && bar.endOfMembershipDate !== null ? (
+            { !index &&
+              <button onClick={ onStartGame }> Click to Start a Game </button> 
+            }
+          ) : (<h3>Please <Link to='/checkout'>sign up!</Link></h3>)
+        }
       </div>
     );
   }
+        
 }
 
 export default Home;

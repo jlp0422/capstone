@@ -6,5 +6,6 @@ router.use('/bars', require('./bars'));
 router.use('/games', require('./games'));
 router.use('/dbQuestions', require('./questions'));
 router.use('/auth', require('../auth'));
+router.use('/checkout', require('./checkout'));
 
 module.exports = router;
