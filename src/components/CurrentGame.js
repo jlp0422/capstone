@@ -14,7 +14,7 @@ export default class CurrentGame extends Component {
       questionTimer: 10,
       waitTimer: 10,
       answers: [],
-onActive: false,
+      questionActive: false,
       finalScores: []
     }
     this.onNextQuestion = this.onNextQuestion.bind(this)
@@ -65,11 +65,11 @@ onActive: false,
   }
 
   componentWillUnmount() {
-    localStorage.setItem('index', this.state.index);
-    socket.off('question timer');
-    socket.off('wait timer');
-    socket.off('game started');
-    socket.off('ready for next question');
+    localStorage.setItem('index', this.state.index)
+    socket.off('question timer')
+    socket.off('wait timer')
+    // socket.off('game started')
+    socket.off('ready for next question')
   }
 
   onNextQuestion() {
