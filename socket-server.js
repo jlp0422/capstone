@@ -14,7 +14,7 @@ const sock = (io) => {
     socket.on('authenticate', (id) => {
       console.log('***** user authenticated: ', id)
       console.log(`***** socket authenticated: ${socket.id}`)
-      io.to(socket.id).emit('authenticated', id)
+      socket.to(socket.id).emit('authenticated', id)
     });
 
     // bar logging in
