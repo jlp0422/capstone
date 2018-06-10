@@ -13,15 +13,10 @@ const googleCredentials = {
 }
 
 const verificationCb = (token, refreshToken, profile, done) => {
-  const info = {
-    firstname: profile.name.givenName,
-    lastname: profile.name.familyName,
-    email: profile.emails[0].value,
-  };
-
+  
   Team.findOrCreate({
     where: { googleId: profile.id },
-    defaults: info
+    defaults: { email: profile.emails[0].value }
   })
   .spread((team, created) => {
       done(null, team);
@@ -35,6 +30,7 @@ router.get('/', passport.authenticate('google', { scope: 'email', session: false
 
 router.get('/callback', passport.authenticate('google', { session: false }), (req, res) => {
   socket.emit('authenticate', req.user.id)
+  // token = jwt.sign({ id: req.user.id }, process.env.SECRET, { expiresIn: 86400 })
   res.redirect(`untappedtrivia://`)
 })
 

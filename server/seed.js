@@ -19,6 +19,7 @@ const populateTeams = game => {
   return Promise.all([createTeam(game), createTeam(game), createTeam(game)]);
 };
 
+
 const createGames = () => {
   return Promise.all([
     Game.create(),
@@ -76,6 +77,7 @@ const seed = () => {
       .catch(err => console.log(err));
   });
 };
+
 
 conn
   .sync({ force: true })

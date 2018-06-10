@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Login from './Login';
-import { NavLink, Route, HashRouter as Router, Switch } from 'react-router-dom';
+import { Route, HashRouter as Router, Switch } from 'react-router-dom';
 import jwt from 'jsonwebtoken';
 import axios from 'axios';
 import socket from '../../socket-client';
@@ -21,7 +21,8 @@ class App extends Component {
     super(props);
     this.state = {
       bar: {},
-      loggedIn: false
+
+      loggedIn: false,
     };
     this.logout = this.logout.bind(this);
     this.login = this.login.bind(this);
@@ -29,10 +30,8 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.whoAmI();
-    socket.once('need bar name', () => {
-      socket.emit('bar name here', this.state.bar);
-    });
+
+    this.whoAmI()
   }
 
   componentWillReceiveProps() {
@@ -64,36 +63,30 @@ class App extends Component {
 
   render() {
     const { bar, loggedIn } = this.state;
-    if (!bar.name) this.whoAmI();
+
+    const { whoAmI, logout } = this
+    if (!bar.name) this.whoAmI()
     return (
       <Router>
         <div id="main">
-          <Banner loggedIn={loggedIn} logout={this.logout} bar={bar} />
-          {loggedIn && <Sidebar />}
-          <div className={`${loggedIn ? 'container app' : 'loggedOut'}`}>
-            {loggedIn && <Timer />}
-            {loggedIn ? (
+          <Banner loggedIn={ loggedIn } logout={ logout } bar={ bar } />
+          { loggedIn && <Sidebar /> }
+          <div className={`${ loggedIn ? 'container app' : 'loggedOut'}`}>
+          { loggedIn && <Timer bar={ bar } /> }
+          { loggedIn ? (
               <Switch>
-                <Route
-                  path="/"
-                  exact
-                  render={({ history }) => <Home history={history} bar={bar} />}
-                />
-                <Route path="/categories" exact component={Categories} />
+                <Route path="/" exact render={({ history }) => <Home whoAmI={ whoAmI } history={ history } bar={ bar } /> } />
+                <Route path="/categories" exact component={ Categories } />
                 <Route path="/categories/:id" component={Category} />
                 <Route path="/teams" component={Teams} />
-                <Route path="/games/active" exact component={CurrentGame} />
+                <Route path="/games/active" exact render={() => <CurrentGame bar={ bar } /> } />
                 <Route path="/games/past" exact component={PastGames} />
                 <Route path="/stats/" exact component={Stats} />
                 <Route path="/scores" exact component={Scores} />
               </Switch>
             ) : (
-              <Route
-                path="/"
-                render={({ history }) => (
-                  <Login login={this.login} history={history} />
-                )}
-              />
+
+              <Route path="/" render={({history}) => <Login login={this.login} history={history} />} />
             )}
           </div>
         </div>

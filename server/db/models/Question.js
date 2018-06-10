@@ -18,9 +18,5 @@ const Question = conn.define(
   { underscored: true }
 );
 
-Question.prototype.answers = function() {
-  const answers = [...this.correct_answer, this.incorrect_answers];
-  return chance.shuffle(answers);
-};
 
 module.exports = Question;
