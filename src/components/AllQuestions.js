@@ -33,7 +33,6 @@ export default class AllQuestionsChart extends Component {
       ]
     ];
     this.state.allQuestions.map(question => {
-      console.log(question.id);
       dataArr.push([
         `question # ${question.id}`,
         question.answered_correctly,
