@@ -17,12 +17,13 @@ class Checkout extends React.Component {
       state: '',
       zip: '',
       email: '',
-      bar: {},
-      endOfMembershipDate: {},
+      bar: this.props.bar ? this.props.bar : '',
+      // id: this.state.bar.id ? this.state.bar.id : '',
+      endOfMembershipDate: this.props.bar ? this.props.bar.endOfMembershipDate : 'not a member yet',
       payment: false,
       errors: {}
     };
-    this.whoAmI = this.whoAmI.bind(this);
+    // this.whoAmI = this.whoAmI.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handlePaymentChange = this.handlePaymentChange.bind(this);
@@ -60,21 +61,15 @@ class Checkout extends React.Component {
       }
     };
   }
-  componentDidMount(){
-    this.whoAmI();
-  }
+  componentWillMount() {
+    this.setState({bar: this.props.bar});
 
-  componentWillReceiveProps(){
-    this.whoAmI();
   }
-
-  whoAmI() {
-    const token = localStorage.getItem('token');
-    if (token) {
-      const bar = jwt.verify(token, 'untappedpotential');
-      axios.post(`/v1/bars/${bar.id}`, bar)
-      .then(res => res.data)
-      .then(_bar => this.setState({ _bar }));
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.bar) {
+      this.setState({
+        bar: nextProps.bar
+      });
     }
   }
 
@@ -93,14 +88,21 @@ class Checkout extends React.Component {
     if (Object.keys(errors).length) {
       return;
     }
-    const name = `${this.state.billingFirstName} ${this.state.billingLastName}`;
+    const name = `${this.state.billingFirstName} ${this.state.billingLastName}`;  
+    
+    const addMonthToNow = moment().add(1, 'months').format('LL').toString();    
+    const addMonthToExpirationDate = moment(this.state.endOfMembershipDate).add(1, 'months').format('LL').toString();
+    const timeAddition = moment().isBefore(this.state.endOfMembershipDate) ? addMonthToExpirationDate : addMonthToNow;
 
     this.props.stripe.createToken({type: 'card', name })
-      .then(token => axios.post('/v1/checkout', { token: token.token.id, amount: 1000}))
-      // .then(() => {
-      //   axios.put(`/v1/bars/${this.state.bar.id}`, {id: this.state.bar.id, endOfMembershipDate: this.state.endOfMembershipDate});
-      // })
-      .then(() => this.setState({ endOfMembershipDate: moment().add(1, 'months')}))
+      .then(token => axios.post('/v1/checkout', { token: token.token.id, amount: 1000}))      
+      .then(() => {
+        axios.put(`/v1/bars/${this.state.bar.id}`, {endOfMembershipDate: timeAddition})
+        .then(() => this.setState({ endOfMembershipDate: timeAddition}))
+        .then(() => console.log('history is:', this.props.history))
+        .then(() => this.props.history.push('/'))
+        .catch(err => console.log(err));
+      });
     }
 
   handleChange(event) {
@@ -108,23 +110,30 @@ class Checkout extends React.Component {
   }
 
   handlePaymentChange(event) {
-    this.setState({ payment: event.complete });  
+    this.setState({ payment: event.complete });
   }
+  
   render() {
-    const { bar, billingFirstName, billingLastName, firstName, lastName, address, city, state, zip, email,endOfMembershipDate, errors } = this.state;
+    const { bar, billingFirstName, billingLastName, firstName, lastName, address, city, state, zip, email, endOfMembershipDate, errors } = this.state;
     
     if (!bar) return null;
-    // console.log(moment().add(1, 'months').format());
-    // if(endOfMembershipDate !== {}) {
-    //   const endDate = endOfMembershipDate.format();
-    // }
-    // console.log('endDate is:', endDate);
-    console.log('endOfMembershipDate is:', endOfMembershipDate.toString());
-    
+    // if (!endOfMembershipDate) return null;
+    // console.log('this.props:', this.props);
+    // console.log('endOfMembershipDate is:', typeof endOfMembershipDate);
+    // console.log('bar is:', bar);
+    // const addMonthToNow = moment().add(1, 'months').format('LL').toString();    
+    // const addMonthToExpirationDate = moment(this.props.bar.endOfMembershipDate)
+    // //.add(1, 'months').format('LL').toString();
+    // const timeAddition = moment().isBefore(this.state.endOfMembershipDate) ? addMonthToExpirationDate : addMonthToNow;
+    // console.log('addMonthToNow is:', addMonthToNow);
+    // console.log('addMonthToExpirationDate is', addMonthToExpirationDate);
+    // console.log('timeAddition is:', timeAddition);
+  
     return (
       <div>
+      {/*<p>End of membership date: {endOfMembershipDate}</p>*/}
         {
-          endOfMembershipDate ? (<p>No membership</p>) : (<p>Membership end date: {endOfMembershipDate.toString()}</p>)
+          endOfMembershipDate !== "Invalid date" && endOfMembershipDate !== null ? (<p>Cheers!  Your membership end date is {endOfMembershipDate}</p>) : (<p>Buy a membership!</p>)
         }
         <form onSubmit={ event => this.handleSubmit(event, bar.id) }>
           <h2 className='header'>Billing Information</h2>

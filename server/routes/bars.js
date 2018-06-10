@@ -25,7 +25,7 @@ router.put('/:id', (req, res, next) => {
       return bar.save();
     })
     .then( bar => res.send(bar))
-    .catch(next);
+    .catch(err => console.log(err));
 });
 
 module.exports = router;

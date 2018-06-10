@@ -80,7 +80,7 @@ class App extends Component {
                 <Route path="/games/past" exact component={PastGames} />
                 <Route path="/stats/" exact component={Stats} />
                 <Route path="/scores" exact component={Scores} />
-                <Route path="/checkout" component={ Checkout } />
+                <Route path="/checkout" exact render={({history}) => <Checkout bar={ bar } history={history} /> } />
               </Switch>
             ) : (
               <Route path="/" render={({history}) => <Login login={this.login} history={history} />} />

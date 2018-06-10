@@ -19,7 +19,7 @@ const Bar = conn.define('bar',
       allowNull: false,
     },
     endOfMembershipDate: {
-      type: Sequelize.DATE
+      type: Sequelize.STRING
     },
     latitude: Sequelize.STRING,
     longitude: Sequelize.STRING
