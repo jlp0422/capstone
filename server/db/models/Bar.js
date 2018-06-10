@@ -18,9 +18,12 @@ const Bar = conn.define('bar',
       type: Sequelize.STRING,
       allowNull: false,
     },
+    endOfMembershipDate: {
+      type: Sequelize.STRING
+    },
     latitude: Sequelize.STRING,
     longitude: Sequelize.STRING
-  },{ underscored: true }
+  }, { underscored: true }
 );
 
 // add back before start
