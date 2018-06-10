@@ -2,6 +2,7 @@
 const axios = require('axios')
 const Game = require('./server/db/models/Game')
 const Team = require('./server/db/models/Team')
+const Question = require('./server/db/models/Question');
 const devices = {}
 
 const sock = (io) => {
@@ -45,7 +46,7 @@ const sock = (io) => {
             })
             .then(_teams => io.to(bar_id).emit('game started', _teams))
         })
-        return axios.get('https://untapped-trivia.herokuapp.com/v1/questions')
+        axios.get('https://untapped-trivia.herokuapp.com/v1/questions')
           .then(res => res.data.results)
           .then(questions => {
             console.log('questions: ', questions)
