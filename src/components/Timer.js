@@ -137,7 +137,8 @@ class Timer extends React.Component {
       return (
         <div id='timer' className={ isQuestionActive ? questionTimer > 3 ? 'good' : questionTimer === 0 ? 'warning' : 'warning-animate' : 'wait' }>
           <div className='banner-question'>Question { (index * 1) + 1 }</div>
-            { isQuestionActive ? (
+            {
+              isQuestionActive ? (
                 <div className='question-time'>00:{ questionTimer < 10 ? `0${questionTimer}` : questionTimer }</div>
               ) : (
                 <div className='wait-time'>{index < 9 ? ('Next question in... :') : ('Last question... :') }{ waitTimer < 10 ? `0${waitTimer}` : waitTimer }</div>
