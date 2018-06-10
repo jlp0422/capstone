@@ -26,6 +26,8 @@ const sock = (io) => {
 
     // team choosing team name
     socket.on('choose team name', ({ name, bar_id, team }) => {
+      console.log('****** team name: ', name)
+      console.log('****** team id: ', team)
       axios.put(`https://untapped-trivia.herokuapp.com/v1/teams/${team}`, { team_name: name })
       .then(() => io.to(bar_id).emit('team register', name))
     });
