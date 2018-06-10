@@ -49,7 +49,6 @@ class App extends Component {
       axios.get(`/v1/bars/${token.id}`)
         .then(res => res.data)
         .then(bar => {
-          console.log(bar)
           if (moment(bar.endOfMembershipDate) > moment()) {
             localStorage.setItem('validMembership', 'true')
           }
