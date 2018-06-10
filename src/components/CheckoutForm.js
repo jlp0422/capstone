@@ -1,10 +1,8 @@
 import React from 'react';
-// import { Link } from 'react-router-dom';
 import { injectStripe, CardElement } from 'react-stripe-elements';
 import axios from 'axios';
 import moment from 'moment';
 import jwt from 'jsonwebtoken';
-const charge = require('./stripe');
 
 class Checkout extends React.Component {
   constructor(props) {
@@ -20,7 +18,7 @@ class Checkout extends React.Component {
       zip: '',
       email: '',
       bar: {},
-      endOfMembershipDate: '',
+      endOfMembershipDate: {},
       payment: false,
       errors: {}
     };
@@ -28,7 +26,6 @@ class Checkout extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handlePaymentChange = this.handlePaymentChange.bind(this);
-
 
     this.validators = {
       billingFirstName: value => {
@@ -97,12 +94,14 @@ class Checkout extends React.Component {
       return;
     }
     const name = `${this.state.billingFirstName} ${this.state.billingLastName}`;
+
     this.props.stripe.createToken({type: 'card', name })
-      .then(() => this.setState({ endOfMembershipDate: moment().add(1, 'months')})  //figure out date object
-      .then(() => {
-        axios.put(`/v1/bars/${this.state.bar.id}`, this.state.bar.endOfMembershipDate);
-      })
-    );}
+      .then(token => axios.post('/v1/checkout', { token: token.token.id, amount: 1000}))
+      // .then(() => {
+      //   axios.put(`/v1/bars/${this.state.bar.id}`, {id: this.state.bar.id, endOfMembershipDate: this.state.endOfMembershipDate});
+      // })
+      .then(() => this.setState({ endOfMembershipDate: moment().add(1, 'months')}))
+    }
 
   handleChange(event) {
     this.setState({ [event.target.name]: event.target.value });
@@ -115,11 +114,17 @@ class Checkout extends React.Component {
     const { bar, billingFirstName, billingLastName, firstName, lastName, address, city, state, zip, email,endOfMembershipDate, errors } = this.state;
     
     if (!bar) return null;
+    // console.log(moment().add(1, 'months').format());
+    // if(endOfMembershipDate !== {}) {
+    //   const endDate = endOfMembershipDate.format();
+    // }
+    // console.log('endDate is:', endDate);
+    console.log('endOfMembershipDate is:', endOfMembershipDate.toString());
     
     return (
       <div>
         {
-          endOfMembershipDate ? (<p>Signed Up!</p>) : <p>No membership</p>
+          endOfMembershipDate ? (<p>No membership</p>) : (<p>Membership end date: {endOfMembershipDate.toString()}</p>)
         }
         <form onSubmit={ event => this.handleSubmit(event, bar.id) }>
           <h2 className='header'>Billing Information</h2>
@@ -131,8 +136,8 @@ class Checkout extends React.Component {
             <input name='billingLastName' value={ billingLastName } className='element' onChange={ this.handleChange } placeholder='Billing Last Name' />
             <p className='error'>{ errors.billingFirstName }</p>
           </div>
-          <div>
-            <CardElement onChange={ this.handlePaymentChange } />
+          <div className='form-group'>
+            <CardElement className='CardElement element' onChange={ this.handlePaymentChange } />
             <p className='error'>{ errors.payment }</p>
           </div>
           <hr className='style-eight' />
