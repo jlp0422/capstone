@@ -90,6 +90,7 @@ class Timer extends React.Component {
     const { bar } = this.props
     let { questionTimer } = this.state
     if ((localStorage.getItem('index') * 1) < 10) {
+      console.log(questionTimer)
       if (questionTimer) {
         this.setState({
           questionTimer: questionTimer - 1,
