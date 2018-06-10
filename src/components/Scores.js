@@ -10,8 +10,7 @@ export default class Scores extends Component {
     }
   }
   componentDidMount() {
-    axios
-      .get('/v1/teams')
+    axios.get('/v1/teams')
       .then(res => res.data)
       .then(team => {
         this.setState({
@@ -37,19 +36,16 @@ export default class Scores extends Component {
             <h3>Score</h3>
           </div>
         </div>
-        {
-          teams.map(team => {
-            return (
-              <div key={team.id} className="grid-container">
-                <div className="grid-item-1">
-                   { team.team_name }
-                </div>
-                <div className="grid-item-2">
-                  { team.score }
-                </div>
+        { teams.map(team => (
+            <div key={team.id} className="grid-container">
+              <div className="grid-item-1">
+                  { team.team_name }
               </div>
-            );
-          })
+              <div className="grid-item-2">
+                { team.score }
+              </div>
+            </div>
+          ))
         }
       </div>
     );

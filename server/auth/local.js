@@ -44,7 +44,7 @@ router.post('/login', (req, res) => {
       }
       res.status(200).send({ token });
     })
-    .catch(err => res.status(404).send({ error: err }));
+    .catch(err => res.status(404).send({ error: err.response }));
 });
 
 module.exports = router;

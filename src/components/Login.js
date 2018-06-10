@@ -30,14 +30,14 @@ export default class Login extends Component {
     ev.preventDefault();
     if ( signup ) {
       const randomNum = Math.floor(Math.random() * 10000)
-      const newId = randomNum > 1000 ? String(randomNum) : `0${randomNum}` 
+      const newId = randomNum > 1000 ? String(randomNum) : `0${randomNum}`
       socket.emit('bar login', newId)
-      axios.post('/auth/register', { 
-        name, 
-        id: newId, 
-        password: hashPassword, 
-        email, 
-        address: { street, city, state, zip } 
+      axios.post('/auth/register', {
+        name,
+        id: newId,
+        password: hashPassword,
+        email,
+        address: { street, city, state, zip }
       })
       .then(res => res.data)
       .then(user => this.props.login(user))
@@ -87,7 +87,7 @@ export default class Login extends Component {
                 className='form-control login-input mb-3' />
               <input
                 onChange={(ev) => this.setState({ street: ev.target.value })}
-                placeholder='Street Addres'
+                placeholder='Street Address'
                 className='form-control login-input mb-3' />
               <div className='form-row login-input mb-3'>
                 <div className='col-7 login-col-l'>
@@ -132,9 +132,6 @@ export default class Login extends Component {
             :
             <div>
               <input
-                type='number'
-                max='9999'
-                min='1000'
                 onChange={(ev) => this.setState({ id: ev.target.value })}
                 placeholder='Bar ID'
                 className='form-control login-input mb-3' />

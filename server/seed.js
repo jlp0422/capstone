@@ -7,9 +7,7 @@ const faker = require('faker');
 
 const createTeam = game => {
   return Team.create({
-    team_name: `${chance.capitalize(
-      faker.commerce.color()
-    )} ${chance.animal()}s`,
+    team_name: `${chance.capitalize(faker.commerce.color())} ${chance.animal()}s`,
     email: chance.email(),
     score: chance.integer({ min: 0, max: 100 })
   })
@@ -43,7 +41,7 @@ const createGames = () => {
     ]);
   });
 };
-const createQuestions = num => {
+const createQuestions = (game) => {
   return axios
     .get('https://opentdb.com/api.php?amount=10')
     .then(res => res.data.results)
@@ -57,7 +55,7 @@ const createQuestions = num => {
           difficulty: question.difficulty,
           answered_correctly: chance.integer({ min: 0, max: 40 }),
           category: question.category
-        }).then(question => question.setGame(num));
+        }).then(question => question.setGame(game));
       });
     });
 };
@@ -93,6 +91,7 @@ const seed = () => {
       .catch(err => console.log(err));
   });
 };
+
 
 conn
   .sync({ force: true })

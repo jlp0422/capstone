@@ -5,6 +5,7 @@ import CompareGamesChart from './charts/CompareGames';
 import GameScoreChart from './charts/GameScoreChart';
 import GeoChart from './charts/GeoChart';
 
+
 export default class Stats extends Component {
   constructor() {
     super();
@@ -16,10 +17,12 @@ export default class Stats extends Component {
     this.gameState = this.gameState.bind(this);
   }
   gameState() {
+
     this.setState({ game: !this.state.game, games: false });
   }
   gamesState() {
     this.setState({ games: !this.state.games, game: false });
+
   }
   render() {
     const { games, game } = this.state;
