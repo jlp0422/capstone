@@ -1,5 +1,8 @@
 const path = require('path');
+const Dotenv = require('dotenv-webpack');
+
 module.exports = {
+  plugins: [new Dotenv()],
   devtool: 'source-maps',
   entry: './src/index.js',
   output: {
@@ -13,9 +16,9 @@ module.exports = {
         exclude: /node_modules/,
         loader: 'babel-loader',
         query: {
-          presets: [ 'env', 'react' ]
+          presets: ['env', 'react']
         }
       }
     ]
   }
-}
+};

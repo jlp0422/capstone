@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import QuestionsChart from './QuestionsInAGame';
-import AllQuestionsChart from './AllQuestions';
-import CompareGamesChart from './CompareGames';
+import QuestionsChart from './charts/QuestionsInAGame';
+import AllQuestionsChart from './charts/AllQuestions';
+import CompareGamesChart from './charts/CompareGames';
+import GameScoreChart from './charts/GameScoreChart';
+import GeoChart from './charts/GeoChart';
 
 
 export default class Stats extends Component {
@@ -30,9 +32,10 @@ export default class Stats extends Component {
         <button onClick={() => gameState()}>Last game stats on/off</button>
         <button onClick={() => gamesState()}>all games stats on/off</button>
         {game && <QuestionsChart />}
+        {game && <GameScoreChart />}
         {games && <AllQuestionsChart />}
         {games && <CompareGamesChart />}
-
+        {<GeoChart />}
       </div>
     );
   }

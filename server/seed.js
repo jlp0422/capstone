@@ -9,8 +9,14 @@ const createTeam = game => {
   return Team.create({
     team_name: `${chance.capitalize(faker.commerce.color())} ${chance.animal()}s`,
     email: chance.email(),
-    score: chance.integer({ min: 0, max: 10 })
-  }).then(team => team.setGame(game));
+    score: chance.integer({ min: 0, max: 100 })
+  })
+    .then(team => team.setGame(game))
+    .then(team => {
+      return Bar.findAll().then(bars => {
+        team.setBar(bars[Math.ceil(Math.random() * bars.length - 1)]);
+      });
+    });
 };
 
 const populateTeams = game => {
@@ -19,13 +25,24 @@ const populateTeams = game => {
 
 
 const createGames = () => {
-  return Promise.all([
-    Game.create(),
-    Game.create({ active: false }),
-    Game.create({ active: false })
-  ]);
+  return Bar.findAll().then(bars => {
+    return Promise.all([
+      Game.create({
+        active: false,
+        bar_id: bars[Math.ceil(Math.random() * bars.length - 1)].id
+      }),
+      Game.create({
+        active: false,
+        bar_id: bars[Math.ceil(Math.random() * bars.length - 1)].id
+      }),
+      Game.create({
+        active: false,
+        bar_id: bars[Math.ceil(Math.random() * bars.length - 1)].id
+      })
+    ]);
+  });
 };
-const createQuestions = () => {
+const createQuestions = (game) => {
   return axios
     .get('https://opentdb.com/api.php?amount=10')
     .then(res => res.data.results)
@@ -39,7 +56,7 @@ const createQuestions = () => {
           difficulty: question.difficulty,
           answered_correctly: chance.integer({ min: 0, max: 40 }),
           category: question.category
-        }).then(question => question.setGame(Math.ceil(Math.random() * 3)));
+        }).then(question => question.setGame(game));
       });
     });
 };
@@ -50,25 +67,25 @@ const createBar = () => {
     email: chance.email(),
     password: hashPassword,
     name: `${chance.animal()} Town`,
-    latitude: chance.latitude(),
-    longitude: chance.longitude()
+    latitude: chance.latitude({ min: 29, max: 64.85694 }),
+    longitude: chance.longitude({ min: -115, max: -85 })
   });
 };
 
 const seed = () => {
-  return Promise.resolve(createGames()).then(games => {
-    return Promise.all([
-      populateTeams(Math.ceil(Math.random() * games.length)),
-      populateTeams(Math.ceil(Math.random() * games.length)),
-      populateTeams(Math.ceil(Math.random() * games.length))
-    ])
-      .then(() => {
+  return Promise.all([createBar(), createBar(), createBar()]).then(() => {
+    return Promise.resolve(createGames())
+      .then(games => {
         return Promise.all([
-          createQuestions(),
-          createQuestions(),
-          createQuestions()
+          createQuestions(1),
+          createQuestions(2),
+          createQuestions(3)
         ]).then(() => {
-          return Promise.all([createBar(), createBar(), createBar()]);
+          return Promise.all([
+            populateTeams(Math.ceil(Math.random() * games.length)),
+            populateTeams(Math.ceil(Math.random() * games.length)),
+            populateTeams(Math.ceil(Math.random() * games.length))
+          ]);
         });
       })
 

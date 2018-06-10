@@ -4,7 +4,7 @@ import socket from '../../socket-client';
 
 class Home extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       teams: [],
     }
@@ -24,7 +24,7 @@ class Home extends React.Component {
   }
 
   componentWillUnmount() {
-    socket.off('team register')
+    socket.off('team register');
   }
 
   onStartGame() {
@@ -62,9 +62,8 @@ class Home extends React.Component {
         </div>
         <br/>
       </div>
-    )
+    );
   }
 }
 
 export default Home;
-
