@@ -27,7 +27,7 @@ const createGames = () => {
   return Bar.findAll().then(bars => {
     return Promise.all([
       Game.create({
-        active: false,
+        active: true,
         bar_id: bars[Math.ceil(Math.random() * bars.length - 1)].id
       }),
       Game.create({
