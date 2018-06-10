@@ -23,7 +23,6 @@ const populateTeams = game => {
   return Promise.all([createTeam(game), createTeam(game), createTeam(game)]);
 };
 
-
 const createGames = () => {
   return Bar.findAll().then(bars => {
     return Promise.all([
