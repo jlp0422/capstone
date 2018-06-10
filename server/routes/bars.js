@@ -1,9 +1,9 @@
 const router = require('express').Router();
-const { Bar, Team } = require('../db').models;
+const { Bar, Team, Game } = require('../db').models;
 
 router.get('/', (req, res, next) => {
   Bar.findAll({
-    include: [{ model: Team }]
+    include: [{ model: Team }, { model: Game }]
   }).then(bars => res.send(bars));
 });
 

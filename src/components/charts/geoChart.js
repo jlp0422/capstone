@@ -18,7 +18,7 @@ export default class GeoChart extends Component {
 
   geoMapChart() {
     const { bars } = this.state;
-    let geoArr = [['City', 'Bar Name', 'Teams']];
+    let geoArr = [['City', 'Bar Name', 'Teams', 'games played']];
     bars.length
       ? bars.map(bar => {
           let tempArr = [];
@@ -35,7 +35,8 @@ export default class GeoChart extends Component {
                   tempArr.push(
                     addressTypes.long_name,
                     bar.name,
-                    bar.teams.length
+                    bar.teams.length,
+                    bar.games.length
                   );
                   geoArr.push(tempArr);
                 }
