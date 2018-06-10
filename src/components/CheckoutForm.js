@@ -18,12 +18,10 @@ class Checkout extends React.Component {
       zip: '',
       email: '',
       bar: this.props.bar ? this.props.bar : '',
-      // id: this.state.bar.id ? this.state.bar.id : '',
       endOfMembershipDate: this.props.bar ? this.props.bar.endOfMembershipDate : 'not a member yet',
       payment: false,
       errors: {}
     };
-    // this.whoAmI = this.whoAmI.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handlePaymentChange = this.handlePaymentChange.bind(this);
@@ -117,21 +115,9 @@ class Checkout extends React.Component {
     const { bar, billingFirstName, billingLastName, firstName, lastName, address, city, state, zip, email, endOfMembershipDate, errors } = this.state;
     
     if (!bar) return null;
-    // if (!endOfMembershipDate) return null;
-    // console.log('this.props:', this.props);
-    // console.log('endOfMembershipDate is:', typeof endOfMembershipDate);
-    // console.log('bar is:', bar);
-    // const addMonthToNow = moment().add(1, 'months').format('LL').toString();    
-    // const addMonthToExpirationDate = moment(this.props.bar.endOfMembershipDate)
-    // //.add(1, 'months').format('LL').toString();
-    // const timeAddition = moment().isBefore(this.state.endOfMembershipDate) ? addMonthToExpirationDate : addMonthToNow;
-    // console.log('addMonthToNow is:', addMonthToNow);
-    // console.log('addMonthToExpirationDate is', addMonthToExpirationDate);
-    // console.log('timeAddition is:', timeAddition);
-  
+ 
     return (
       <div>
-      {/*<p>End of membership date: {endOfMembershipDate}</p>*/}
         {
           endOfMembershipDate !== "Invalid date" && endOfMembershipDate !== null ? (<p>Cheers!  Your membership end date is {endOfMembershipDate}</p>) : (<p>Buy a membership!</p>)
         }

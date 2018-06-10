@@ -46,7 +46,7 @@ class Home extends React.Component {
     const { onStartGame } = this
     const { bar } = this.props
     console.log('bar is:', bar);
-    // console.log('bar.endOfMembershipDate is:', bar.endOfMembershipDate)
+
     return (
       <div className='home'>
         <h1> Cheers, { bar.name } </h1>
@@ -56,8 +56,6 @@ class Home extends React.Component {
             <p key={team}>{team}</p>
           )) : null
         }
- 
-        {/*<div><button onClick={ onStartGame }> Click to Start a Game </button></div>*/}
         <img className='home-img' width='500' height='500' src='/public/images/UTT-logo.svg' />
         <br/>
         {
@@ -65,11 +63,6 @@ class Home extends React.Component {
             <div><button onClick={ onStartGame }> Click to Start a Game </button></div>
           ) : (<h3>Please <Link to='/checkout'>sign up!</Link></h3>)
         }
-        {/*{
-          moment().isBefore(moment(bar.endOfMembershipDate)) ? (
-            <div><button onClick={ onStartGame }> Click to Start a Game </button></div>
-          ) : (<h3>Please <Link to='/checkout'>sign up!</Link></h3>)
-        }*/}
       </div>
     )
   }
