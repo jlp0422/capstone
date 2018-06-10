@@ -41,6 +41,7 @@ Game.startGame = function() {
         .then(question => question.setGame(game))
       })
     })
+    .catch(err => console.err(err))
   })
   .then(game => {
     return game
