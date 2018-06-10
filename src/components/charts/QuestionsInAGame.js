@@ -40,7 +40,7 @@ export default class QuestionsChart extends Component {
       }
       return color;
     };
-    let arr = [
+    let chartArr = [
       [
         'Question Id',
         'Answered Correctly',
@@ -49,7 +49,7 @@ export default class QuestionsChart extends Component {
       ]
     ];
     this.state.questions.map(question =>
-      arr.push([
+      chartArr.push([
         `question # ${question.id}`,
         question.answered_correctly,
         getRandomColor(),
@@ -60,7 +60,7 @@ export default class QuestionsChart extends Component {
     google.charts.setOnLoadCallback(drawBasic);
 
     function drawBasic() {
-      var data = google.visualization.arrayToDataTable(arr);
+      var data = google.visualization.arrayToDataTable(chartArr);
 
       var options = {
         animation: {
