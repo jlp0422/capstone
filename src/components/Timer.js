@@ -40,7 +40,8 @@ class Timer extends React.Component {
       this.setState({
         waitTimer: waitTimer ? waitTimer * 1 : 10,
         questionTimer: questionTimer ? questionTimer * 1 : 10,
-        isPaused: false
+        isPaused: false,
+        isQuestionActive: true
       })
       this.onStartTimer()
     })
@@ -133,6 +134,7 @@ class Timer extends React.Component {
   render() {
     const { questionTimer, waitTimer, isQuestionActive, isPaused } = this.state
     const { onPause, onResume } = this;
+    console.log(this.state)
     const index = localStorage.getItem('index')
     if (!index || (index * 1) > 9) return null
       return (
