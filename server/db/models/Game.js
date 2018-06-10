@@ -19,12 +19,12 @@ const Game = conn.define(
   { underscored: true }
 );
 
-Game.prototype.getAllTeams = function(){
+Game.prototype.getAllTeams = function() {
   return Team.findAll({ where: { game_id: this.id }})
 }
 
-Game.startGame = function(){
-  Game.create()
+Game.startGame = function() {
+  return Game.create()
   .then((game) => {
     return axios.get('https://untapped-trivia.herokuapp.com/v1/questions')
     .then(res => res.data.results)
@@ -41,6 +41,9 @@ Game.startGame = function(){
         .then(question => question.setGame(game))
       })
     })
+  })
+  .then(game => {
+    return game
   })
 }
 
