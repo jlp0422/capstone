@@ -132,9 +132,6 @@ export default class Login extends Component {
             :
             <div>
               <input
-                type='number'
-                max='9999'
-                min='1000'
                 onChange={(ev) => this.setState({ id: ev.target.value })}
                 placeholder='Bar ID'
                 className='form-control login-input mb-3' />

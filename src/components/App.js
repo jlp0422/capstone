@@ -58,6 +58,8 @@ class App extends Component {
 
   login(user) {
     localStorage.setItem('token', user.token);
+    const index = localStorage.getItem('index') * 1
+    if (!index) localStorage.removeItem('index')
     this.setState({ loggedIn: true });
   }
 
