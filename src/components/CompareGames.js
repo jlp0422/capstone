@@ -25,14 +25,6 @@ export default class CompareGamesChart extends Component {
 
   questionGraph() {
     const { teams, games } = this.state;
-    const getRandomColor = () => {
-      var letters = '0123456789ABCDEF';
-      var color = '#';
-      for (var i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-      }
-      return color;
-    };
     let axisArr = [['Games']];
 
     teams.map(team => {
@@ -43,8 +35,7 @@ export default class CompareGamesChart extends Component {
     games.map(game => {
       let tempArr = [game.id.toString()];
       teams.map(team => {
-        console.log(axisArr);
-        team.game_id === game.id ? tempArr.push(team.score) : null;
+        team.game_id === game.id ? tempArr.push(team.score) : tempArr.push(0);
       });
       axisArr.push(tempArr);
     });
