@@ -11,6 +11,7 @@ const sock = (io) => {
 
     // user logging in (won't have bar id yet)
     socket.on('authenticate', (id) => {
+      console.log('***** user authenticated: ', id)
       io.emit('authenticated', id)
     });
 
