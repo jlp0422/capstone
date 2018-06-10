@@ -65,7 +65,7 @@ export default class CurrentGame extends Component {
     localStorage.setItem('index', this.state.index)
     socket.off('question timer')
     socket.off('wait timer')
-    socket.off('game started')
+    // socket.off('game started')
     socket.off('ready for next question')
   }
 

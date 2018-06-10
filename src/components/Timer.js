@@ -132,11 +132,11 @@ class Timer extends React.Component {
   render() {
     const { questionTimer, waitTimer, isQuestionActive, isPaused } = this.state
     const { onPause, onResume } = this;
-    const index = localStorage.getItem('index') * 1
-    if (!index || index > 9) return null
+    const index = localStorage.getItem('index')
+    if (!index || (index * 1) > 9) return null
       return (
         <div id='timer' className={ isQuestionActive ? questionTimer > 3 ? 'good' : questionTimer === 0 ? 'warning' : 'warning-animate' : 'wait' }>
-          <div className='banner-question'>Question { index + 1 }</div>
+          <div className='banner-question'>Question { (index * 1) + 1 }</div>
             { isQuestionActive ? (
                 <div className='question-time'>00:{ questionTimer < 10 ? `0${questionTimer}` : questionTimer }</div>
               ) : (
