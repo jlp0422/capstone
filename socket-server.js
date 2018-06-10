@@ -14,7 +14,7 @@ const sock = (io) => {
     socket.on('authenticate', (id) => {
       console.log('***** user authenticated: ', id)
       socket.join(`${id}`)
-      //io.to(`${id}`).emit('authenticated', { id, socket: socket.id })
+      io.to(`${id}`).emit('authenticated', { id, socket: socket.id })
       io.emit('authenticated', { id, socket: socket.id })
     });
 
@@ -124,7 +124,7 @@ const sock = (io) => {
 
     socket.on('disconnect', () => {
       delete devices[socket.id]
-      console.log('user has disconnected')
+      console.log('user has disconnected: ', socket.id)
     })
   })
 }
