@@ -7,11 +7,9 @@ const faker = require('faker');
 
 const createTeam = game => {
   return Team.create({
-    team_name: `${chance.capitalize(
-      faker.commerce.color()
-    )} ${chance.animal()}s`,
+    team_name: `${chance.capitalize(faker.commerce.color())} ${chance.animal()}s`,
     email: chance.email(),
-    score: chance.integer({ min: 0, max: 100 })
+    score: chance.integer({ min: 0, max: 10 })
   }).then(team => team.setGame(game));
 };
 
@@ -22,7 +20,7 @@ const populateTeams = game => {
 
 const createGames = () => {
   return Promise.all([
-    Game.create(),
+    Game.create({ active: false }),
     Game.create({ active: false }),
     Game.create({ active: false })
   ]);
