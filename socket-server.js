@@ -32,24 +32,24 @@ const sock = (io) => {
 
     // new game
     socket.on('start game', ({ bar_id, teams }) => {
-      console.log('teams: ', teams )
-      console.log('game started!')
+      console.log('*****teams: ', teams )
+      console.log('*******game started!')
       Game.create()
       .then(game => {
-        console.log('game: ', game)
+        console.log('********game: ', game)
         teams.map(team => {
-          console.log('team map: ', team)
+          console.log('*******team map: ', team)
           Team.findOne({ where: { team_name: team } })
             .then(_team => {
-              console.log('returned team', _team.get())
-              _team.game_id = game.id
+              console.log('*******returned team', _team.get())
+              console.log('****** bar id', bar_id)
+              _team.setGame(game)
             })
             .then(_teams => io.to(bar_id).emit('game started', _teams))
         })
         axios.get('https://untapped-trivia.herokuapp.com/v1/questions')
           .then(res => res.data.results)
           .then(questions => {
-            console.log('questions: ', questions)
             questions.map(question => {
               Question.create({
                 question: question.question,
