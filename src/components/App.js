@@ -39,11 +39,16 @@ class App extends Component {
   whoAmI() {
     const user = localStorage.getItem('token');
     if (user) {
+      console.log('user: ', user)
       const token = jwt.verify(user, 'untappedpotential');
+      console.log(token)
       axios.post(`/v1/bars/${token.id}`, token)
         .then(res => res.data)
         .then(bar => this.setState({ bar, loggedIn: true }))
         .then(() => socket.emit('bar login', token.id));
+      axios.get(`/v1/bars/${token.id}`)
+        .then(res => res.data)
+        .then(bar => console.log(bar))
     }
   }
 
@@ -62,7 +67,6 @@ class App extends Component {
 
   render() {
     const { bar, loggedIn } = this.state;
-
     const { whoAmI, logout } = this
     if (!bar.name) this.whoAmI()
     return (
