@@ -32,23 +32,15 @@ export default class CurrentGame extends Component {
     axios.get('/v1/games/active')
       .then(res => res.data)
       .then(game => {
-        console.log(game)
         axios.get(`/v1/games/${game.id}/teams`)
           .then(res => res.data)
-          .then(teams => {
-            console.log(teams)
-            this.setState({ teams })
-          })
+          .then(teams => this.setState({ teams }))
         axios.get(`/v1/games/${game.id}/questions`)
           .then(res => res.data)
-          .then(questions => {
-            console.log(questions)
-            this.setState({ questions })
-          });
+          .then(questions => this.setState({ questions }));
         return game
       })
       .then(game => {
-        console.log('game number 2: ', game)
         const { bar } = this.props
         setTimeout(() => socket.emit('send question', { index, question: this.state.questions[index], bar }), 100)
         socket.on('answer submitted', (info) => {
@@ -59,10 +51,7 @@ export default class CurrentGame extends Component {
           const { answers } = this.state
           this.setState({ answers: [...answers, info] })
         })
-        socket.on('game started', (teams) => {
-          console.log(teams)
-          this.setState({ questionTimer: 10, teams })
-        })
+        socket.on('game started', (teams) => this.setState({ questionTimer: 10, teams }))
         socket.on('ready for next question', () => this.onNextQuestion())
         socket.on('question timer', (questionTimer) => this.setState({ questionTimer }))
         socket.on('wait timer', (waitTimer) => this.setState({ waitTimer }))
@@ -113,7 +102,6 @@ export default class CurrentGame extends Component {
 
   render() {
     const { teams, questions, answers, finalScores } = this.state;
-    console.log('state questions:', questions)
     const { onRestartGame } = this;
     const index = localStorage.getItem('index') * 1
     return (
@@ -123,7 +111,6 @@ export default class CurrentGame extends Component {
             { index < 10 ? (
               <div>
                 {index === questions.length - 1 && <h1>Last Question!</h1>}
-
                 <div className="question">
                   <div
                     dangerouslySetInnerHTML={{
@@ -163,7 +150,7 @@ export default class CurrentGame extends Component {
         )}
         { index > 9 && <h3>Final Scores</h3> }
         { teams.length && (
-          <TeamsList scores={ finalScores } answers={answers} />
+          <TeamsList finalScores={ finalScores } answers={ answers } />
         )}
       </div>
     );

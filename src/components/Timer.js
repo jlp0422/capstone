@@ -40,7 +40,8 @@ class Timer extends React.Component {
       this.setState({
         waitTimer: waitTimer ? waitTimer * 1 : 10,
         questionTimer: questionTimer ? questionTimer * 1 : 10,
-        isPaused: false
+        isPaused: false,
+        isQuestionActive: true
       })
       this.onStartTimer()
     })

@@ -8,43 +8,42 @@ export default class PastGames extends Component {
     super();
     this.state = {
       pastGames: [],
+      teams: []
     };
   }
   componentDidMount() {
-    axios
-      .get('/v1/games')
+    axios.get('/v1/games')
       .then(res => res.data)
       .then(_games => _games.filter(game => game.active === false))
       .then(pastGames => this.setState({ pastGames }));
+    axios.get('/v1/teams')
+      .then(res => res.data)
+      .then(teams => this.setState({ teams }))
   }
   render() {
-    const { pastGames } = this.state;
+    const { pastGames, teams } = this.state;
+    if (!teams.length) return null
     return (
-      <div className="container">
-        <div className="grid-container">
-          <div className="grid-item-1">
-            <h3>Date</h3>
+      <div>
+        <div className='teams-list'>
+          <div className='team'>
+            <h3 className='team-name header'>Date</h3>
+            <h3 className='team-secondary header'># of Teams</h3>
           </div>
-          <div className="grid-item-2">
-            <h3>No. of Teams</h3>
-          </div>
-        </div>
-        {
-          pastGames.map(game => {
-            return (
-              <div key={game.id} className="grid-container">
-                <div className="grid-item-1">
-                  <Link to={`/pastgames/${game.id}`}>
-                    { moment(game.createdAt).format('mm:dd:yy') }
-                  </Link>
-                </div>
+          { pastGames.map(game => (
+            <div key={game.id}>
+              <div className="team">
+                <Link to={`/pastgames/${game.id}`}>
+                  {moment(game.createdAt).format('MMMM Do, YYYY')}
+                </Link>
                 <div className="grid-item-2">
-                  { game.num_of_teams }
+                  { teams.filter(team => team.game_id === game.id).length }
                 </div>
               </div>
-            );
-          })
-        }
+            </div>
+            ))
+          }
+        </div>
       </div>
     );
   }

@@ -17,7 +17,6 @@ const populateTeams = game => {
   return Promise.all([createTeam(game), createTeam(game), createTeam(game)]);
 };
 
-
 const createGames = () => {
   return Promise.all([
     Game.create(),
@@ -26,8 +25,7 @@ const createGames = () => {
   ]);
 };
 const createQuestions = () => {
-  return axios
-    .get('https://opentdb.com/api.php?amount=10')
+  return axios.get('https://opentdb.com/api.php?amount=10')
     .then(res => res.data.results)
     .then(questions => {
       questions.map(question => {
@@ -39,7 +37,8 @@ const createQuestions = () => {
           difficulty: question.difficulty,
           answered_correctly: chance.integer({ min: 0, max: 40 }),
           category: question.category
-        }).then(question => question.setGame(Math.ceil(Math.random() * 3)));
+        })
+        .then(question => question.setGame(Math.ceil(Math.random() * 3)));
       });
     });
 };
