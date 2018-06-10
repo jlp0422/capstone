@@ -20,11 +20,17 @@ class Checkout extends React.Component {
       bar: this.props.bar ? this.props.bar : '',
       endOfMembershipDate: this.props.bar ? this.props.bar.endOfMembershipDate : 'not a member yet',
       payment: false,
+      amount: -1,
+      months: -1,
+      selectedPlan: '',
       errors: {}
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handlePaymentChange = this.handlePaymentChange.bind(this);
+    this.oneMonth = this.oneMonth.bind(this);
+    this.threeMonths = this.threeMonths.bind(this);
+    this.oneYear = this.oneYear.bind(this);
 
     this.validators = {
       billingFirstName: value => {
@@ -71,6 +77,21 @@ class Checkout extends React.Component {
     }
   }
 
+  oneMonth(ev) {
+    ev.preventDefault();
+    this.setState({amount: 5, months: 1, selectedPlan: '1 Month of Membership'});
+  }
+
+  threeMonths(ev) {
+    ev.preventDefault();
+    this.setState({amount: 10, months: 3, selectedPlan: '3 Months of Membership'});
+  }
+
+  oneYear(ev) {
+    ev.preventDefault();
+    this.setState({amount: 30, months: 12, selectedPlan: '1 Year of Membership'});
+  }
+
   handleSubmit(event) {
     event.preventDefault();
     const errors = Object.keys(this.validators).reduce((memo, key) => {
@@ -88,12 +109,12 @@ class Checkout extends React.Component {
     }
     const name = `${this.state.billingFirstName} ${this.state.billingLastName}`;  
     
-    const addMonthToNow = moment().add(1, 'months').format('LL').toString();    
-    const addMonthToExpirationDate = moment(this.state.endOfMembershipDate).add(1, 'months').format('LL').toString();
+    const addMonthToNow = moment().add(this.state.months, 'months').format('LL').toString();    
+    const addMonthToExpirationDate = moment(this.state.endOfMembershipDate).add(this.state.months, 'months').format('LL').toString();
     const timeAddition = moment().isBefore(this.state.endOfMembershipDate) ? addMonthToExpirationDate : addMonthToNow;
 
     this.props.stripe.createToken({type: 'card', name })
-      .then(token => axios.post('/v1/checkout', { token: token.token.id, amount: 1000}))      
+      .then(token => axios.post('/v1/checkout', { token: token.token.id, amount: this.state.amount}))
       .then(() => {
         axios.put(`/v1/bars/${this.state.bar.id}`, {endOfMembershipDate: timeAddition})
         .then(() => this.setState({ endOfMembershipDate: timeAddition}))
@@ -130,6 +151,18 @@ class Checkout extends React.Component {
           <div className='form-group'>
             <input name='billingLastName' value={ billingLastName } className='element' onChange={ this.handleChange } placeholder='Billing Last Name' />
             <p className='error'>{ errors.billingFirstName }</p>
+          </div>
+          <div className='form-group'>
+            <p>
+              <button className='btn btn-primary btn-sm' onClick={ oneMonth }>1 month - $5.00</button>
+              <button className='btn btn-primary btn-sm' onClick={ threeMonths }>3 months - $10.00 </button>
+              <button className='btn btn-primary btn-sm' onClick={ oneYear }>1 year - $30.00</button>
+            </p>
+          </div>
+          <div className='form-group'>
+            <p>
+              {this.state.selectedPlan}
+            </p>
           </div>
           <div className='form-group'>
             <CardElement className='CardElement element' onChange={ this.handlePaymentChange } />
