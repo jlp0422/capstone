@@ -102,14 +102,17 @@ const sock = (io) => {
     // game over
     socket.on('game over', (bar) => {
       return axios.get('https://untapped-trivia.herokuapp.com/v1/games/active')
-        .then(res => res.data.id)
-        .then(gameId => {
-          Game.findById(gameId)
+        .then(res => res.data)
+        .then(game => {
+          Game.findById(game.id)
           .then(game => {
-            game.getAllTeams()
             game.update({ active: false })
+            game.getAllTeams()
           })
-          .then(teams => io.to(bar.id).emit('game has ended', teams))
+          .then(teams => {
+            console.log('game teams: ', teams)
+            io.to(bar.id).emit('game has ended', teams)
+          })
         })
     })
 

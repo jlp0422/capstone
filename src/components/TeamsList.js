@@ -3,9 +3,10 @@ import React from 'react';
 
 const TeamsList = (props) => {
   // console.log('teams list props: ', props)
-  const { answers, showAll, teams } = props;
+  const { answers, showAll, teams, finalScores } = props;
   // console.log('scores: ', scores)
   // console.log('mapper: ', mapper)
+  console.log(finalScores)
   return (
     <div className='teams-list'>
       <div className='team'>
