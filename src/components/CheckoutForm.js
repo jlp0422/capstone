@@ -24,6 +24,7 @@ class Checkout extends React.Component {
       selectedPlan: '',
       errors: {}
     };
+    
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handlePaymentChange = this.handlePaymentChange.bind(this);
