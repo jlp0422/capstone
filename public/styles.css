@@ -340,7 +340,6 @@ body {
 	grid-column: 2;
 }
 
-/*added by Ed */
 .element {
   display: block;
   margin: 10px auto 20px 0;
@@ -357,5 +356,10 @@ body {
 }
 
 .planButton {
-	margin: 5px 20px 5px 20px;
+	margin: 5px 30px 5px 0;
+}
+
+.alert {
+	font-weight: bold;
+	color: red;
 }
