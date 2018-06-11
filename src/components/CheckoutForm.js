@@ -2,7 +2,6 @@ import React from 'react';
 import { injectStripe, CardElement } from 'react-stripe-elements';
 import axios from 'axios';
 import moment from 'moment';
-import jwt from 'jsonwebtoken';
 
 class Checkout extends React.Component {
   constructor(props) {
@@ -22,6 +21,7 @@ class Checkout extends React.Component {
       payment: false,
       errors: {}
     };
+    
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handlePaymentChange = this.handlePaymentChange.bind(this);

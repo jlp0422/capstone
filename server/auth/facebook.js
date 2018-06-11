@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const FacebookStrategy = require('');
+const FacebookStrategy = require('passport-facebook');
 const passport = require('passport');
 const socket = require('../../socket-client');
 const Team = require('../db/models/Team');
