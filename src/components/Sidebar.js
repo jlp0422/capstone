@@ -5,8 +5,7 @@ const Sidebar = () => {
   return (
     <div className="sidebar container-fluid">
       <NavLink to="/" exact>
-        {' '}
-        Home{' '}
+        Home
       </NavLink>
       <NavLink to="/categories"> Categories </NavLink>
       <NavLink to="/teams"> Teams </NavLink>

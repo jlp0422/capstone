@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import bcrypt from 'bcryptjs';
 import socket from '../../socket-client';
+// import moment from 'moment';
 
 export default class Login extends Component {
   constructor(props){
@@ -37,7 +38,8 @@ export default class Login extends Component {
         id: newId,
         password: hashPassword,
         email,
-        address: { street, city, state, zip }
+        address: { street, city, state, zip },
+        //endOfMembershipDate: moment().add(1, 'months').format('LL').toString()
       })
       .then(res => res.data)
       .then(user => this.props.login(user))

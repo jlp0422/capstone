@@ -64,6 +64,13 @@ class Home extends React.Component {
             Please <Link to="/checkout">sign up!</Link>
           </h3>
         )}
+        {/*{
+          bar.endOfMembershipDate !== "Invalid date" && bar.endOfMembershipDate !== null ? (
+            
+              <p>Membership expires on bar.endOfMembershipDate</p> 
+            
+          ) : (null)
+        }*/}
       </div>
     );
   }

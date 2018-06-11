@@ -3,7 +3,7 @@ import QuestionsChart from './charts/QuestionsInAGame';
 import AllQuestionsChart from './charts/AllQuestions';
 import CompareGamesChart from './charts/CompareGames';
 import GameScoreChart from './charts/GameScoreChart';
-import GeoChart from './charts/GeoChart';
+import GeoChart from './charts/geoChart';
 
 export default class Stats extends Component {
   constructor() {

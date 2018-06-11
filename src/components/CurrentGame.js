@@ -150,7 +150,7 @@ export default class CurrentGame extends Component {
         )}
         { index > 9 && <h3>Final Scores</h3> }
         { teams.length && (
-          <TeamsList finalScores={ finalScores } answers={ answers } />
+          <TeamsList finalScores={ finalScores } answers={ answers } index={ index } />
         )}
       </div>
     );

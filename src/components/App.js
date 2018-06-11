@@ -3,6 +3,7 @@ import Login from './Login';
 import { Route, HashRouter as Router, Switch } from 'react-router-dom';
 import jwt from 'jsonwebtoken';
 import axios from 'axios';
+import moment from 'moment';
 import socket from '../../socket-client';
 import Categories from './Categories';
 import CurrentGame from './CurrentGame';
@@ -47,6 +48,14 @@ class App extends Component {
         .then(res => res.data)
         .then(bar => this.setState({ bar, loggedIn: true }))
         .then(() => socket.emit('bar login', token.id));
+      axios
+        .get(`/v1/bars/${token.id}`)
+        .then(res => res.data)
+        .then(bar => {
+          if (moment(bar.endOfMembershipDate) > moment()) {
+            localStorage.setItem('validMembership', 'true');
+          }
+        });
     }
   }
 
@@ -58,14 +67,13 @@ class App extends Component {
 
   login(user) {
     localStorage.setItem('token', user.token);
-    // const index = localStorage.getItem('index') * 1
-    // if (!index) localStorage.removeItem('index')
+    const index = localStorage.getItem('index');
+    if (index === '10' || index === '0') localStorage.removeItem('index');
     this.setState({ loggedIn: true });
   }
 
   render() {
     const { bar, loggedIn } = this.state;
-
     const { whoAmI, logout } = this;
     if (!bar.name) this.whoAmI();
     return (
