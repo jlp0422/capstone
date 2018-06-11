@@ -6,6 +6,7 @@ export default class GeoChart extends Component {
     super();
     this.state = {
       bars: []
+      // geoArr: [['City', 'Bar Name', 'Teams']]
     };
   }
   componentDidMount() {
@@ -17,12 +18,10 @@ export default class GeoChart extends Component {
 
   geoMapChart() {
     const { bars } = this.state;
-
-    let geoArr = [['City', 'Bar Name', 'Teams'], ['Brooklyn', 'edie', 5]];
-    let tempArr = [];
+    let geoArr = [['City', 'Bar Name', 'Teams']];
     bars.length
       ? bars.map(bar => {
-          console.log(bar.latitude, bar.longitude);
+          let tempArr = [];
           return axios
             .get(
               `https://maps.googleapis.com/maps/api/geocode/json?latlng=${
@@ -30,13 +29,20 @@ export default class GeoChart extends Component {
               },${bar.longitude}&key=${process.env.MAPS_KEY}`
             )
             .then(res => res.data)
-            .then(data => console.log(data));
+            .then(data => {
+              data.results[0].address_components.map(addressTypes => {
+                if (addressTypes.types[0] === 'administrative_area_level_1') {
+                  tempArr.push(
+                    addressTypes.long_name,
+                    bar.name,
+                    bar.teams.length
+                  );
+                  geoArr.push(tempArr);
+                }
+              });
+            });
         })
       : null;
-    //data.results[0].address_components.map(data => {
-    //   if (data.types.length === 3) console.log(data.long_name);
-    // })
-
     google.charts.load('current', {
       packages: ['geochart'],
       mapsApiKey: process.env.MAP_JS_KEY
@@ -44,6 +50,7 @@ export default class GeoChart extends Component {
     google.charts.setOnLoadCallback(drawMap);
 
     function drawMap() {
+      console.log(geoArr);
       var data = google.visualization.arrayToDataTable(geoArr);
 
       var options = {
@@ -52,7 +59,7 @@ export default class GeoChart extends Component {
         colorAxis: { colors: ['green', 'blue'] },
         animation: {
           startup: true,
-          duration: 5000,
+          duration: 10000,
           easing: 'inAndOut'
         }
       };
