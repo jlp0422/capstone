@@ -7,7 +7,9 @@ const faker = require('faker');
 
 const createTeam = game => {
   return Team.create({
-    team_name: `${chance.capitalize(faker.commerce.color())} ${chance.animal()}s`,
+    team_name: `${chance.capitalize(
+      faker.commerce.color()
+    )} ${chance.animal()}s`,
     email: chance.email(),
     score: chance.integer({ min: 0, max: 100 })
   })
@@ -27,6 +29,13 @@ const createGames = () => {
   return Bar.findAll().then(bars => {
     return Promise.all([
       Game.create({
+        bar_id: bars[Math.ceil(Math.random() * bars.length - 1)].id
+      }),
+      Game.create({
+        active: false,
+        bar_id: bars[Math.ceil(Math.random() * bars.length - 1)].id
+      }),
+      Game.create({
         active: false,
         bar_id: bars[Math.ceil(Math.random() * bars.length - 1)].id
       }),
@@ -41,7 +50,7 @@ const createGames = () => {
     ]);
   });
 };
-const createQuestions = (game) => {
+const createQuestions = game => {
   return axios
     .get('https://opentdb.com/api.php?amount=10')
     .then(res => res.data.results)
@@ -72,15 +81,25 @@ const createBar = () => {
 };
 
 const seed = () => {
-  return Promise.all([createBar(), createBar(), createBar()]).then(() => {
+  return Promise.all([
+    createBar(),
+    createBar(),
+    createBar(),
+    createBar(),
+    createBar()
+  ]).then(() => {
     return Promise.resolve(createGames())
       .then(games => {
         return Promise.all([
           createQuestions(1),
           createQuestions(2),
-          createQuestions(3)
+          createQuestions(3),
+          createQuestions(4),
+          createQuestions(5)
         ]).then(() => {
           return Promise.all([
+            populateTeams(Math.ceil(Math.random() * games.length)),
+            populateTeams(Math.ceil(Math.random() * games.length)),
             populateTeams(Math.ceil(Math.random() * games.length)),
             populateTeams(Math.ceil(Math.random() * games.length)),
             populateTeams(Math.ceil(Math.random() * games.length))
@@ -91,7 +110,6 @@ const seed = () => {
       .catch(err => console.log(err));
   });
 };
-
 
 conn
   .sync({ force: true })

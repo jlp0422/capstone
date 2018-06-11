@@ -15,14 +15,15 @@ import Banner from './Banner';
 import Scores from './Scores';
 import Timer from './Timer';
 import Checkout from './Checkout';
-import Stats from './Stats';
+import GlobalStats from './GlobalStats';
+import LocalStats from './LocalStats';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       bar: {},
-      loggedIn: false,
+      loggedIn: false
     };
     this.logout = this.logout.bind(this);
     this.login = this.login.bind(this);
@@ -30,7 +31,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.whoAmI()
+    this.whoAmI();
   }
 
   componentWillReceiveProps() {
@@ -41,7 +42,8 @@ class App extends Component {
     const user = localStorage.getItem('token');
     if (user) {
       const token = jwt.verify(user, 'untappedpotential');
-      axios.post(`/v1/bars/${token.id}`, token)
+      axios
+        .post(`/v1/bars/${token.id}`, token)
         .then(res => res.data)
         .then(bar => this.setState({ bar, loggedIn: true }))
         .then(() => socket.emit('bar login', token.id));
@@ -64,30 +66,55 @@ class App extends Component {
   render() {
     const { bar, loggedIn } = this.state;
 
-    const { whoAmI, logout } = this
-    if (!bar.name) this.whoAmI()
+    const { whoAmI, logout } = this;
+    if (!bar.name) this.whoAmI();
     return (
       <Router>
         <div id="main">
-          <Banner loggedIn={ loggedIn } logout={ logout } bar={ bar } />
-          { loggedIn && <Sidebar /> }
-          <div className={`${ loggedIn ? 'container app' : 'loggedOut'}`}>
-          { loggedIn && <Timer bar={ bar } /> }
-          { loggedIn ? (
+          <Banner loggedIn={loggedIn} logout={logout} bar={bar} />
+          {loggedIn && <Sidebar />}
+          <div className={`${loggedIn ? 'container app' : 'loggedOut'}`}>
+            {loggedIn && <Timer bar={bar} />}
+            {loggedIn ? (
               <Switch>
-                <Route path="/" exact render={({ history }) => <Home whoAmI={ whoAmI } history={ history } bar={ bar } /> } />
-                <Route path="/categories" exact component={ Categories } />
+                <Route
+                  path="/"
+                  exact
+                  render={({ history }) => (
+                    <Home whoAmI={whoAmI} history={history} bar={bar} />
+                  )}
+                />
+                <Route path="/categories" exact component={Categories} />
                 <Route path="/categories/:id" component={Category} />
                 <Route path="/teams" component={Teams} />
-                <Route path="/games/active" exact render={() => <CurrentGame bar={ bar } /> } />
+                <Route
+                  path="/games/active"
+                  exact
+                  render={() => <CurrentGame bar={bar} />}
+                />
                 <Route path="/games/past" exact component={PastGames} />
-                <Route path="/stats/" exact component={Stats} />
+                <Route path="/GlobalStats/" exact component={GlobalStats} />
+                <Route
+                  path="/LocalStats/"
+                  exact
+                  render={() => <LocalStats bar={bar} />}
+                />
                 <Route path="/scores" exact component={Scores} />
-                <Route path="/checkout" exact render={({history}) => <Checkout bar={ bar } history={history} /> } />
+                <Route
+                  path="/checkout"
+                  exact
+                  render={({ history }) => (
+                    <Checkout bar={bar} history={history} />
+                  )}
+                />
               </Switch>
             ) : (
-
-              <Route path="/" render={({history}) => <Login login={this.login} history={history} />} />
+              <Route
+                path="/"
+                render={({ history }) => (
+                  <Login login={this.login} history={history} />
+                )}
+              />
             )}
           </div>
         </div>

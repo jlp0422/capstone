@@ -9,6 +9,12 @@ export default class GeoChart extends Component {
       // geoArr: [['City', 'Bar Name', 'Teams']]
     };
   }
+  componentWillMount() {
+    axios
+      .get('/v1/bars')
+      .then(res => res.data)
+      .then(bars => this.setState({ bars }));
+  }
   componentDidMount() {
     axios
       .get('/v1/bars')
@@ -18,7 +24,7 @@ export default class GeoChart extends Component {
 
   geoMapChart() {
     const { bars } = this.state;
-    let geoArr = [['City', 'Bar Name', 'Teams', 'games played']];
+    var geoArr = [['City', 'Bar Name', 'Teams', 'games played']];
     bars.length
       ? bars.map(bar => {
           let tempArr = [];
@@ -39,6 +45,7 @@ export default class GeoChart extends Component {
                     bar.games.length
                   );
                   geoArr.push(tempArr);
+                  //   console.log(geoArr);
                 }
               });
             });
@@ -51,18 +58,12 @@ export default class GeoChart extends Component {
     google.charts.setOnLoadCallback(drawMap);
 
     function drawMap() {
-      console.log(geoArr);
       var data = google.visualization.arrayToDataTable(geoArr);
 
       var options = {
         region: 'US',
         displayMode: 'markers',
-        colorAxis: { colors: ['green', 'blue'] },
-        animation: {
-          startup: true,
-          duration: 10000,
-          easing: 'inAndOut'
-        }
+        colorAxis: { colors: ['green', 'blue'] }
       };
 
       var chart = new google.visualization.GeoChart(
