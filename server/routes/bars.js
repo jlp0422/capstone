@@ -7,6 +7,11 @@ router.get('/', (req, res, next) => {
   }).then(bars => res.send(bars));
 });
 
+router.get('/:id', (req, res, next) => {
+  Bar.findById(req.params.id)
+    .then(bar => res.send(bar))
+});
+
 router.post('/:id', (req, res, next) => {
   Bar.findById(req.params.id).then(bar => res.send(bar));
 });

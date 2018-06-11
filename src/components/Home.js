@@ -61,8 +61,7 @@ class Home extends React.Component {
         {
           bar.endOfMembershipDate !== "Invalid date" && bar.endOfMembershipDate !== null ? (
             !index &&
-              <button onClick={ onStartGame }> Click to Start a Game </button> 
-            
+              <button onClick={ onStartGame }> Click to Start a Game </button>
           ) : (<h3>Please <Link to='/checkout'>sign up!</Link></h3>)
         }
         {/*{
@@ -74,7 +73,7 @@ class Home extends React.Component {
         }*/}
       </div>
     );
-  }        
+  }
 }
 
 export default Home;

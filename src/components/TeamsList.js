@@ -3,15 +3,15 @@ import React from 'react';
 
 const TeamsList = (props) => {
   // console.log('teams list props: ', props)
-  const { answers, showAll, teams, finalScores } = props;
+  const { answers, showAll, teams, finalScores, index } = props;
   // console.log('scores: ', scores)
   // console.log('mapper: ', mapper)
-  console.log(finalScores)
+  // console.log(finalScores)
   return (
     <div className='teams-list'>
       <div className='team'>
         <h3 className='team-name header'>Team</h3>
-        <h3 className='team-secondary header'>{showAll ? 'Email' : 'Answer'}</h3>
+        <h3 className='team-secondary header'>{showAll ? 'Email' : index > 9 ? 'Score' : 'Answer'}</h3>
         {/* !showAll && <h3 className='team-tertiary header'>Answer</h3> */}
       </div>
        { answers &&
