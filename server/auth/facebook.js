@@ -15,7 +15,7 @@ const verificationCb = (token, refreshToken, profile, done) => {
   
   Team.findOrCreate({
     where: { facebookId: profile.id },
-    defaults: profile.emails.length ? { email: profile.emails[0].value } : { email: 'NONE' }
+    defaults: profile.emails ? { email: profile.emails[0].value } : { email: 'NONE' }
   })
   .spread((team, created) => {
       done(null, team);
