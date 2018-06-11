@@ -355,3 +355,7 @@ body {
 .CardElement {
   padding: 10px;
 }
+
+.planButton {
+	margin: 5px 20px 5px 20px;
+}
