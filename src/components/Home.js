@@ -1,8 +1,8 @@
 /* eslint-disable */
 import React from 'react';
 import socket from '../../socket-client';
-import moment from 'moment';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
 
 class Home extends React.Component {
   constructor(props) {
@@ -71,6 +71,11 @@ class Home extends React.Component {
             
           ) : (null)
         }*/}
+        {
+          moment().diff(bar.endOfMembershipDate, 'days') >= -10 ? (
+            <p>Your membership will expire on {bar.endOfMembershipDate}, time to <Link to='/checkout'>re-subscribe!</Link></p>
+          ) : (null)
+        }
       </div>
     );
   }
