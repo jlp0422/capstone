@@ -2,7 +2,6 @@ import React from 'react';
 import { injectStripe, CardElement } from 'react-stripe-elements';
 import axios from 'axios';
 import moment from 'moment';
-import jwt from 'jsonwebtoken';
 
 class Checkout extends React.Component {
   constructor(props) {
@@ -20,11 +19,17 @@ class Checkout extends React.Component {
       bar: this.props.bar ? this.props.bar : '',
       endOfMembershipDate: this.props.bar ? this.props.bar.endOfMembershipDate : 'not a member yet',
       payment: false,
+      amount: -1,
+      months: -1,
+      selectedPlan: '',
       errors: {}
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handlePaymentChange = this.handlePaymentChange.bind(this);
+    this.oneMonth = this.oneMonth.bind(this);
+    this.threeMonths = this.threeMonths.bind(this);
+    this.oneYear = this.oneYear.bind(this);
 
     this.validators = {
       billingFirstName: value => {
@@ -71,6 +76,21 @@ class Checkout extends React.Component {
     }
   }
 
+  oneMonth(ev) {
+    ev.preventDefault();
+    this.setState({amount: 500, months: 1, selectedPlan: '1 Month of Membership'});
+  }
+
+  threeMonths(ev) {
+    ev.preventDefault();
+    this.setState({amount: 1000, months: 3, selectedPlan: '3 Months of Membership'});
+  }
+
+  oneYear(ev) {
+    ev.preventDefault();
+    this.setState({amount: 3000, months: 12, selectedPlan: '1 Year of Membership'});
+  }
+
   handleSubmit(event) {
     event.preventDefault();
     const errors = Object.keys(this.validators).reduce((memo, key) => {
@@ -88,16 +108,15 @@ class Checkout extends React.Component {
     }
     const name = `${this.state.billingFirstName} ${this.state.billingLastName}`;  
     
-    const addMonthToNow = moment().add(1, 'months').format('LL').toString();    
-    const addMonthToExpirationDate = moment(this.state.endOfMembershipDate).add(1, 'months').format('LL').toString();
+    const addMonthToNow = moment().add(this.state.months, 'months').format('LL').toString();    
+    const addMonthToExpirationDate = moment(this.state.endOfMembershipDate).add(this.state.months, 'months').format('LL').toString();
     const timeAddition = moment().isBefore(this.state.endOfMembershipDate) ? addMonthToExpirationDate : addMonthToNow;
 
     this.props.stripe.createToken({type: 'card', name })
-      .then(token => axios.post('/v1/checkout', { token: token.token.id, amount: 1000}))      
+      .then(token => axios.post('/v1/checkout', { token: token.token.id, amount: this.state.amount}))
       .then(() => {
         axios.put(`/v1/bars/${this.state.bar.id}`, {endOfMembershipDate: timeAddition})
         .then(() => this.setState({ endOfMembershipDate: timeAddition}))
-        .then(() => console.log('history is:', this.props.history))
         .then(() => this.props.history.push('/'))
         .catch(err => console.log(err));
       });
@@ -113,7 +132,8 @@ class Checkout extends React.Component {
   
   render() {
     const { bar, billingFirstName, billingLastName, firstName, lastName, address, city, state, zip, email, endOfMembershipDate, errors } = this.state;
-    
+    const { oneMonth, threeMonths, oneYear } = this;
+
     if (!bar) return null;
  
     return (
@@ -130,6 +150,18 @@ class Checkout extends React.Component {
           <div className='form-group'>
             <input name='billingLastName' value={ billingLastName } className='element' onChange={ this.handleChange } placeholder='Billing Last Name' />
             <p className='error'>{ errors.billingFirstName }</p>
+          </div>
+          <div className='form-group'>
+            <p>
+              <button className='btn btn-primary btn-sm planButton' onClick={ oneMonth }>1 month: $5.00</button>
+              <button className='btn btn-primary btn-sm planButton' onClick={ threeMonths }>3 months: $10.00 </button>
+              <button className='btn btn-primary btn-sm planButton' onClick={ oneYear }>1 year: $30.00</button>
+            </p>
+          </div>
+          <div className='form-group'>
+            <p>
+              {this.state.selectedPlan}
+            </p>
           </div>
           <div className='form-group'>
             <CardElement className='CardElement element' onChange={ this.handlePaymentChange } />
@@ -165,7 +197,7 @@ class Checkout extends React.Component {
             <input name='zip' value={ zip } className='element' onChange={ this.handleChange } placeholder='Zip Code' />
             <p className='error'>{ errors.zip }</p>
           </div>
-          <button className='btn btn-primary btn-sm'>Submit Order</button>
+          <button className='btn btn-primary btn-sm' disabled={this.state.amount === -1}>Submit Order</button>
         </form>
       </div>
     );
