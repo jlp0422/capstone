@@ -1,32 +1,21 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
+let geoArr = [['City', 'Bar Name', 'Teams', 'games played']];
 export default class GeoChart extends Component {
   constructor() {
     super();
     this.state = {
       bars: []
-      // geoArr: [['City', 'Bar Name', 'Teams']]
     };
-  }
-  componentWillMount() {
-    axios
-      .get('/v1/bars')
-      .then(res => res.data)
-      .then(bars => this.setState({ bars }));
   }
   componentDidMount() {
     axios
       .get('/v1/bars')
       .then(res => res.data)
-      .then(bars => this.setState({ bars }));
-  }
-
-  geoMapChart() {
-    const { bars } = this.state;
-    var geoArr = [['City', 'Bar Name', 'Teams', 'games played']];
-    bars.length
-      ? bars.map(bar => {
+      .then(bars => {
+        this.setState({ bars });
+        bars.map(bar => {
           let tempArr = [];
           return axios
             .get(
@@ -45,12 +34,14 @@ export default class GeoChart extends Component {
                     bar.games.length
                   );
                   geoArr.push(tempArr);
-                  //   console.log(geoArr);
                 }
               });
             });
-        })
-      : null;
+        });
+      });
+  }
+
+  geoMapChart() {
     google.charts.load('current', {
       packages: ['geochart'],
       mapsApiKey: process.env.MAP_JS_KEY

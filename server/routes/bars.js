@@ -8,8 +8,21 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/:id', (req, res, next) => {
-  Bar.findById(req.params.id)
-    .then(bar => res.send(bar))
+  Bar.findById(req.params.id).then(bar => res.send(bar));
+});
+// Bar.findOne({
+//   where: { id: req.params.id },
+//   include: [{ model: Team }, { model: Game }]
+// }).then(bar => res.send(bar));
+router.get('/:id/games', (req, res, next) => {
+  Game.findAll({ where: { bar_id: req.params.id } }).then(games =>
+    res.send(games)
+  );
+});
+router.get('/:id/teams', (req, res, next) => {
+  Team.findAll({ where: { bar_id: req.params.id } }).then(teams =>
+    res.send(teams)
+  );
 });
 
 router.post('/:id', (req, res, next) => {
@@ -24,11 +37,11 @@ router.post('/', (req, res, next) => {
 //ADDED PUT ROUTE
 router.put('/:id', (req, res, next) => {
   Bar.findById(req.params.id)
-    .then( bar => {
+    .then(bar => {
       Object.assign(bar, req.body);
       return bar.save();
     })
-    .then( bar => res.send(bar))
+    .then(bar => res.send(bar))
     .catch(err => console.log(err));
 });
 

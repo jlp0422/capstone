@@ -5,30 +5,29 @@ import CompareGamesChart from './charts/CompareGames';
 import GameScoreChart from './charts/GameScoreChart';
 import GeoChart from './charts/geoChart';
 
-export default class Stats extends Component {
+export default class GlobalStats extends Component {
   constructor() {
     super();
     this.state = {
       games: false,
-      game: false,
-      geo: !this.game && !this.games
+      game: false
     };
     this.gamesState = this.gamesState.bind(this);
     this.gameState = this.gameState.bind(this);
-    //this.geoToggle = this.geoToggle.bind(this);
   }
   gameState() {
-    this.setState({ game: !this.state.game, games: false });
+    const { games, game } = this.state;
+    this.setState({ game: !game, games: false });
   }
   gamesState() {
-    this.setState({ games: !this.state.games, game: false });
+    const { games, game } = this.state;
+    this.setState({ games: !games, game: false });
   }
-  // geoToggle() {
-  //   this.setState({ games: false, game: false, geo: !this.state.geo });
-  // }
+
   render() {
     const { games, game, geo } = this.state;
-    const { gamesState, gameState, geoToggle } = this;
+    const { gamesState, gameState } = this;
+    console.log(this.state);
     return (
       <div>
         <button onClick={() => gameState()}>Last game stats on/off</button>
@@ -38,7 +37,7 @@ export default class Stats extends Component {
         {game && <GameScoreChart />}
         {games && <AllQuestionsChart />}
         {games && <CompareGamesChart />}
-        {geo && <GeoChart />}
+        <GeoChart />
       </div>
     );
   }
