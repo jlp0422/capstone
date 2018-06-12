@@ -10,22 +10,24 @@ export default class GlobalStats extends Component {
     super();
     this.state = {
       games: false,
-      game: false,
-      geo: !this.game && !this.games
+      game: false
     };
     this.gamesState = this.gamesState.bind(this);
     this.gameState = this.gameState.bind(this);
   }
   gameState() {
-    this.setState({ game: !this.state.game, games: false });
+    const { games, game } = this.state;
+    this.setState({ game: !game, games: false });
   }
   gamesState() {
-    this.setState({ games: !this.state.games, game: false });
+    const { games, game } = this.state;
+    this.setState({ games: !games, game: false });
   }
 
   render() {
     const { games, game, geo } = this.state;
     const { gamesState, gameState } = this;
+    console.log(this.state);
     return (
       <div>
         <button onClick={() => gameState()}>Last game stats on/off</button>
@@ -35,7 +37,7 @@ export default class GlobalStats extends Component {
         {game && <GameScoreChart />}
         {games && <AllQuestionsChart />}
         {games && <CompareGamesChart />}
-        {geo && <GeoChart />}
+        <GeoChart />
       </div>
     );
   }

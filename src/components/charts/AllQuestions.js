@@ -41,7 +41,6 @@ export default class AllQuestionsChart extends Component {
           .then(allQuestions => this.setState({ allQuestions }));
   }
   allQuestionGraph() {
-    console.log(this.state);
     const getRandomColor = () => {
       var letters = '0123456789ABCDEF';
       var color = '#';
