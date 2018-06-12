@@ -11,24 +11,46 @@ export default class QuestionsChart extends Component {
     this.questionGraph = this.questionGraph.bind(this);
   }
   componentDidMount() {
-    axios
-      .get('/v1/games')
-      .then(res => res.data)
-      .then(games =>
-        games.reduce((lastGame, game) => {
-          if (game.created_at > lastGame.created_at) lastGame = game;
+    const { bar } = this.props;
+    if (bar) {
+      axios
+        .get(`/v1/bars/${bar.id}/games`)
+        .then(res => res.data)
+        .then(games =>
+          games.reduce((lastGame, game) => {
+            if (game.created_at > lastGame.created_at) lastGame = game;
 
-          return lastGame;
-        })
-      )
-      .then(game => {
-        axios
-          .get(`/v1/games/${game.id}/questions`)
-          .then(res => res.data)
-          .then(questions =>
-            this.setState({ questions: questions, gameId: game.id })
-          );
-      });
+            return lastGame;
+          })
+        )
+        .then(game => {
+          axios
+            .get(`/v1/games/${game.id}/questions`)
+            .then(res => res.data)
+            .then(questions =>
+              this.setState({ questions: questions, gameId: game.id })
+            );
+        });
+    } else {
+      axios
+        .get('/v1/games')
+        .then(res => res.data)
+        .then(games =>
+          games.reduce((lastGame, game) => {
+            if (game.created_at > lastGame.created_at) lastGame = game;
+
+            return lastGame;
+          })
+        )
+        .then(game => {
+          axios
+            .get(`/v1/games/${game.id}/questions`)
+            .then(res => res.data)
+            .then(questions =>
+              this.setState({ questions: questions, gameId: game.id })
+            );
+        });
+    }
   }
   questionGraph() {
     const gameNumber = this.state.gameId;
