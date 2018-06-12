@@ -1,26 +1,21 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
+let geoArr = [['City', 'Bar Name', 'Teams', 'games played']];
 export default class GeoChart extends Component {
   constructor() {
     super();
     this.state = {
       bars: []
-      // geoArr: [['City', 'Bar Name', 'Teams']]
     };
   }
   componentDidMount() {
     axios
       .get('/v1/bars')
       .then(res => res.data)
-      .then(bars => this.setState({ bars }));
-  }
-
-  geoMapChart() {
-    const { bars } = this.state;
-    let geoArr = [['City', 'Bar Name', 'Teams']];
-    bars.length
-      ? bars.map(bar => {
+      .then(bars => {
+        this.setState({ bars });
+        bars.map(bar => {
           let tempArr = [];
           return axios
             .get(
@@ -35,14 +30,18 @@ export default class GeoChart extends Component {
                   tempArr.push(
                     addressTypes.long_name,
                     bar.name,
-                    bar.teams.length
+                    bar.teams.length,
+                    bar.games.length
                   );
                   geoArr.push(tempArr);
                 }
               });
             });
-        })
-      : null;
+        });
+      });
+  }
+
+  geoMapChart() {
     google.charts.load('current', {
       packages: ['geochart'],
       mapsApiKey: process.env.MAP_JS_KEY
@@ -50,18 +49,12 @@ export default class GeoChart extends Component {
     google.charts.setOnLoadCallback(drawMap);
 
     function drawMap() {
-      console.log(geoArr);
       var data = google.visualization.arrayToDataTable(geoArr);
 
       var options = {
         region: 'US',
         displayMode: 'markers',
-        colorAxis: { colors: ['green', 'blue'] },
-        animation: {
-          startup: true,
-          duration: 10000,
-          easing: 'inAndOut'
-        }
+        colorAxis: { colors: ['green', 'blue'] }
       };
 
       var chart = new google.visualization.GeoChart(
