@@ -16,7 +16,7 @@ import Banner from './Banner';
 import Scores from './Scores';
 import Timer from './Timer';
 import Checkout from './Checkout';
-import Stats from './Stats';
+// import Stats from './Stats';
 import Footer from './Footer';
 import GlobalStats from './GlobalStats';
 import LocalStats from './LocalStats';
@@ -87,6 +87,7 @@ class App extends Component {
           <div className={`${loggedIn ? 'container app' : 'loggedOut'}`}>
             {loggedIn && <Timer bar={bar} />}
             {loggedIn ? (
+              <div>
               <Switch>
                 <Route
                   path="/"
@@ -130,9 +131,8 @@ class App extends Component {
               />
             )}
           </div>
-        </div>  
-        
-        </div>      
+        </div>
+      </div>
       </Router>
     );
   }
