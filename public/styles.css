@@ -3,6 +3,7 @@
 body {
 	background-color: #E7F1F5;
 	font-family: 'Roboto';
+	margin-bottom: 60px;
 }
 
 .app {
@@ -21,7 +22,6 @@ body {
 	display: grid;
 	grid-template-columns: 1fr 7fr;
 	background-color: #E7F1F5;
-	/* padding-bottom: 60px; */
 }
 
 /* BANNER */
@@ -362,4 +362,25 @@ body {
 .alert {
 	font-weight: bold;
 	color: red;
+}
+
+.footer {	
+	grid-column: 1;
+	/* padding: 10px 15px; */
+	background-color:#E7F1F5;
+	color: black;
+	font-size: 20px;
+	align-self: center;	
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+	position: fixed;
+	bottom: 0;
+	/* grid-column: 1 / -1; */
+}
+
+.center-block {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }

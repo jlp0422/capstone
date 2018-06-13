@@ -17,6 +17,7 @@ import Scores from './Scores';
 import Timer from './Timer';
 import Checkout from './Checkout';
 import Stats from './Stats';
+import Footer from './Footer';
 
 class App extends Component {
   constructor(props) {
@@ -75,12 +76,14 @@ class App extends Component {
     if (!bar.name) this.whoAmI()
     return (
       <Router>
+      <div>
         <div id="main">
           <Banner loggedIn={ loggedIn } logout={ logout } bar={ bar } />
           { loggedIn && <Sidebar /> }
           <div className={`${ loggedIn ? 'container app' : 'loggedOut'}`}>
           { loggedIn && <Timer bar={ bar } /> }
           { loggedIn ? (
+            <div>
               <Switch>
                 <Route path="/" exact render={({ history }) => <Home whoAmI={ whoAmI } history={ history } bar={ bar } /> } />
                 <Route path="/categories" exact component={ Categories } />
@@ -92,12 +95,16 @@ class App extends Component {
                 <Route path="/scores" exact component={Scores} />
                 <Route path="/checkout" exact render={({history}) => <Checkout bar={ bar } history={history} /> } />
               </Switch>
+              <Footer bar={bar} />
+              </div>
             ) : (
 
               <Route path="/" render={({history}) => <Login login={this.login} history={history} />} />
-            )}
+            )}            
           </div>
-        </div>
+        </div>  
+        
+        </div>      
       </Router>
     );
   }

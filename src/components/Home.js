@@ -63,25 +63,25 @@ class Home extends React.Component {
           bar.endOfMembershipDate !== "Invalid date" && bar.endOfMembershipDate !== null ? (
             !index &&
               <button onClick={ onStartGame }> Click to Start a Game </button>
-          ) : (<h3>Please <Link to='/checkout'>sign up!</Link></h3>)
+          ) : (<h3>Please <Link to='/checkout'>buy a membership!</Link></h3>)
         }
         </div>
-        <div>
+        {/*<div>
         {          
           moment().diff(bar.endOfMembershipDate, 'days') >= -10 && moment().diff(bar.endOfMembershipDate, 'days') < 1 ? (
             <p className='alert'>Your membership will expire in {moment().diff(bar.endOfMembershipDate, 'days') * (-1)} days on {bar.endOfMembershipDate}, time to <Link to='/checkout'>re-subscribe!</Link></p>
           ) : (null)
         }
-        </div>
-        <div>
+      </div>*/}
+        {/*<div>
         {
           bar.endOfMembershipDate !== "Invalid date" && bar.endOfMembershipDate !== null ? (
             
-              <p>Membership expires on bar.endOfMembershipDate</p> 
+              <p>Membership expires on {bar.endOfMembershipDate}</p> 
             
           ) : (null)
         }
-        </div>
+      </div>*/}
       </div>
     );
   }
