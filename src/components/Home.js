@@ -8,21 +8,21 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      teams: [],
-    }
-    this.onStartGame = this.onStartGame.bind(this)
+      teams: []
+    };
+    this.onStartGame = this.onStartGame.bind(this);
   }
 
   componentDidMount() {
-    this.props.whoAmI()
-    const teams = localStorage.getItem('teams')
-    if (teams) this.setState({ teams: teams.split(', ') })
-    socket.on('team register', (team) => {
-      this.setState({ teams: [ team, ...this.state.teams ]})
-      const teams = localStorage.getItem('teams')
-      const teamString = teams ? `${teams}, ${team}` : team
-      localStorage.setItem('teams', teamString)
-    })
+    this.props.whoAmI();
+    const teams = localStorage.getItem('teams');
+    if (teams) this.setState({ teams: teams.split(', ') });
+    socket.on('team register', team => {
+      this.setState({ teams: [team, ...this.state.teams] });
+      const teams = localStorage.getItem('teams');
+      const teamString = teams ? `${teams}, ${team}` : team;
+      localStorage.setItem('teams', teamString);
+    });
   }
 
   componentWillUnmount() {
@@ -30,27 +30,27 @@ class Home extends React.Component {
   }
 
   onStartGame() {
-    const { history, bar } = this.props
-    const { teams } = this.state
-    localStorage.setItem('index', 0)
-    localStorage.setItem('waitTimer', 10)
-    localStorage.setItem('questionTimer', 10)
-    localStorage.setItem('questionActive', 'yes')
-    console.log('home teams: ', teams)
-    socket.emit('start game', { bar_id: bar.id, teams })
-    history.push('/games/active')
+    const { history, bar } = this.props;
+    const { teams } = this.state;
+    localStorage.setItem('index', 0);
+    localStorage.setItem('waitTimer', 10);
+    localStorage.setItem('questionTimer', 10);
+    localStorage.setItem('questionActive', 'yes');
+    console.log('home teams: ', teams);
+    socket.emit('start game', { bar_id: bar.id, teams });
+    history.push('/games/active');
   }
 
   render() {
-    const { teams } = this.state
-    const { onStartGame } = this
-    const { bar } = this.props
-    const index = localStorage.getItem('index')
+    const { teams } = this.state;
+    const { onStartGame } = this;
+    const { bar } = this.props;
+    const index = localStorage.getItem('index');
     return (
-      <div className='home'>
-        <img className='home-img mb-3' src='/public/images/wordmark.png' />
+      <div className="home">
+        <img className="home-img mb-3" src="/public/images/wordmark.png" />
         <br />
-        <h1 className='mt-4'> Cheers, { bar.name } </h1>
+        <h1 className="mt-4"> Cheers, {bar.name} </h1>
         <h3>Teams connected:</h3>
         { teams.length ?
           teams.map(team => (
@@ -65,23 +65,7 @@ class Home extends React.Component {
               <button onClick={ onStartGame }> Click to Start a Game </button>
           ) : (<h3>Please <Link to='/checkout'>buy a membership!</Link></h3>)
         }
-        </div>
-        {/*<div>
-        {          
-          moment().diff(bar.endOfMembershipDate, 'days') >= -10 && moment().diff(bar.endOfMembershipDate, 'days') < 1 ? (
-            <p className='alert'>Your membership will expire in {moment().diff(bar.endOfMembershipDate, 'days') * (-1)} days on {bar.endOfMembershipDate}, time to <Link to='/checkout'>re-subscribe!</Link></p>
-          ) : (null)
-        }
-      </div>*/}
-        {/*<div>
-        {
-          bar.endOfMembershipDate !== "Invalid date" && bar.endOfMembershipDate !== null ? (
-            
-              <p>Membership expires on {bar.endOfMembershipDate}</p> 
-            
-          ) : (null)
-        }
-      </div>*/}
+        </div>       
       </div>
     );
   }

@@ -11,16 +11,30 @@ export default class CompareGamesChart extends Component {
     this.questionGraph = this.questionGraph.bind(this);
   }
   componentDidMount() {
-    const { games, teams } = this.state.games;
-    axios
-      .get('/v1/games')
-      .then(res => res.data)
-      .then(games => this.setState({ games }));
-
-    axios
-      .get(`/v1/teams`)
-      .then(res => res.data)
-      .then(teams => this.setState({ teams }));
+    const { bar } = this.props;
+    if (bar) {
+      axios
+        .get(`/v1/bars/${bar.id}/games`)
+        .then(res => res.data)
+        .then(_games => this.setState({ games: _games }));
+      axios
+        .get(`/v1/bars/${bar.id}/teams`)
+        .then(res => res.data)
+        .then(_teams => this.setState({ teams: _teams }));
+      // axios
+      //   .get(`/v1/bars/${bar.id}`)
+      //   .then(res => res.data)
+      //   .then(bars => this.setState({ games: bars.games, teams: bars.teams }));
+    } else {
+      axios
+        .get('/v1/games')
+        .then(res => res.data)
+        .then(games => this.setState({ games }));
+      axios
+        .get(`/v1/teams`)
+        .then(res => res.data)
+        .then(teams => this.setState({ teams }));
+    }
   }
 
   questionGraph() {

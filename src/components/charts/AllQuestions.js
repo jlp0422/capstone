@@ -5,15 +5,40 @@ export default class AllQuestionsChart extends Component {
   constructor() {
     super();
     this.state = {
-      allQuestions: []
+      allQuestions: [],
+      games: []
     };
     this.allQuestionGraph = this.allQuestionGraph.bind(this);
   }
   componentDidMount() {
-    axios
-      .get('/v1/dbQuestions')
-      .then(res => res.data)
-      .then(allQuestions => this.setState({ allQuestions }));
+    const { bar } = this.props;
+
+    bar
+      ? axios
+          // .get(`/v1/bars/${bar.id}`)
+          // .then(res => res.data)
+          // .then(bars => this.setState({ games: bars.games }))
+          .get(`/v1/bars/${bar.id}/games`)
+          .then(res => res.data)
+          .then(_games => this.setState({ games: _games }))
+          .then(() => {
+            const { games } = this.state;
+            games.map(game => {
+              axios
+                .get(`/v1/games/${game.id}/questions`)
+                .then(res => res.data)
+                .then(questions => {
+                  const { allQuestions } = this.state;
+                  return this.setState({
+                    allQuestions: [...allQuestions, ...questions]
+                  });
+                });
+            });
+          })
+      : axios
+          .get('/v1/dbQuestions')
+          .then(res => res.data)
+          .then(allQuestions => this.setState({ allQuestions }));
   }
   allQuestionGraph() {
     const getRandomColor = () => {
