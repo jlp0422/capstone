@@ -1,38 +1,22 @@
 import React from 'react';
-// import StickyFooter from 'react-sticky-footer';
 
-
-// <StickyFooter
-// bottomThreshold={50}
-// stickyStyles={{
-// padding: "2rem",  
-// display: "grid",
-// gridColumn: 1 / -1,            
-// }}
-// >
-// {/*</StickyFooter>*/}
-const Footer = ({ bar }) => {
+const Footer = () => {
   return (
-    <div className="footer center-block">
-
-          
-            <div>
-              <div>
-                {
-                  bar.endOfMembershipDate !== 'Invalid date' && bar.endOfMembershipDate !== null ? (
-                    
-                    <p>{bar.name} membership expiration date: {bar.endOfMembershipDate}</p>
-                    
-                  ) : (null)
-                }
-              </div>
-              <p>&copy; UnTapped Trivia Productions | <a href="https://www.fullstackacademy.com/">Fullstack Academy</a></p>
-            </div>
-          
-          </div>
+    <div className="container footer">
+      <div>
+        <p>&copy; UnTapped Trivia & <a href="https://www.fullstackacademy.com/">Fullstack Academy</a></p>
+        <p>
+          <a href="https://www.linkedin.com/in/alon-j-adelson-5691b87/">Alon J. Adelson</a>
+          <span> | </span>
+          <a href="https://www.linkedin.com/in/jeremyphilipson/">Jeremy Philipson</a>
+          <span> | </span>
+          <a href="https://www.linkedin.com/in/jacobrico/">Jacob Rico</a>
+          <span> | </span>
+          <a href="https://www.linkedin.com/in/edward-timmer-031a78/">Edward Timmer</a>
+        </p>
+      </div>
+    </div>
   );
 };
-
-
 
 export default Footer;

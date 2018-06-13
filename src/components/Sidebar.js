@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-const Sidebar = () => {
+const Sidebar = ({bar}) => {
   return (
     <div className="sidebar container-fluid">
       <NavLink to="/" exact>
@@ -15,6 +15,15 @@ const Sidebar = () => {
       <NavLink to="/GlobalStats">Global Stats</NavLink>
       <NavLink to="/LocalStats">Local Stats</NavLink>
       <NavLink to="/checkout"> Buy Membership </NavLink>
+      <div className="membershipDate">
+        {
+          bar.endOfMembershipDate !== 'Invalid date' && bar.endOfMembershipDate !== null ? (
+            
+            <p>Membership end date: {bar.endOfMembershipDate}</p>
+            
+          ) : (null)
+        }
+      </div>
     </div>
   );
 };

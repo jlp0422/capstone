@@ -83,44 +83,44 @@ class App extends Component {
       <div>
         <div id="main">
           <Banner loggedIn={loggedIn} logout={logout} bar={bar} />
-          {loggedIn && <Sidebar />}
+          {loggedIn && <Sidebar bar={bar} />}
           <div className={`${loggedIn ? 'container app' : 'loggedOut'}`}>
             {loggedIn && <Timer bar={bar} />}
             {loggedIn ? (
               <div>
-              <Switch>
-                <Route
-                  path="/"
-                  exact
-                  render={({ history }) => (
-                    <Home whoAmI={whoAmI} history={history} bar={bar} />
-                  )}
-                />
-                <Route path="/categories" exact component={Categories} />
-                <Route path="/categories/:id" component={Category} />
-                <Route path="/teams" component={Teams} />
-                <Route
-                  path="/games/active"
-                  exact
-                  render={() => <CurrentGame bar={bar} />}
-                />
-                <Route path="/games/past" exact component={PastGames} />
-                <Route path="/GlobalStats/" exact component={GlobalStats} />
-                <Route
-                  path="/LocalStats/"
-                  exact
-                  render={() => <LocalStats bar={bar} />}
-                />
-                <Route path="/scores" exact component={Scores} />
-                <Route
-                  path="/checkout"
-                  exact
-                  render={({ history }) => (
-                    <Checkout bar={bar} history={history} />
-                  )}
-                />
-              </Switch>
-              <Footer bar={bar} />
+                <Switch>
+                  <Route
+                    path="/"
+                    exact
+                    render={({ history }) => (
+                      <Home whoAmI={whoAmI} history={history} bar={bar} />
+                    )}
+                  />
+                  <Route path="/categories" exact component={Categories} />
+                  <Route path="/categories/:id" component={Category} />
+                  <Route path="/teams" component={Teams} />
+                  <Route
+                    path="/games/active"
+                    exact
+                    render={() => <CurrentGame bar={bar} />}
+                  />
+                  <Route path="/games/past" exact component={PastGames} />
+                  <Route path="/GlobalStats/" exact component={GlobalStats} />
+                  <Route
+                    path="/LocalStats/"
+                    exact
+                    render={() => <LocalStats bar={bar} />}
+                  />
+                  <Route path="/scores" exact component={Scores} />
+                  <Route
+                    path="/checkout"
+                    exact
+                    render={({ history }) => (
+                      <Checkout bar={bar} history={history} />
+                    )}
+                  />
+                </Switch>
+                <Footer />
               </div>
             ) : (
               <Route

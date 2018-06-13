@@ -365,11 +365,13 @@ body {
 }
 
 .footer {	
-	grid-column: 1;
+	grid-column: 2;
+	display: grid;
+	/* grid-column: 1; */
 	/* padding: 10px 15px; */
 	background-color:#E7F1F5;
 	color: black;
-	font-size: 20px;
+	font-size: 18px;
 	align-self: center;	
 	text-align: center;
 	margin-left: auto;
@@ -383,4 +385,8 @@ body {
   display: block;
   margin-left: auto;
   margin-right: auto;
+}
+
+.membershipDate {
+	color: lightgreen;
 }
