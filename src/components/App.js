@@ -7,16 +7,13 @@ import moment from 'moment';
 import socket from '../../socket-client';
 import Categories from './Categories';
 import CurrentGame from './CurrentGame';
-import PastGames from './PastGames';
 import Category from './Category';
 import Teams from './Teams';
 import Home from './Home';
 import Sidebar from './Sidebar';
 import Banner from './Banner';
-import Scores from './Scores';
 import Timer from './Timer';
 import Checkout from './Checkout';
-// import Stats from './Stats';
 import Footer from './Footer';
 import GlobalStats from './GlobalStats';
 import LocalStats from './LocalStats';
@@ -104,14 +101,12 @@ class App extends Component {
                     exact
                     render={() => <CurrentGame bar={bar} />}
                   />
-                  <Route path="/games/past" exact component={PastGames} />
                   <Route path="/GlobalStats/" exact component={GlobalStats} />
                   <Route
                     path="/LocalStats/"
                     exact
                     render={() => <LocalStats bar={bar} />}
                   />
-                  <Route path="/scores" exact component={Scores} />
                   <Route
                     path="/checkout"
                     exact

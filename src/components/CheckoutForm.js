@@ -31,7 +31,6 @@ class Checkout extends React.Component {
     this.oneMonth = this.oneMonth.bind(this);
     this.threeMonths = this.threeMonths.bind(this);
     this.oneYear = this.oneYear.bind(this);
-    // this.oneWeek = this.oneWeek.bind(this);
 
     this.validators = {
       billingFirstName: value => {
@@ -78,11 +77,6 @@ class Checkout extends React.Component {
     }
   }
 
-  // oneWeek(ev) {
-  //   ev.preventDefault();
-  //   this.setState({amount: 50, days: 7, selectedPlan: '1 Week of Membership'});
-  // }
-  
   oneMonth(ev) {
     ev.preventDefault();
     this.setState({amount: 500, months: 1, selectedPlan: '1 Month of Membership'});
@@ -160,7 +154,6 @@ class Checkout extends React.Component {
           </div>
           <div className='form-group'>
             <p>
-              {/*<button className='btn btn-primary btn-sm planButton' onClick={ oneWeek }>1 week: $1.00</button>*/}
               <button className='btn btn-primary btn-sm planButton' onClick={ oneMonth }>1 month: $5.00</button>
               <button className='btn btn-primary btn-sm planButton' onClick={ threeMonths }>3 months: $10.00 </button>
               <button className='btn btn-primary btn-sm planButton' onClick={ oneYear }>1 year: $30.00</button>
