@@ -89,7 +89,7 @@ class Checkout extends React.Component {
 
   oneYear(ev) {
     ev.preventDefault();
-    this.setState({amount: 3000, months: 12, selectedPlan: '1 Year of Membership'});
+    this.setState({amount: 3000, months: 12, selectedPlan: '1 Year of Membership! You Rock!'});
   }
 
   handleSubmit(event) {
