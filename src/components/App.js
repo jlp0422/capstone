@@ -7,15 +7,14 @@ import moment from 'moment';
 import socket from '../../socket-client';
 import Categories from './Categories';
 import CurrentGame from './CurrentGame';
-import PastGames from './PastGames';
 import Category from './Category';
 import Teams from './Teams';
 import Home from './Home';
 import Sidebar from './Sidebar';
 import Banner from './Banner';
-import Scores from './Scores';
 import Timer from './Timer';
 import Checkout from './Checkout';
+import Footer from './Footer';
 import GlobalStats from './GlobalStats';
 import LocalStats from './LocalStats';
 
@@ -78,44 +77,46 @@ class App extends Component {
     if (!bar.name) this.whoAmI();
     return (
       <Router>
+      <div>
         <div id="main">
           <Banner loggedIn={loggedIn} logout={logout} bar={bar} />
-          {loggedIn && <Sidebar />}
+          {loggedIn && <Sidebar bar={bar} />}
           <div className={`${loggedIn ? 'container app' : 'loggedOut'}`}>
             {loggedIn && <Timer bar={bar} />}
             {loggedIn ? (
-              <Switch>
-                <Route
-                  path="/"
-                  exact
-                  render={({ history }) => (
-                    <Home whoAmI={whoAmI} history={history} bar={bar} />
-                  )}
-                />
-                <Route path="/categories" exact component={Categories} />
-                <Route path="/categories/:id" component={Category} />
-                <Route path="/teams" component={Teams} />
-                <Route
-                  path="/games/active"
-                  exact
-                  render={() => <CurrentGame bar={bar} />}
-                />
-                <Route path="/games/past" exact component={PastGames} />
-                <Route path="/GlobalStats/" exact component={GlobalStats} />
-                <Route
-                  path="/LocalStats/"
-                  exact
-                  render={() => <LocalStats bar={bar} />}
-                />
-                <Route path="/scores" exact component={Scores} />
-                <Route
-                  path="/checkout"
-                  exact
-                  render={({ history }) => (
-                    <Checkout bar={bar} history={history} />
-                  )}
-                />
-              </Switch>
+              <div>
+                <Switch>
+                  <Route
+                    path="/"
+                    exact
+                    render={({ history }) => (
+                      <Home whoAmI={whoAmI} history={history} bar={bar} />
+                    )}
+                  />
+                  <Route path="/categories" exact component={Categories} />
+                  <Route path="/categories/:id" component={Category} />
+                  <Route path="/teams" component={Teams} />
+                  <Route
+                    path="/games/active"
+                    exact
+                    render={() => <CurrentGame bar={bar} />}
+                  />
+                  <Route path="/GlobalStats/" exact component={GlobalStats} />
+                  <Route
+                    path="/LocalStats/"
+                    exact
+                    render={() => <LocalStats bar={bar} />}
+                  />
+                  <Route
+                    path="/checkout"
+                    exact
+                    render={({ history }) => (
+                      <Checkout bar={bar} history={history} />
+                    )}
+                  />
+                </Switch>
+                <Footer />
+              </div>
             ) : (
               <Route
                 path="/"
@@ -126,6 +127,7 @@ class App extends Component {
             )}
           </div>
         </div>
+      </div>
       </Router>
     );
   }
