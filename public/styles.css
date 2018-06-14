@@ -359,3 +359,7 @@ body {
 .planButton {
 	margin: 5px 20px 5px 20px;
 }
+
+.error {
+  color: red;
+}

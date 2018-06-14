@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import axios from 'axios';
 import bcrypt from 'bcryptjs';
 import socket from '../../socket-client';
-// import moment from 'moment';
 
 export default class Login extends Component {
   constructor(props){
@@ -19,16 +18,42 @@ export default class Login extends Component {
       password: '',
       email: '',
       passwordStrength: 'Weak',
-      passwordMatch: false
+      passwordMatch: false,
+      errors: {}
     }
     this.submit = this.submit.bind(this);
     this.validatePassword = this.validatePassword.bind(this);
+
+    this.validators = {
+      id: value => {
+        if (!value) return 'Valid Id Is Required';
+      },
+      password: value => {
+        if (!value) return 'Password Is Required';
+      }
+    };
   }
 
   submit(ev){
     const { id, name, password, signup, email, street, city, state, zip } = this.state;
-    const hashPassword = bcrypt.hashSync(password, 6)
+    const hashPassword = bcrypt.hashSync(password, 6);
     ev.preventDefault();
+
+    const errors = Object.keys(this.validators).reduce((memo, key) => {
+      const validator = this.validators[key];
+      const value = this.state[key];
+      const error = validator(value);
+      if (error) {
+        memo[key] = error;
+      }
+      return memo;
+    }, {});
+    this.setState({ errors });
+    if (Object.keys(errors).length) {
+      return;
+    }
+
+
     if ( signup ) {
       const randomNum = Math.floor(Math.random() * 10000)
       const newId = randomNum > 1000 ? String(randomNum) : `0${randomNum}`
@@ -39,7 +64,6 @@ export default class Login extends Component {
         password: hashPassword,
         email,
         address: { street, city, state, zip },
-        //endOfMembershipDate: moment().add(1, 'months').format('LL').toString()
       })
       .then(res => res.data)
       .then(user => this.props.login(user))
@@ -76,7 +100,7 @@ export default class Login extends Component {
   }
 
   render(){
-    const { signup, passwordStrength, passwordMatch } = this.state;
+    const { signup, passwordStrength, passwordMatch, errors } = this.state;
     return (
       <div className='login'>
         <div className='login-header'> { signup ? 'Create an Account' : 'Please Log in' } </div>
@@ -137,11 +161,13 @@ export default class Login extends Component {
                 onChange={(ev) => this.setState({ id: ev.target.value })}
                 placeholder='Bar ID'
                 className='form-control login-input mb-3' />
+                <p className='error'>{ errors.id }</p>
               <input
                 type='password'
                 onChange={(ev) => this.setState({ password: ev.target.value })}
                 placeholder='Password'
                 className='form-control login-input mb-3' />
+                <p className='error'>{ errors.password }</p>
             </div>
           }
           <button className='btn btn-dark'> { signup ? 'Sign up' : 'Log in' }</button>
