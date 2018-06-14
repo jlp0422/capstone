@@ -19,19 +19,19 @@ export default class Login extends Component {
       email: '',
       passwordStrength: 'Weak',
       passwordMatch: false,
-      errors: {}
+      // errors: {}
     }
     this.submit = this.submit.bind(this);
     this.validatePassword = this.validatePassword.bind(this);
 
-    this.validators = {
-      id: value => {
-        if (!value) return 'Valid Id Is Required';
-      },
-      password: value => {
-        if (!value) return 'Password Is Required';
-      }
-    };
+    // this.validators = {
+    //   id: value => {
+    //     if (!value) return 'Valid Id Is Required';
+    //   },
+    //   password: value => {
+    //     if (!value) return 'Password Is Required';
+    //   }
+    // };
   }
 
   submit(ev){
@@ -39,19 +39,19 @@ export default class Login extends Component {
     const hashPassword = bcrypt.hashSync(password, 6);
     ev.preventDefault();
 
-    const errors = Object.keys(this.validators).reduce((memo, key) => {
-      const validator = this.validators[key];
-      const value = this.state[key];
-      const error = validator(value);
-      if (error) {
-        memo[key] = error;
-      }
-      return memo;
-    }, {});
-    this.setState({ errors });
-    if (Object.keys(errors).length) {
-      return;
-    }
+    // const errors = Object.keys(this.validators).reduce((memo, key) => {
+    //   const validator = this.validators[key];
+    //   const value = this.state[key];
+    //   const error = validator(value);
+    //   if (error) {
+    //     memo[key] = error;
+    //   }
+    //   return memo;
+    // }, {});
+    // this.setState({ errors });
+    // if (Object.keys(errors).length) {
+    //   return;
+    // }
 
 
     if ( signup ) {
@@ -100,7 +100,7 @@ export default class Login extends Component {
   }
 
   render(){
-    const { signup, passwordStrength, passwordMatch, errors } = this.state;
+    const { signup, passwordStrength, passwordMatch } = this.state;  //removed errors
     return (
       <div className='login'>
         <div className='login-header'> { signup ? 'Create an Account' : 'Please Log in' } </div>
@@ -161,13 +161,13 @@ export default class Login extends Component {
                 onChange={(ev) => this.setState({ id: ev.target.value })}
                 placeholder='Bar ID'
                 className='form-control login-input mb-3' />
-                <p className='error'>{ errors.id }</p>
+                {/*<p className='error'>{ errors.id }</p>*/}
               <input
                 type='password'
                 onChange={(ev) => this.setState({ password: ev.target.value })}
                 placeholder='Password'
                 className='form-control login-input mb-3' />
-                <p className='error'>{ errors.password }</p>
+                {/*<p className='error'>{ errors.password }</p>*/}
             </div>
           }
           <button className='btn btn-dark'> { signup ? 'Sign up' : 'Log in' }</button>
