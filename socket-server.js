@@ -26,7 +26,7 @@ const sock = (io) => {
     // team choosing team name
     /* TEAM AND GAME BOTH HAVE BAR ID */
     socket.on('choose team name', ({ name, bar_id, team }) => {
-      axios.put(`https://untapped-trivia.herokuapp.com/v1/teams/${team}`, { team_name: name })
+      axios.put(`/v1/teams/${team}`, { team_name: name })
       .then(() => io.to(bar_id).emit('team register', name))
     });
 
@@ -38,7 +38,7 @@ const sock = (io) => {
           Team.findOne({ where: { team_name: team } })
             .then(_team => _team.setGame(game))
         }))
-        axios.get('https://untapped-trivia.herokuapp.com/v1/questions')
+        axios.get('/v1/questions')
           .then(res => res.data.results)
           .then(questions => {
             questions.map(question => {
@@ -87,13 +87,14 @@ const sock = (io) => {
 
     // game over
     socket.on('game over', (bar) => {
-      return axios.get('https://untapped-trivia.herokuapp.com/v1/games/active')
+      axios.get('/v1/games/active')
         .then(res => res.data)
         .then(game => {
+          console.log('game: ', game.get())
           Game.findById(game.id)
           .then(game => {
             game.update({ active: false })
-            game.getAllTeams()
+            return game.getAllTeams()
           })
           .then(teams => {
             console.log('game teams: ', teams)
