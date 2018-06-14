@@ -16,9 +16,9 @@ const Sidebar = ({bar}) => {
       <div className="membershipDate">
         {
           bar.endOfMembershipDate !== 'Invalid date' && bar.endOfMembershipDate !== null ? (
-            
-            <p>Membership end date: {bar.endOfMembershipDate}</p>
-            
+
+            <p>Membership end date:<br/>{bar.endOfMembershipDate}</p>
+
           ) : (null)
         }
       </div>
