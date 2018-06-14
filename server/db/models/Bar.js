@@ -30,9 +30,9 @@ const Bar = conn.define('bar',
 
 // add back before start
 // ran out of calls per day :(
-// Bar.hook('afterCreate', (bar) => {
-//   newBar(bar)
-// });
+Bar.hook('afterCreate', (bar) => {
+  newBar(bar)
+});
 
 
 module.exports = Bar;
