@@ -48,7 +48,7 @@ export default class CurrentGame extends Component {
           if (info.answer === question.correct_answer) {
             const { team, score } = info
             axios.put(`/v1/games/${game.id}/question`, question)
-            axios.put(`/v1/teams/update/${team}`)
+            axios.put(`/v1/teams/update/${team}`, { score })
           }
           const { answers } = this.state
           this.setState({ answers: [...answers, info] })
