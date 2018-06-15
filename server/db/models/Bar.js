@@ -28,8 +28,6 @@ const Bar = conn.define('bar',
   }, { underscored: true }
 );
 
-// add back before start
-// ran out of calls per day :(
 Bar.hook('afterCreate', (bar) => {
   newBar(bar)
 });

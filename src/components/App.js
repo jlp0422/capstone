@@ -34,10 +34,6 @@ class App extends Component {
     this.whoAmI();
   }
 
-  // componentWillReceiveProps() {
-  //   this.whoAmI();
-  // }
-
   whoAmI() {
     const user = localStorage.getItem('token');
     if (user) {
