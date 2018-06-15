@@ -73,7 +73,7 @@ export default class Login extends Component {
     if (this.state.password === confirmPassword) {
       this.setState({ passwordMatch: true })
     }
-    else { 
+    else {
       this.setState({ passwordMatch: false })
     }
   }
