@@ -62,10 +62,10 @@ class Home extends React.Component {
         {
           moment().isBefore(bar.endOfMembershipDate) ? (
             !index &&
-              <button onClick={ onStartGame }> Click to Start a Game </button>
+              <button className="btn btn-primary" onClick={ onStartGame }> Click to Start a Game </button>
           ) : (<h3>Please <Link to='/checkout'>buy a membership!</Link></h3>)
         }
-        </div>       
+        </div>
       </div>
     );
   }
