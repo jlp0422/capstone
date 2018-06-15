@@ -11,7 +11,7 @@ const createTeam = game => {
       faker.commerce.color()
     )} ${chance.animal()}s`,
     email: chance.email(),
-    score: chance.integer({ min: 0, max: 10 })
+    score: chance.integer({ min: 0, max: 100 })
   })
     .then(team => team.setGame(game))
     .then(team => {

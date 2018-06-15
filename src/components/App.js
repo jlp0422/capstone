@@ -34,6 +34,10 @@ class App extends Component {
     this.whoAmI();
   }
 
+  componentWillReceiveProps() {
+    this.whoAmI();
+  }
+
   whoAmI() {
     const user = localStorage.getItem('token');
     if (user) {
@@ -82,27 +86,41 @@ class App extends Component {
             {loggedIn ? (
               <div>
                 <Switch>
-                  <Route path="/" exact render={({ history }) => (
+                  <Route
+                    path="/"
+                    exact
+                    render={({ history }) => (
                       <Home whoAmI={whoAmI} history={history} bar={bar} />
-                    )} />
+                    )}
+                  />
                   <Route path="/categories" exact component={Categories} />
                   <Route path="/categories/:id" component={Category} />
                   <Route path="/teams" component={Teams} />
-                  <Route path="/games/active" exact render={() => (
-                    <CurrentGame bar={bar} />
-                  )} />
+                  <Route
+                    path="/games/active"
+                    exact
+                    render={() => <CurrentGame bar={bar} />}
+                  />
                   <Route path="/GlobalStats/" exact component={GlobalStats} />
-                  <Route path="/LocalStats/" exact render={() => (
-                    <LocalStats bar={bar} />
-                  )} />
-                  <Route path="/checkout" exact render={({ history }) => (
-                    <Checkout bar={bar} history={history} />
-                  )} />
+                  <Route
+                    path="/LocalStats/"
+                    exact
+                    render={() => <LocalStats bar={bar} />}
+                  />
+                  <Route
+                    path="/checkout"
+                    exact
+                    render={({ history }) => (
+                      <Checkout bar={bar} history={history} />
+                    )}
+                  />
                 </Switch>
                 <Footer />
               </div>
             ) : (
-              <Route path="/" render={({ history }) => (
+              <Route
+                path="/"
+                render={({ history }) => (
                   <Login login={this.login} history={history} />
                 )}
               />
