@@ -1,8 +1,8 @@
 /* eslint-disable */
 import React from 'react';
 import socket from '../../socket-client';
-import moment from 'moment';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
 
 class Home extends React.Component {
   constructor(props) {
@@ -52,18 +52,20 @@ class Home extends React.Component {
         <br />
         <h1 className="mt-4"> Cheers, {bar.name} </h1>
         <h3>Teams connected:</h3>
-        {teams.length ? teams.map(team => <p key={team}>{team}</p>) : null}
-        <br />
-        {bar.endOfMembershipDate !== 'Invalid date' &&
-        bar.endOfMembershipDate !== null ? (
-          !index && (
-            <button onClick={onStartGame}> Click to Start a Game </button>
-          )
-        ) : (
-          <h3>
-            Please <Link to="/checkout">sign up!</Link>
-          </h3>
-        )}
+        { teams.length ?
+          teams.map(team => (
+            <p key={team}>{team}</p>
+          )) : null
+        }
+        <br/>
+        <div>
+        {
+          bar.endOfMembershipDate !== "Invalid date" && bar.endOfMembershipDate !== null ? (
+            !index &&
+              <button className='btn btn-primary' onClick={ onStartGame }> Click to Start a Game </button>
+          ) : (<h3>Please <Link to='/checkout'>buy a membership!</Link></h3>)
+        }
+        </div>       
       </div>
     );
   }

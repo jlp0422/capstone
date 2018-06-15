@@ -1,6 +1,7 @@
 const conn = require('../conn');
 const { Sequelize } = conn;
 const { newBar } = require('../../automail');
+const moment = require('moment');
 
 const Bar = conn.define('bar',
   {
@@ -20,6 +21,7 @@ const Bar = conn.define('bar',
     },
     endOfMembershipDate: {
       type: Sequelize.STRING,
+      defaultValue: moment().add(1, 'months').format('LL').toString()
     },
     latitude: Sequelize.STRING,
     longitude: Sequelize.STRING

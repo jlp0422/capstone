@@ -3,6 +3,7 @@
 body {
 	background-color: #E7F1F5;
 	font-family: 'Roboto';
+	margin-bottom: 60px;
 }
 
 .app {
@@ -21,7 +22,6 @@ body {
 	display: grid;
 	grid-template-columns: 1fr 7fr;
 	background-color: #E7F1F5;
-	/* padding-bottom: 60px; */
 }
 
 /* BANNER */
@@ -340,7 +340,6 @@ body {
 	grid-column: 2;
 }
 
-/*added by Ed */
 .element {
   display: block;
   margin: 10px auto 20px 0;
@@ -357,5 +356,37 @@ body {
 }
 
 .planButton {
-	margin: 5px 20px 5px 20px;
+	margin: 5px 30px 5px 0;
+}
+
+.alert {
+	font-weight: bold;
+	color: red;
+}
+
+.footer {	
+	grid-column: 2;
+	display: grid;
+	/* grid-column: 1; */
+	/* padding: 10px 15px; */
+	background-color:#E7F1F5;
+	color: black;
+	font-size: 18px;
+	align-self: center;	
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+	position: fixed;
+	bottom: 0;
+	/* grid-column: 1 / -1; */
+}
+
+.center-block {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.membershipDate {
+	color: lightgreen;
 }
