@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
-// import { Link } from 'react-router-dom';
 import axios from 'axios';
 import bcrypt from 'bcryptjs';
 import socket from '../../socket-client';
-
-// disabled={passwordMatch === false}
 
 export default class Login extends Component {
   constructor(props){
@@ -46,7 +43,7 @@ export default class Login extends Component {
         if (!value) return 'Email Is Required';
       },
       password: value => {
-        if (!value) return 'Password Is Required';
+        if (!value || this.state.passwordMatch === false) return 'Matching Passwords Are Required';
       },
     };
   }
@@ -111,9 +108,6 @@ export default class Login extends Component {
   }
 
   passwordMatch(confirmPassword){
-    if (this.state.password !== confirmPassword) {
-      this.setState({errors: {noMatch: 'Passwords Must Match'}})
-    } 
     if (this.state.password === confirmPassword) {
       this.setState({ passwordMatch: true })
     }
@@ -123,7 +117,6 @@ export default class Login extends Component {
   }
   
   render(){
-    console.log(this.state.errors.noMatch)
     const { signup, passwordStrength, passwordMatch, error, errors } = this.state;  //removed errors
     return (
       <div className='login'>
@@ -182,8 +175,7 @@ export default class Login extends Component {
                 type='password'
                 onChange={(ev) => this.passwordMatch(ev.target.value) }
                 placeholder='Confirm Password'
-                className='form-control login-input mb-3' />
-                <p className='error'>{ errors.noMatch }</p>
+                className='form-control login-input mb-3' />                
               <span> {passwordStrength} </span>
               <span> {passwordMatch ? 'match' : 'nope'} </span>
             </div>
