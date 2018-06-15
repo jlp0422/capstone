@@ -32,7 +32,7 @@ const sock = (io) => {
 
     // start game
     socket.on('start game', ({ bar_id, teams }) => {
-      Game.findOne({ where: { active: true }})
+      Game.create()
       .then(game => {
         io.to(bar_id).emit('game started', teams.map(team => {
           Team.findOne({ where: { team_name: team } })
