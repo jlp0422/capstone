@@ -60,7 +60,7 @@ class Home extends React.Component {
         <br/>
         <div>
         {
-          bar.endOfMembershipDate !== "Invalid date" && bar.endOfMembershipDate !== null ? (
+          moment().isBefore(bar.endOfMembershipDate) ? (
             !index &&
               <button onClick={ onStartGame }> Click to Start a Game </button>
           ) : (<h3>Please <Link to='/checkout'>buy a membership!</Link></h3>)

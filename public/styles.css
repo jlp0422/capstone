@@ -394,4 +394,6 @@ body {
 
 .membershipDate {
 	color: lightgreen;
+	align-self: center;
+	text-align: center;
 }
