@@ -49,9 +49,10 @@ export default class Login extends Component {
   }
 
   submit(ev){
+    ev.preventDefault();
     const { id, name, password, signup, email, street, city, state, zip } = this.state;
     const hashPassword = bcrypt.hashSync(password, 6);
-    ev.preventDefault();
+    
 
     const errors = Object.keys(this.validators).reduce((memo, key) => {
       const validator = this.validators[key];
@@ -63,9 +64,11 @@ export default class Login extends Component {
       return memo;
     }, {});
     this.setState({ errors });
-    if (Object.keys(errors).length) {
+    if (Object.keys(errors).length && signup) {
       return;
     }
+
+    
 
     if ( signup ) {
       const randomNum = Math.floor(Math.random() * 10000)
@@ -117,7 +120,7 @@ export default class Login extends Component {
   }
   
   render(){
-    const { signup, passwordStrength, passwordMatch, error, errors } = this.state;  //removed errors
+    const { signup, passwordStrength, passwordMatch, error, errors } = this.state;  
     return (
       <div className='login'>
         <div className='login-header'> { signup ? 'Create an Account' : 'Please Log in' } </div>
