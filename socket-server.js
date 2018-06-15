@@ -38,6 +38,8 @@ const sock = (io) => {
           Team.findOne({ where: { team_name: team } })
             .then(_team => _team.setGame(game))
         }))
+      })
+      .then(() => {
         axios.get('https://untapped-trivia.herokuapp.com/v1/questions')
           .then(res => res.data.results)
           .then(questions => {
