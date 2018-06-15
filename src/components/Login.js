@@ -39,7 +39,7 @@ export default class Login extends Component {
         password: hashPassword,
         email,
         address: { street, city, state, zip },
-        //endOfMembershipDate: moment().add(1, 'months').format('LL').toString()
+        // endOfMembershipDate: moment().add(1, 'months').format('LL').toString()
       })
       .then(res => res.data)
       .then(user => this.props.login(user))
