@@ -90,10 +90,10 @@ const sock = (io) => {
       axios.get('https://untapped-trivia.herokuapp.com/v1/games/active')
         .then(res => res.data)
         .then(game => {
-          console.log('game: ', game.get())
           Game.findById(game.id)
           .then(game => {
-            game.update({ active: false })
+            console.log('game: ', game)
+            // game.update({ active: false })
             return game.getAllTeams()
           })
           .then(teams => {
