@@ -140,7 +140,7 @@ class Checkout extends React.Component {
     return (
       <div>
         {
-          endOfMembershipDate !== "Invalid date" && endOfMembershipDate !== null ? (<p>Cheers!  Your membership end date is {endOfMembershipDate}</p>) : (<p>Buy a membership!</p>)
+          moment().isBefore(bar.endOfMembershipDate) ? (<p>Cheers!  Your membership end date is {endOfMembershipDate}</p>) : (<p>Buy a membership!</p>)
         }
         <form onSubmit={ event => this.handleSubmit(event, bar.id) }>
           <h2 className='header'>Billing Information</h2>
@@ -150,7 +150,7 @@ class Checkout extends React.Component {
           </div>
           <div className='form-group'>
             <input name='billingLastName' value={ billingLastName } className='element' onChange={ this.handleChange } placeholder='Billing Last Name' />
-            <p className='error'>{ errors.billingFirstName }</p>
+            <p className='error'>{ errors.billingLastName }</p>
           </div>
           <div className='form-group'>
             <p>

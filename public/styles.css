@@ -356,6 +356,11 @@ body {
 }
 
 .planButton {
+	margin: 5px 20px 5px 20px;
+}
+
+.error {
+  color: red;
 	margin: 5px 30px 5px 0;
 }
 
@@ -389,4 +394,6 @@ body {
 
 .membershipDate {
 	color: lightgreen;
+	align-self: center;
+	text-align: center;
 }
