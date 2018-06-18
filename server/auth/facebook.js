@@ -12,7 +12,7 @@ const facebookCredentials = {
 }
 
 const verificationCb = (token, refreshToken, profile, done) => {
-  
+
   Team.findOrCreate({
     where: { facebookId: profile.id },
     defaults: profile.emails ? { email: profile.emails[0].value } : { email: 'NONE' }
